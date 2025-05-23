@@ -1,3 +1,4 @@
+// Modifié le 2025-05-23 11:44 - Création du composant Header
 // Modifié le 2025-05-25 15:03 - Vérification finale et ajustements visuels
 // Modifié le 2025-05-22 11:44 - Création du composant Header
 import React, { useState, useEffect } from 'react';
