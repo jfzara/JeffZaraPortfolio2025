@@ -1,3 +1,4 @@
+// Modifié le 2025-05-23 11:06 - Ajout des types de base dans index.ts
 // Modifié le 2025-05-22 11:06 - Ajout des types de base dans index.ts
 export interface Project {
     id: string;
