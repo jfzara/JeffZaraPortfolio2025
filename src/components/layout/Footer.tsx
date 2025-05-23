@@ -1,3 +1,4 @@
+// Modifié le 2025-05-23 13:21 - Création du composant Footer
 // Modifié le 2025-05-22 13:21 - Création du composant Footer
 import React from 'react';
 import { SocialIcon } from '../ui/SocialIcon';
