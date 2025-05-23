@@ -1,3 +1,4 @@
+// Modifié le 2025-05-23 13:57 - Ajout des fichiers de données (projets, skills, etc.)
 // Modifié le 2025-05-22 13:57 - Ajout des fichiers de données (projets, skills, etc.)
 import { Skill } from '../types';
 
