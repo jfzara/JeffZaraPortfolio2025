@@ -1,3 +1,4 @@
+// Modifié le 2025-05-24 15:30 - Ajout de la section compétences
 // Modifié le 2025-05-23 15:30 - Ajout de la section compétences
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
