@@ -1,3 +1,4 @@
+// Modifié le 2025-05-24 16:09 - Ajout du composant SkillBar pour les compétences
 // Modifié le 2025-05-23 16:09 - Ajout du composant SkillBar pour les compétences
 import React from 'react';
 import { motion } from 'framer-motion';
