@@ -1,3 +1,4 @@
+// Modifié le 2025-05-24 12:18 - Ajout de la section contact avec formulaire
 // Modifié le 2025-05-23 12:18 - Ajout de la section contact avec formulaire
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
