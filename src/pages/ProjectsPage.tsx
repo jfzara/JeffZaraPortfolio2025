@@ -1,3 +1,4 @@
+// Modifié le 2025-05-25 14:42 - Ajout de la page des projets
 // Modifié le 2025-05-24 14:42 - Ajout de la page des projets
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
