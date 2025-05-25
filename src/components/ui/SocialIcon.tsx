@@ -1,3 +1,4 @@
+// Modifié le 2025-05-25 10:39 - Ajout du composant pour les icônes sociales
 // Modifié le 2025-05-24 10:39 - Ajout du composant pour les icônes sociales
 import React from 'react';
 import { Github, Linkedin, Mail, Twitter, ExternalLink } from 'lucide-react';
