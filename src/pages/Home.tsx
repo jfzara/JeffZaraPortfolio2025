@@ -1,3 +1,4 @@
+// Modifié le 2025-05-25 13:07 - Création de la page d'accueil
 // Modifié le 2025-05-24 13:07 - Création de la page d'accueil
 import React from 'react';
 import { HeroSection } from '../components/sections/HeroSection';
