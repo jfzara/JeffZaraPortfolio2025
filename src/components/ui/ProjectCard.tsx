@@ -1,3 +1,4 @@
+// Modifié le 2025-05-25 09:27 - Création du composant pour afficher un projet
 // Modifié le 2025-05-24 09:27 - Création du composant pour afficher un projet
 import React from 'react';
 import { motion } from 'framer-motion';
