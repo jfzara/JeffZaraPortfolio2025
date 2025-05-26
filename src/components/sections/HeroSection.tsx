@@ -1,3 +1,4 @@
+// Modifié le 2025-05-26 10:01 - Corrections dans les composants et styles
 // Modifié le 2025-05-24 09:11 - Création de la section d'accueil (Hero)
 // Modifié le 2025-05-25 10:01 - Corrections dans les composants et styles
 // Modifié le 2025-05-23 09:11 - Création de la section d'accueil (Hero)
