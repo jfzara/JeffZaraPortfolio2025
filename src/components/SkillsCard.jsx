@@ -25,17 +25,17 @@ const Badge = styled.span`
   background: ${theme.colors.accent};
   font-weight: 700;
   box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease;
+  &:hover { transform: translateY(-2px); }
 `;
 
 export default function SkillsCard() {
-  const tags = ["Interfaces simples", "Sites rapides", "Expérience utilisateur", "SEO friendly", "Support & suivis"];
+  const tags = ["React", "TypeScript", "Styled-Components", "UX/UI", "SEO", "Performance", "Accessibilité", "Support & Suivis"];
 
   return (
-    <Card role="region" aria-label="Compétences">
+    <Card role="region" aria-label="Compétences principales">
       <Row>
-        {tags.map((t, i) => (
-          <Badge key={i} tabIndex="0">{t}</Badge>
-        ))}
+        {tags.map((t, i) => <Badge key={i} tabIndex="0">{t}</Badge>)}
       </Row>
     </Card>
   );

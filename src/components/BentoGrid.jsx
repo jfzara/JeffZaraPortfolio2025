@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import ContactCard from "./ContactCard";
 import AboutCard from "./AboutCard";
 import ProjectsCard from "./ProjectsCard";
@@ -8,7 +8,6 @@ import SkillsCard from "./SkillsCard";
 const Grid = styled.section`
   display: grid;
   grid-template-columns: 1fr;
-  grid-auto-rows: auto;
   gap: 1.5rem;
   padding: 1.5rem;
 
@@ -45,10 +44,20 @@ const Toggles = styled.div`
   }
 `;
 
+// Animation pour fade
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+const AnimatedSlot = styled.div`
+  display: ${p => (p.show ? "block" : "none")};
+  animation: ${fadeIn} 0.5s ease forwards;
+`;
+
 export default function BentoGrid({ showProjects, setShowProjects, showSkills, setShowSkills }) {
   return (
     <Grid role="region" aria-label="Contenu principal">
-      {/* Contact + toggles */}
       <Slot area="contact">
         <ContactCard />
         <Toggles className="mobile-toggles">
@@ -59,7 +68,6 @@ export default function BentoGrid({ showProjects, setShowProjects, showSkills, s
           >
             {showProjects ? "Cacher projets" : "Voir projets"}
           </button>
-
           <button
             aria-expanded={showSkills}
             aria-controls="skills-section"
@@ -70,19 +78,14 @@ export default function BentoGrid({ showProjects, setShowProjects, showSkills, s
         </Toggles>
       </Slot>
 
-      {/* About */}
-      <Slot area="about">
-        <AboutCard />
+      <Slot area="about"><AboutCard /></Slot>
+
+      <Slot area="projects" id="projects-section">
+        <AnimatedSlot show={showProjects}><ProjectsCard /></AnimatedSlot>
       </Slot>
 
-      {/* Projects */}
-      <Slot area="projects" id="projects-section" style={{ display: showProjects ? "block" : "none" }}>
-        <ProjectsCard />
-      </Slot>
-
-      {/* Skills */}
-      <Slot area="skills" id="skills-section" style={{ display: showSkills ? "block" : "none" }}>
-        <SkillsCard />
+      <Slot area="skills" id="skills-section">
+        <AnimatedSlot show={showSkills}><SkillsCard /></AnimatedSlot>
       </Slot>
     </Grid>
   );

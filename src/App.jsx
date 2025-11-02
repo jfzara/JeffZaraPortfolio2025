@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { createRoot } from "react-dom/client";
 import Layout from "./components/Layout";
 import BentoGrid from "./components/BentoGrid";
+import "./global.css";
 
-export default function App() {
-  const [showProjects, setShowProjects] = useState(false);
-  const [showSkills, setShowSkills] = useState(false);
+function App() {
+  const [showProjects, setShowProjects] = useState(true);
+  const [showSkills, setShowSkills] = useState(true);
 
   return (
     <Layout>
@@ -17,3 +19,10 @@ export default function App() {
     </Layout>
   );
 }
+
+const root = createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);

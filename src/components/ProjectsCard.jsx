@@ -23,10 +23,11 @@ const Tile = styled.div`
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-  transition: transform 180ms ease;
+  background: ${p => p.color || theme.colors.bg};
+  transition: transform 0.25s ease, filter 0.25s ease;
   &:hover {
     transform: translateY(-4px);
-    filter: brightness(1.02);
+    filter: brightness(1.05);
   }
 `;
 
@@ -49,9 +50,9 @@ const ViewAll = styled.a`
   font-weight: 800;
   color: #fff;
   text-decoration: none;
-  &:hover {
-    filter: brightness(1.05);
-  }
+  &:hover { filter: brightness(1.05); }
+  margin-top: 1rem;
+  align-self: start;
 `;
 
 export default function ProjectsCard() {
@@ -63,16 +64,16 @@ export default function ProjectsCard() {
   ];
 
   return (
-    <Wrap role="region" aria-label="Aperçu projets">
+    <Wrap role="region" aria-label="Projets récents">
       <Grid>
         {items.map((it, i) => (
-          <Tile key={i} style={{ background: it.color }}>
+          <Tile key={i} color={it.color}>
             <Title tabIndex="0">{it.t}</Title>
             <Sub tabIndex="0">{it.s}</Sub>
           </Tile>
         ))}
       </Grid>
-      <ViewAll href="#projects">Découvrir</ViewAll>
+      <ViewAll href="#projects">Voir tous les projets</ViewAll>
     </Wrap>
   );
 }
