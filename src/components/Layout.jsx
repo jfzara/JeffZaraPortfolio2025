@@ -2,11 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { theme } from "../theme";
 
 const Page = styled.div`
   min-height: 100vh;
-  background: ${theme.colors.bg};
+  background: ${p => p.theme.colors.bg};
   display: flex;
   flex-direction: column;
 `;
@@ -18,10 +17,10 @@ const Main = styled.main`
   padding: 1rem;
 `;
 
-export default function Layout({ children }) {
+export default function Layout({ children, toggleTheme }) {
   return (
     <Page>
-      <Navbar />
+      <Navbar toggleTheme={toggleTheme} />
       <Main className="container">{children}</Main>
       <Footer />
     </Page>

@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { theme } from "../theme";
 
 const Wrap = styled.article`
   width: 100%;
@@ -18,35 +17,24 @@ const Grid = styled.div`
 
 const Tile = styled.div`
   padding: 1.5rem;
-  border-radius: ${theme.radius};
+  border-radius: ${p => p.theme.radius};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-  background: ${p => p.color || theme.colors.bg};
+  background: ${p => p.color || p.theme.colors.bg};
   transition: transform 0.25s ease, filter 0.25s ease;
-  &:hover {
-    transform: translateY(-4px);
-    filter: brightness(1.05);
-  }
+  &:hover { transform: translateY(-4px); filter: brightness(1.05); }
 `;
 
-const Title = styled.h3`
-  margin: 0 0 0.5rem 0;
-  font-size: 1.3rem;
-`;
-
-const Sub = styled.p`
-  margin: 0;
-  font-size: 1.1rem;
-  color: ${theme.colors.muted};
-`;
+const Title = styled.h3` margin: 0 0 0.5rem 0; font-size: 1.3rem; `;
+const Sub = styled.p` margin: 0; font-size: 1.1rem; color:${p => p.theme.colors.muted}; `;
 
 const ViewAll = styled.a`
   display: inline-block;
   padding: 0.9rem 1.6rem;
-  border-radius: ${theme.radius};
-  background: ${theme.colors.cta};
+  border-radius: ${p => p.theme.radius};
+  background: ${p => p.theme.colors.cta};
   font-weight: 800;
   color: #fff;
   text-decoration: none;
@@ -57,10 +45,10 @@ const ViewAll = styled.a`
 
 export default function ProjectsCard() {
   const items = [
-    { t: "YouChef", s: "Plateforme recettes simple", color: theme.colors.project1 },
-    { t: "Livano", s: "Vitrine optimisée SEO", color: theme.colors.project2 },
-    { t: "CI/CD", s: "Déploiements fiables", color: theme.colors.project3 },
-    { t: "Prototype", s: "MVP testé", color: theme.colors.project4 }
+    { t: "YouChef", s: "Plateforme recettes simple", color: p => p.theme.colors.project1 },
+    { t: "Livano", s: "Vitrine optimisée SEO", color: p => p.theme.colors.project2 },
+    { t: "CI/CD", s: "Déploiements fiables", color: p => p.theme.colors.project3 },
+    { t: "Prototype", s: "MVP testé", color: p => p.theme.colors.project4 }
   ];
 
   return (

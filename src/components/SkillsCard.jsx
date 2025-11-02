@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { theme } from "../theme";
 
 const Card = styled.article`
   width: 100%;
   padding: 2.5rem;
-  border-radius: ${theme.radius};
-  background: ${theme.colors.skills};
+  border-radius: ${p => p.theme.radius};
+  background: ${p => p.theme.colors.skills};
   box-shadow: 0 8px 25px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
@@ -22,7 +21,7 @@ const Row = styled.div`
 const Badge = styled.span`
   padding: 0.7rem 1.2rem;
   border-radius: 999px;
-  background: ${theme.colors.accent};
+  background: ${p => p.theme.colors.accent};
   font-weight: 700;
   box-shadow: 0 6px 14px rgba(0,0,0,0.04);
   transition: transform 0.2s ease;

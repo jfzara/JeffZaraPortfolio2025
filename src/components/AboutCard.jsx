@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { theme } from "../theme";
 
 const Card = styled.article`
   width: 100%;
   padding: 3rem 2.5rem;
-  border-radius: ${theme.radius};
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border-radius: ${p => p.theme.radius};
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -22,14 +21,14 @@ const Short = styled.p`
   font-size: 1.2rem;
   line-height: 1.6;
   margin: 0;
-  color: ${theme.colors.muted};
+  color: ${p => p.theme.colors.muted};
 `;
 
 const Action = styled.a`
   display: inline-block;
   padding: 0.9rem 1.6rem;
-  border-radius: ${theme.radius};
-  background: ${theme.colors.accent2};
+  border-radius: ${p => p.theme.radius};
+  background: ${p => p.theme.colors.accent2};
   color: #fff;
   font-weight: 700;
   text-decoration: none;
@@ -42,7 +41,7 @@ export default function AboutCard() {
     <Card role="region" aria-label="À propos">
       <Title tabIndex="0">Qui suis-je ?</Title>
       <Short tabIndex="0">
-        Développeur React & Freelance basé à Montréal. Je transforme vos idées en expériences web simples, performantes et impactantes. Stack principale : React, JS/TS, Styled-Components. Disponible pour missions freelance et projets startups.
+        Hello, je suis Jean Fabrice (Jeff), développeur React & Freelance basé à Montréal. Je transforme vos idées en expériences web simples, performantes et impactantes. Stack principale : React, JS/TS, Styled-Components.
       </Short>
       <Action href="#contact">Discutons de votre projet →</Action>
     </Card>

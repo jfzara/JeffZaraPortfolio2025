@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { theme } from "../theme";
 import photo from "../assets/photo-technicien.jpeg";
 
 const Card = styled.article`
@@ -8,8 +7,8 @@ const Card = styled.article`
   flex-wrap: wrap;
   gap: 2rem;
   padding: 2.5rem;
-  border-radius: ${theme.radius};
-  background: ${theme.colors.contact};
+  border-radius: ${p => p.theme.radius};
+  background: ${p => p.theme.colors.contact};
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
   align-items: center;
   justify-content: center;
@@ -18,7 +17,7 @@ const Card = styled.article`
 const Photo = styled.img`
   width: 200px;
   height: 200px;
-  border-radius: ${theme.radius};
+  border-radius: ${p => p.theme.radius};
   object-fit: cover;
   @media(max-width: 900px){ width:150px; height:150px; }
 `;
@@ -30,20 +29,26 @@ const Content = styled.div`
 `;
 
 const Headline = styled.h1` margin:0; font-size:2rem; `;
-const Tagline = styled.p` margin:0; color:${theme.colors.muted}; `;
-const Actions = styled.div` display:flex; gap:1rem; flex-wrap:wrap; `;
+const Tagline = styled.p` margin:0; color:${p => p.theme.colors.muted}; `;
+
+const Actions = styled.div`
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+`;
 
 const Primary = styled.a`
   padding: 0.9rem 1.8rem;
-  border-radius:${theme.radius};
-  background: ${theme.colors.cta};
+  border-radius:${p => p.theme.radius};
+  background: ${p => p.theme.colors.cta};
   color:#fff;
   font-weight:800;
   &:hover { transform: translateY(-2px); filter: brightness(1.05); }
 `;
+
 const Secondary = styled.a`
   padding:0.8rem 1.5rem;
-  border-radius:${theme.radius};
+  border-radius:${p => p.theme.radius};
   border:1px solid rgba(0,0,0,0.1);
   &:hover{ background: rgba(0,0,0,0.03); }
 `;
