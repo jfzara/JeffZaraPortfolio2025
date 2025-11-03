@@ -1,7 +1,8 @@
+ // src/components/AboutCard.jsx
 import React from "react";
 import { useTheme } from "styled-components";
-import { ShinyRevealButton } from "./ShinyRevealButton";
 import { CardBase } from "./CardBase";
+import {  ShinyRevealButton } from "./ShinyRevealButton";
 import styled from "styled-components";
 
 const Title = styled.h2`
@@ -25,9 +26,11 @@ export default function AboutCard() {
         Développeur React & Freelance basé à Montréal. Je transforme vos idées en expériences web simples, performantes et impactantes. 
         Stack principale : React, JS/TS, Styled-Components. Disponible pour missions freelance et projets startups.
       </Short>
+      
       <ShinyRevealButton href="#contact">
         <span>Discutons de votre projet →</span>
       </ShinyRevealButton>
+    
     </CardBase>
   );
 }

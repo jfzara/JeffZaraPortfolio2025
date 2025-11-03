@@ -1,7 +1,9 @@
+// src/components/ContactCard.jsx
 import React from "react";
 import styled from "styled-components";
 import { CardBase } from "./CardBase";
 import photo from "../assets/photo-technicien.jpeg";
+import { ShinyRevealButton } from "./ShinyRevealButton";
 
 const Photo = styled.img`
   width: 200px;
@@ -37,23 +39,11 @@ const Actions = styled.div`
   flex-wrap: wrap;
 `;
 
-const Primary = styled.a`
-  padding: 0.9rem 1.8rem;
-  border-radius: ${({ theme }) => theme.radius};
-  background: ${({ theme }) => theme.colors.cta};
-  color: #fff;
-  font-weight: 800;
-  transition: transform 0.3s ease, filter 0.3s ease;
-  &:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.05);
-  }
-`;
-
 const Secondary = styled.a`
   padding: 0.8rem 1.5rem;
   border-radius: ${({ theme }) => theme.radius};
   border: 1px solid rgba(0, 0, 0, 0.1);
+  text-decoration: none;
   &:hover {
     background: rgba(0, 0, 0, 0.03);
   }
@@ -67,7 +57,9 @@ export default function ContactCard() {
         <Headline tabIndex="0">Envie de lancer un projet ?</Headline>
         <Tagline tabIndex="0">Simple et rapide — discutons de vos besoins.</Tagline>
         <Actions>
-          <Primary href="mailto:zarajeanfabrice@gmail.com">Envoyer un email</Primary>
+          <ShinyRevealButton href="mailto:zarajeanfabrice@gmail.com">
+            <span>Envoyer un email →</span>
+          </ShinyRevealButton>
           <Secondary href="#contact">Voir détails</Secondary>
         </Actions>
       </Content>

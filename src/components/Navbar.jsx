@@ -11,8 +11,8 @@ const Nav = styled.nav`
   position: sticky;
   top: 0;
   background: ${({ theme }) =>
-    theme.colors.bg === "#F5F5F5"
-      ? "rgba(255,255,255,0.7)"
+    theme.colors.bg === "#ad1e1e"
+      ? "rgb(122, 0, 0)"
       : "rgba(26,26,46,0.7)"};
   backdrop-filter: blur(8px);
   z-index: 100;
@@ -67,8 +67,7 @@ export default function Navbar({ themeMode, toggleTheme }) {
       <Brand href="#home">JeanFabrice — Dev</Brand>
 
       <Actions>
-        <Link href="#projects">Projets</Link>
-        <Link href="#skills">Compétences</Link>
+       
         <ShinyRevealButton href="#contact">
           <span>Contact</span>
         </ShinyRevealButton>
