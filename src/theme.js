@@ -1,40 +1,37 @@
-// theme.js
 export const lightTheme = {
+  mode: "light",
   colors: {
-    accent: "#00A6FB",
-    accent2: "#FF4C4C",
-    cta: "#FFB84C",
-    bg: "#F5F5F5",
-    text: "#1A1A1A",
+    accent: "#3D00FF",
+    cta: "#B9FFCF",
+    bg: "#4949ff49",
+    text: "#000000ff",      // violet pour H1 et textes principaux
     muted: "#555555",
-    contact: "#D3FECD",
-    skills: "#E0F7FA",
-    project1: "#FFD6D6",
-    project2: "#D6E4FF",
-    project3: "#FFF4D6",
-    project4: "#D6FFD6"
+    section1: "#0044ffff",
+    section2: "#00CED1",
+    section3: "#FF4500",
+    h1Shadow: "2px 2px 6px rgba(0,0,0,0.25)",
+    cardBorder: "#cbabf552"  // bordure des cartes en light mode
   },
-  radius: "6px",
+  radius: "0px",
   gap: "1.5rem",
   transition: "all 0.3s ease"
 };
 
 export const darkTheme = {
+  mode: "dark",
   colors: {
-    accent: "#00A6FB",
-    accent2: "#FF4C4C",
-    cta: "#FFB84C",
-    bg: "#1a1a2e",
-    text: "#F5F5F5",
-    muted: "#ccc",
-    contact: "#1b2f2b80",
-    skills: "#142f3c80",
-    project1: "#332222",
-    project2: "#223344",
-    project3: "#334422",
-    project4: "#223322"
+    accent: "#7F00FF",
+    cta: "#11111F",
+    bg: "#272751",
+    text: "#27a34e",
+    muted: "#1f9ca3",
+    section1: "#ff7b00dc",
+    section2: "#00CED133",
+    section3: "#FF634733",
+    h1Shadow: "2px 2px 8px rgba(255, 255, 255, 0.6)",
+    cardBorder: "#0f16275e"  // bordure des cartes en dark mode
   },
-  radius: "6px",
+  radius: "0px",
   gap: "1.5rem",
   transition: "all 0.3s ease"
 };
