@@ -12,7 +12,7 @@ export const lightTheme = {
     h1Shadow: "2px 2px 6px rgba(0,0,0,0.25)",
     cardBorder: "#cbabf552"  // bordure des cartes en light mode
   },
-  radius: "0px",
+  radius: "1px",
   gap: "1.5rem",
   transition: "all 0.3s ease"
 };
@@ -31,7 +31,7 @@ export const darkTheme = {
     h1Shadow: "2px 2px 8px rgba(255, 255, 255, 0.6)",
     cardBorder: "#0f16275e"  // bordure des cartes en dark mode
   },
-  radius: "0px",
+  radius: "1px",
   gap: "1.5rem",
   transition: "all 0.3s ease"
 };

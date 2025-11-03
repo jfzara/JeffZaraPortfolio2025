@@ -33,14 +33,14 @@ const Toggles = styled.div`
 
   button {
     padding: 0.6rem 1rem;
-    background: transparent;
-    border-radius: 4px;
-    border: 1px solid rgba(0,0,0,0.1);
+    background: ${({ theme }) => theme.colors.bg};
+    border-radius: ${({ theme }) => theme.radius};
+    border: none;
     cursor: pointer;
     font-weight: 700;
     font-size: 0.95rem;
     transition: all 0.2s ease;
-    &:hover { background: rgba(0,0,0,0.05); }
+    &:hover { background: rgba(0, 0, 0, 0.05); }
   }
 `;
 
