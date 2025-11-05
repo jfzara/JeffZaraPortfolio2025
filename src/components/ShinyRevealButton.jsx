@@ -1,4 +1,3 @@
-// src/components/ShinyRevealButton.jsx
 import styled from "styled-components";
 
 const ShinyRevealButton = styled.a`
@@ -6,8 +5,8 @@ const ShinyRevealButton = styled.a`
   display: inline-block;
   padding: 0.8rem 1.8rem;
   font-weight: 800;
-  color: #fff;        /* texte blanc par défaut */
-  background: #000;   /* fond noir par défaut */
+  color: #fff;
+  background: #000;
   text-decoration: none;
   overflow: hidden;
   cursor: pointer;
@@ -17,7 +16,7 @@ const ShinyRevealButton = styled.a`
 
   span {
     position: relative;
-    z-index: 2; /* texte au-dessus du panneau */
+    z-index: 2;
   }
 
   &::before {
@@ -27,19 +26,19 @@ const ShinyRevealButton = styled.a`
     left: 0;
     width: 100%;
     height: 100%;
-    background: #b0d2ff;  /* panneau bleu clair */
+    background: #b0d2ff;
     transform-origin: center;
-    transform: rotateY(-180deg); /* caché derrière le bouton */
+    transform: rotateY(-180deg);
     z-index: 1;
     transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
   }
 
   &:hover::before {
-    transform: rotateY(0deg);  /* animation rotation vers l'avant */
+    transform: rotateY(0deg);
   }
 
   &:hover {
-    color: #464646; /* texte devient noir au hover */
+    color: #464646;
   }
 `;
 

@@ -17,8 +17,6 @@ const Card = styled.div`
   }
 `;
 
-const CardBase = ({ children }) => {
-  return <Card>{children}</Card>;
-};
+const CardBase = ({ children }) => <Card>{children}</Card>;
 
 export default CardBase;

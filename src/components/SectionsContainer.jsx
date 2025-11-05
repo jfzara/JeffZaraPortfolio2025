@@ -1,19 +1,13 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled, { keyframes, css } from "styled-components";
 
 // 🔹 Animations
-const flashToFinal = keyframes`
+const flashColors = keyframes`
   0% { color: #FF0077; filter: brightness(1.8); }
-  25% { color: #00FFF0; }
+  20% { color: #00FFF0; }
   50% { color: #FFB800; }
-  75% { color: #00C2FF; }
+  80% { color: #00C2FF; }
   100% { color: inherit; filter: brightness(1); }
-`;
-
-const floatVertical = keyframes`
-  0% { transform: translateY(0); opacity: 0.7; }
-  50% { transform: translateY(-30px); opacity: 1; }
-  100% { transform: translateY(0); opacity: 0.7; }
 `;
 
 const breathing = keyframes`
@@ -32,6 +26,17 @@ const getContrastColor = (hexColor) => {
   return brightness > 150 ? "#000" : "#fff";
 };
 
+// 🔹 Hook pour scroll
+const useScrollY = () => {
+  const [scrollY, setScrollY] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  return scrollY;
+};
+
 // 🔹 Conteneur global
 const Container = styled.div`
   scroll-behavior: smooth;
@@ -40,20 +45,19 @@ const Container = styled.div`
   position: relative;
 `;
 
-// 🔹 Section
+// 🔹 Section avec asymétrie
 const Section = styled.section`
   position: relative;
   height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
   padding: 6vw;
   overflow: hidden;
-  flex-direction: column;
-  text-align: center;
+  text-align: left;
   color: ${({ textColor }) => textColor};
 
-  /* Gradient de fond avec breathing */
   background: linear-gradient(
     170deg,
     #777777 0%,
@@ -63,36 +67,47 @@ const Section = styled.section`
   background-size: 100% 200%;
   animation: ${breathing} 12s ease-in-out infinite;
 
-  /* Border-radius sections supprimé */
-  border-radius: 0;
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+
+  @media (max-width: 768px) {
+    padding: 4vw;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
 `;
 
-// 🔹 Lignes verticales décoratives
+// 🔹 Lignes verticales décoratives "verre d'eau" lourdes
 const Deco = styled.div`
   position: absolute;
-  top: 38%;
+  top: ${({ top }) => top || "20%"};
   left: ${({ left }) => left || "auto"};
   right: ${({ right }) => right || "auto"};
   width: 0.4rem;
-  height: 34vh;
+  height: 40vh;
   background: linear-gradient(
     to bottom,
     ${({ topColor }) => topColor || "#000000"},
     ${({ midColor }) => midColor || "#bafff7"},
     ${({ bottomColor }) => bottomColor || "#000000"}
   );
-  opacity: ${({ o }) => o || 0.15};
-  transform: skewX(-8deg);
-  animation: ${floatVertical} ${({ dur }) => dur || "16s"} ease-in-out infinite;
+  transform: ${({ scrollOffset, waveX, waveY }) =>
+    `translateX(${waveX}px) translateY(${waveY + scrollOffset}px) skewX(-8deg)`};
+  transition: all 0.25s ease;
   z-index: 1;
+  opacity: 0.15;
+
+  @media (max-width: 768px) {
+    width: 0.2rem;
+    height: 30vh;
+    top: ${({ top }) => top || "15%"};
+  }
 `;
 
 // 🔹 Titre
 const Title = styled.h1`
   font-size: clamp(3rem, 10vw, 8rem);
   font-weight: 800;
-  margin: 0;
+  margin: 0 0 0 3vw;
   text-transform: uppercase;
   line-height: 0.9;
   letter-spacing: 0.04em;
@@ -101,29 +116,47 @@ const Title = styled.h1`
 
   span {
     display: inline-block;
-    animation: ${flashToFinal} 1.6s ease forwards;
+    ${({ firstPanel }) =>
+      firstPanel &&
+      css`
+        animation: ${flashColors} 1.8s ease-in-out forwards;
+      `}
     transition: transform 0.3s ease, color 0.4s ease;
   }
 
   span:hover {
-    transform: translateY(-8px);
-    color: #ffffff; /* hover blanc */
+    transform: translateY(-1px);
+    color: #afafaf;
+  }
+
+  @media (max-width: 768px) {
+    font-size: clamp(2rem, 8vw, 5rem);
+    margin-left: 1.5vw;
   }
 `;
 
 const Subtitle = styled.h2`
-  margin-top: 1.2rem;
+  margin-top: 1rem;
   font-weight: 400;
   font-size: 1.3rem;
   opacity: 0.85;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
 `;
 
 const Body = styled.p`
-  margin: 1.8rem 0;
+  margin: 1.5rem 0;
   font-size: 1.1rem;
   line-height: 1.6;
   opacity: 0.9;
   max-width: 700px;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    max-width: 100%;
+  }
 `;
 
 // 🔹 CTA des sections
@@ -146,6 +179,12 @@ const CTA = styled.a`
     background: #b0d2ff;
     color: #464646;
   }
+
+  @media (max-width: 768px) {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
 `;
 
 // 🔹 Navigation rapide
@@ -167,18 +206,39 @@ const NavDot = styled.button`
   background: ${({ active }) => (active ? "#00ffff" : "#666")};
   transition: all 0.3s ease;
   cursor: pointer;
+
   &:hover {
     background: #ffffff;
     transform: scale(1.2);
+  }
+
+  @media (max-width: 768px) {
+    width: 0.8rem;
+    height: 0.8rem;
   }
 `;
 
 // 🔹 Composant principal
 export default function SectionsContainer({ sections }) {
+  const scrollY = useScrollY();
+
   const handleScrollTo = (id) => {
     document
       .getElementById(`section-${id}`)
       ?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // mouvement organique plus lent et plus franc
+  const waveX = (i, t) => {
+    const amplitude = 30 + (i % 3) * 20;
+    const freq = 0.003;
+    return Math.sin(t * freq + i) * amplitude;
+  };
+
+  const waveY = (i, t) => {
+    const amplitude = 20 + (i % 2) * 15;
+    const freq = 0.004;
+    return Math.sin(t * freq + i * 1.3) * amplitude;
   };
 
   return (
@@ -186,16 +246,22 @@ export default function SectionsContainer({ sections }) {
       <Container>
         {sections.map((s, i) => {
           const textColor = getContrastColor("#bfbfbf");
+          const scrollOffset = scrollY * 0.15;
+
           return (
             <Section key={i} id={`section-${i}`} textColor={textColor}>
               <Deco
                 {...s.deco}
-                dur={`${12 + i * 3}s`}
+                scrollOffset={scrollOffset}
+                waveX={waveX(i, scrollY)}
+                waveY={waveY(i, scrollY)}
                 topColor={s.deco?.topColor}
                 midColor={s.deco?.midColor}
                 bottomColor={s.deco?.bottomColor}
+                left={i % 2 !== 0 ? "6vw" : "auto"}
+                right={i % 2 === 0 ? "6vw" : "auto"}
               />
-              <Title>
+              <Title firstPanel={i === 0}>
                 {s.title.split("").map((letter, idx) => (
                   <span key={idx} style={{ animationDelay: `${idx * 0.05}s` }}>
                     {letter}
