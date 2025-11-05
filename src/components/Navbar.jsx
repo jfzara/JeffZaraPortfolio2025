@@ -1,7 +1,6 @@
 // src/components/Navbar.jsx
 import React from "react";
 import styled from "styled-components";
-import { ShinyRevealButton } from "./ShinyRevealButton";
 
 const Nav = styled.nav`
   display: flex;
@@ -10,18 +9,16 @@ const Nav = styled.nav`
   padding: 1rem 2rem;
   position: sticky;
   top: 0;
-  background: rgba(191,191,191,0.95); /* gris clair cohérent avec les sections */
+  background: rgba(191,191,191,0.95); /* gris clair semi-transparent */
   backdrop-filter: blur(8px);
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  font-family: "Space Grotesk", sans-serif; /* police corrigée */
-  transition: background 0.3s ease, color 0.3s ease;
+  font-family: "Space Grotesk", sans-serif;
 `;
 
 const Brand = styled.a`
   font-weight: 800;
   font-size: 1.2rem;
-  color: ${({ theme }) => theme.colors.text};
+  color: #111;
   text-decoration: none;
 `;
 
@@ -31,40 +28,31 @@ const Actions = styled.div`
   gap: 1rem;
 `;
 
-const ThemeToggle = styled.button`
-  background: none;
-  border: none;
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 1.3rem;
+// Bouton identique aux CTA
+const ContactButton = styled.a`
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-radius: 1px;
+  text-decoration: none;
+  color: #fff;
+  background: #000;
+  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
   cursor: pointer;
-  transition: transform 0.2s ease;
+
   &:hover {
-    transform: rotate(15deg);
+    background: #b0d2ff;
+    color: #464646;
   }
 `;
 
-export default function Navbar({ themeMode, toggleTheme }) {
+export default function Navbar() {
   return (
-    <Nav aria-label="Navigation principale">
+    <Nav>
       <Brand href="#home">JeanFabrice — Dev</Brand>
-
       <Actions>
-        {/* Bouton Contact avec animation ShinyReveal intacte */}
-        <ShinyRevealButton href="#contact">
-          <span>Contact</span>
-        </ShinyRevealButton>
-
-        {/* Toggle Dark/Light */}
-        <ThemeToggle
-          onClick={toggleTheme}
-          aria-label={
-            themeMode === "light"
-              ? "Activer le mode sombre"
-              : "Activer le mode clair"
-          }
-        >
-          {themeMode === "light" ? "🌙" : "☀️"}
-        </ThemeToggle>
+        <ContactButton href="#contact">Contact</ContactButton>
       </Actions>
     </Nav>
   );

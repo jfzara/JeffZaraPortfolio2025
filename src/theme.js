@@ -11,8 +11,8 @@ export const darkTheme = {
 export const lightTheme = {
   colors: {
     bg: "#111111",        // gris très foncé
-    text: "#FFFFFF",      // texte blanc
-    cta: "#FF0077",       // rose vif
+    text: "#000000ff",      // texte blanc
+    cta: "#b0d2ff",       // rose vif
     section1: "#00FFFF",  // cyan pour hover
     deco: "#FFB800"       // décor
   },

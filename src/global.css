@@ -33,6 +33,22 @@ body {
   transform-origin: center;
 }
 
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 4vw; /* responsive et impactant */
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  color: #111; /* sombre et élégant */
+}
+
+p {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  color: #333;
+  line-height: 1.6;
+}
+
 /* letter spans baseline for animated headings */
 .section-title span {
   display:inline-block;

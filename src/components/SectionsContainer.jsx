@@ -1,10 +1,7 @@
-// src/components/SectionsContainer.jsx
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-//
 // 🔹 Animations
-//
 const flashToFinal = keyframes`
   0% { color: #FF0077; filter: brightness(1.8); }
   25% { color: #00FFF0; }
@@ -19,9 +16,12 @@ const floatVertical = keyframes`
   100% { transform: translateY(0); opacity: 0.7; }
 `;
 
-//
-// 🔹 Calcul automatique de la couleur du texte selon le fond
-//
+const breathing = keyframes`
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 0% 55%; }
+`;
+
+// 🔹 Calcul automatique de la couleur du texte
 const getContrastColor = (hexColor) => {
   if (!hexColor) return "#000";
   const c = hexColor.replace("#", "");
@@ -32,21 +32,15 @@ const getContrastColor = (hexColor) => {
   return brightness > 150 ? "#000" : "#fff";
 };
 
-//
 // 🔹 Conteneur global
-//
 const Container = styled.div`
   scroll-behavior: smooth;
   overflow-x: hidden;
-  background: #bfbfbf; /* gris métallique clair */
-  color: #111;
   font-family: "Space Grotesk", sans-serif;
   position: relative;
 `;
 
-//
 // 🔹 Section
-//
 const Section = styled.section`
   position: relative;
   height: 100vh;
@@ -57,26 +51,36 @@ const Section = styled.section`
   overflow: hidden;
   flex-direction: column;
   text-align: center;
-  background: linear-gradient(170deg, #999ac9c7 0%, #ffffff 50%, #00000000 100%
-);
-  transition: all 0.3s ease;
+  color: ${({ textColor }) => textColor};
+
+  /* Gradient de fond avec breathing */
+  background: linear-gradient(
+    170deg,
+    #777777 0%,
+    #ffffff 50%,
+    #00000000 100%
+  );
+  background-size: 100% 200%;
+  animation: ${breathing} 12s ease-in-out infinite;
+
+  /* Border-radius sections supprimé */
+  border-radius: 0;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 `;
 
-//
 // 🔹 Lignes verticales décoratives
-//
 const Deco = styled.div`
   position: absolute;
-  top: 0;
+  top: 38%;
   left: ${({ left }) => left || "auto"};
   right: ${({ right }) => right || "auto"};
-  width: 2rem;
-  height: 100vh;
+  width: 0.4rem;
+  height: 34vh;
   background: linear-gradient(
     to bottom,
-    transparent,
-    ${({ color }) => color},
-    transparent
+    ${({ topColor }) => topColor || "#000000"},
+    ${({ midColor }) => midColor || "#bafff7"},
+    ${({ bottomColor }) => bottomColor || "#000000"}
   );
   opacity: ${({ o }) => o || 0.15};
   transform: skewX(-8deg);
@@ -84,9 +88,7 @@ const Deco = styled.div`
   z-index: 1;
 `;
 
-//
 // 🔹 Titre
-//
 const Title = styled.h1`
   font-size: clamp(3rem, 10vw, 8rem);
   font-weight: 800;
@@ -105,7 +107,7 @@ const Title = styled.h1`
 
   span:hover {
     transform: translateY(-8px);
-    color: #ffffff; /* couleur finale blanche au hover */
+    color: #ffffff; /* hover blanc */
   }
 `;
 
@@ -124,33 +126,29 @@ const Body = styled.p`
   max-width: 700px;
 `;
 
-//
-// 🔹 CTA animé (navigation instantanée)
-//
+// 🔹 CTA des sections
 const CTA = styled.a`
   display: inline-block;
   padding: 1rem 2rem;
   font-weight: 800;
   text-transform: uppercase;
-  border-radius: 50px;
+  border-radius: 1px;
   text-decoration: none;
-  color: ${({ theme }) => theme.colors.text};
-  background: linear-gradient(90deg, #00ffff, #ff0077);
-  transition: all 0.4s ease;
+  color: #FFFFFF;
+  background: #000000;
+  transition: all 0.6s ease;
   cursor: pointer;
   margin-top: 2rem;
   position: relative;
   z-index: 2;
 
   &:hover {
-    filter: brightness(1.3);
-    transform: translateY(-3px);
+    background: #b0d2ff;
+    color: #464646;
   }
 `;
 
-//
-// 🔹 Navigation rapide entre sections
-//
+// 🔹 Navigation rapide
 const NavContainer = styled.nav`
   position: fixed;
   bottom: 2rem;
@@ -175,9 +173,7 @@ const NavDot = styled.button`
   }
 `;
 
-//
 // 🔹 Composant principal
-//
 export default function SectionsContainer({ sections }) {
   const handleScrollTo = (id) => {
     document
@@ -189,10 +185,16 @@ export default function SectionsContainer({ sections }) {
     <>
       <Container>
         {sections.map((s, i) => {
-          const textColor = getContrastColor("#bfbfbf"); // couleur auto sur fond gris
+          const textColor = getContrastColor("#bfbfbf");
           return (
-            <Section key={i} id={`section-${i}`} style={{ color: textColor }}>
-              <Deco {...s.deco} dur={`${12 + i * 3}s`} />
+            <Section key={i} id={`section-${i}`} textColor={textColor}>
+              <Deco
+                {...s.deco}
+                dur={`${12 + i * 3}s`}
+                topColor={s.deco?.topColor}
+                midColor={s.deco?.midColor}
+                bottomColor={s.deco?.bottomColor}
+              />
               <Title>
                 {s.title.split("").map((letter, idx) => (
                   <span key={idx} style={{ animationDelay: `${idx * 0.05}s` }}>
@@ -212,7 +214,7 @@ export default function SectionsContainer({ sections }) {
         })}
       </Container>
 
-      {/* 🌐 Navigation instantanée */}
+      {/* Navigation instantanée */}
       <NavContainer>
         {sections.map((_, i) => (
           <NavDot key={i} onClick={() => handleScrollTo(i)} />

@@ -1,51 +1,46 @@
-// ShinyRevealButton.jsx
-import styled, { keyframes } from "styled-components";
+// src/components/ShinyRevealButton.jsx
+import styled from "styled-components";
 
-const slideReveal = keyframes`
-  0% { transform: translateX(0) skewX(-20deg); }
-  100% { transform: translateX(100%) skewX(180deg); }
-`;
-
-export const ShinyRevealButton = styled.a`
+const ShinyRevealButton = styled.a`
   position: relative;
   display: inline-block;
   padding: 0.8rem 1.8rem;
-  border-radius: ${({ theme }) => theme.radius};
   font-weight: 800;
-  color: ${({ theme }) => theme.colors.text};
-  text-decoration: none; /* pas de soulignement */
+  color: #fff;        /* texte blanc par défaut */
+  background: #000;   /* fond noir par défaut */
+  text-decoration: none;
   overflow: hidden;
   cursor: pointer;
-  background: ${({ theme }) => theme.colors.cta};
-  transition: transform 0.3s ease, filter 0.3s ease;
+  border-radius: 1px;
+  transition: color 0.4s cubic-bezier(0.4,0,0.2,1),
+              background 0.4s cubic-bezier(0.4,0,0.2,1);
 
-  /* Texte au-dessus */
-  & > span {
+  span {
     position: relative;
-    z-index: 2;
-    display: inline-block;
-    transition: color 0.4s ease;
+    z-index: 2; /* texte au-dessus du panneau */
   }
 
-  /* Panneau blanc initial */
   &::before {
     content: "";
     position: absolute;
     top: 0;
-    left: -100%;
+    left: 0;
     width: 100%;
     height: 100%;
-    background: #fff;
+    background: #b0d2ff;  /* panneau bleu clair */
+    transform-origin: center;
+    transform: rotateY(-180deg); /* caché derrière le bouton */
     z-index: 1;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
   }
 
-  /* Animation du panneau au hover */
   &:hover::before {
-    animation: ${slideReveal} 0.5s forwards;
+    transform: rotateY(0deg);  /* animation rotation vers l'avant */
   }
 
-  /* Changement de couleur du texte au hover */
-  &:hover > span {
-    color: ${({ theme }) => theme.colors.section1};
+  &:hover {
+    color: #464646; /* texte devient noir au hover */
   }
 `;
+
+export default ShinyRevealButton;
