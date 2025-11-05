@@ -1,51 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap');
-
-:root {
-  --transition: all 0.4s ease;
-  --focus-color: rgb(176, 251, 0);
-  --focus-spread: 50px;
+/* global additions - put after existing styles */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
-* { box-sizing: border-box; }
-html, body, #root { height: 100%; margin:0; font-family:'Outfit', sans-serif; }
-a { color: inherit; text-decoration: none; }
-button { font-family: inherit; cursor: pointer; }
-h1,h2,h3 { margin:0; }
-
-/* Effet de halo autour du bouton au focus */
-button:focus,
-a:focus {
-  outline: none; /* on supprime le outline par défaut */
-  position: relative; /* nécessaire pour le pseudo-élément */
-  z-index: 1;
+/* allow natural scrolling (we use page scroll + parallax) */
+body {
+  overflow-y: auto;
+  background: var(--fake); /* theme via styled-components preferred */
 }
 
-button:focus::after,
-a:focus::after {
-  content: '';
+/* full-screen section baseline */
+.section-full {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* big decorative vertical bar */
+.deco-vertical {
   position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
-  border-radius: inherit;
-  z-index: -1; /* derrière le bouton */
-  background: radial-gradient(circle, rgba(176, 251, 0, 0.25), rgba(176, 251, 0, 0));
-  animation: focusPulse 1.2s ease-in-out infinite alternate;
-  pointer-events: none; /* pas de capture d’événements */
+  top: -10vh;
+  bottom: -10vh;
+  width: 8vw;
+  max-width: 220px;
+  opacity: 0.08;
+  transform-origin: center;
 }
 
-@keyframes focusPulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.4;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.25;
-  }
-  100% {
-    transform: scale(1.2);
-    opacity: 0.15;
-  }
+/* letter spans baseline for animated headings */
+.section-title span {
+  display:inline-block;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+/* subtle hover for individual letters if needed */
+.section-title span:hover {
+  transform: translateY(-8px);
+  transition: transform 280ms ease;
+}
+
+/* CTA dominant style fallback (in case) */
+.cta-large {
+  display:inline-block;
+  padding: 1rem 1.8rem;
+  font-weight:800;
+  text-decoration: none;
+  border-radius: 1px;
+  border: 0.2px solid rgba(0,0,0,0.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }

@@ -27,9 +27,13 @@ export default function AboutCard() {
         Stack principale : React, JS/TS, Styled-Components. Disponible pour missions freelance et projets startups.
       </Short>
       
-      <ShinyRevealButton href="#contact">
-        <span>Discutons de votre projet →</span>
-      </ShinyRevealButton>
+<ShinyRevealButton href="mailto:zarajeanfabrice@gmail.com">
+  <span>Envoyer un email →</span>
+</ShinyRevealButton>
+
+<ShinyRevealButton href="#contact">
+  <span>Voir détails</span>
+</ShinyRevealButton>
     
     </CardBase>
   );

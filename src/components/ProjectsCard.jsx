@@ -55,9 +55,9 @@ export default function ProjectsCard() {
           </Tile>
         ))}
       </Grid>
-      <ShinyRevealButton href="#projects">
-        <span>Voir tous les projets</span>
-      </ShinyRevealButton>
+  <ShinyRevealButton href="#projects">
+  <span>Voir tous les projets</span>
+</ShinyRevealButton>
     </CardBase>
   );
 }

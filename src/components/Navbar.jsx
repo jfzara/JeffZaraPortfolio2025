@@ -7,22 +7,20 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   position: sticky;
   top: 0;
-  background: ${({ theme }) =>
-    theme.colors.bg === "#ad1e1e"
-      ? "rgb(122, 0, 0)"
-      : "rgba(26,26,46,0.7)"};
+  background: rgba(191,191,191,0.95); /* gris clair cohérent avec les sections */
   backdrop-filter: blur(8px);
   z-index: 100;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-family: "Space Grotesk", sans-serif; /* police corrigée */
   transition: background 0.3s ease, color 0.3s ease;
 `;
 
 const Brand = styled.a`
   font-weight: 800;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: ${({ theme }) => theme.colors.text};
   text-decoration: none;
 `;
@@ -30,23 +28,7 @@ const Brand = styled.a`
 const Actions = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-`;
-
-const Link = styled.a`
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.text};
-  text-decoration: none;
-  transition: all 0.3s ease;
-  &:hover {
-    background: ${({ theme }) =>
-      theme.colors.bg === "#F5F5F5"
-        ? "rgba(0,0,0,0.05)"
-        : "rgba(255,255,255,0.1)"};
-    transform: translateY(-1px);
-  }
+  gap: 1rem;
 `;
 
 const ThemeToggle = styled.button`
@@ -67,11 +49,12 @@ export default function Navbar({ themeMode, toggleTheme }) {
       <Brand href="#home">JeanFabrice — Dev</Brand>
 
       <Actions>
-       
+        {/* Bouton Contact avec animation ShinyReveal intacte */}
         <ShinyRevealButton href="#contact">
           <span>Contact</span>
         </ShinyRevealButton>
 
+        {/* Toggle Dark/Light */}
         <ThemeToggle
           onClick={toggleTheme}
           aria-label={
