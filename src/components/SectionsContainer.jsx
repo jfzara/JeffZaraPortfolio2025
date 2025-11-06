@@ -194,8 +194,8 @@ const Label = styled.div`
   position: absolute;
   right: 100%;
   margin-right: 3rem; // espace minimum
-  background: rgba(0,0,0,0.85);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.85);
+  color: #000000a6;
   font-weight: 700;
   font-size: 1.2rem;
   padding: 0.5rem 0.9rem;
