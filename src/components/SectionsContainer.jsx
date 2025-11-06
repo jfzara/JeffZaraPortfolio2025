@@ -169,12 +169,6 @@ const NavWrapper = styled.div`
   width: 60px;
   height: 32%;
   padding: 2rem 1rem;
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
-  background: rgb(16 105 75 / 44%);
-  backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
@@ -182,6 +176,12 @@ const NavWrapper = styled.div`
   justify-content: center;
   z-index: 999;
   transition: all 0.4s ease;
+
+  /* ✅ invisibilité totale du wrapper */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -193,11 +193,10 @@ const NavWrapper = styled.div`
     flex-direction: row;
     justify-content: space-around;
     padding: 0.6rem 0.4rem;
-    border-radius: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgb(16 105 75 / 44%);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.4);
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
   }
 `;
 
@@ -238,7 +237,7 @@ const NavDot = styled.button`
   border-radius: 50%;
   border: none;
   background: ${({ active }) =>
-    active ? "linear-gradient(145deg, #fbff00, #f3f3f3)" : "rgb(0 0 0 / 80%)"};
+    active ? "linear-gradient(145deg, #0095ff, #f3f3f3)" : "rgb(163 160 160 / 80%)"};
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
