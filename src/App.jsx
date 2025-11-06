@@ -6,13 +6,17 @@ import { lightTheme, darkTheme } from "./theme";
 import Layout from "./components/Layout";
 import SectionsContainer from "./components/SectionsContainer";
 import { ShinyRevealButton } from "./components/ShinyRevealButton";
+import CustomCursor from "./components/CustomCursor";
 import { sections } from "./data";
+
 import "./global.css";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
+    <>
+    <CustomCursor />
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <Layout>
         <SectionsContainer sections={sections} />
@@ -24,6 +28,7 @@ function App() {
         </div>
       </Layout>
     </ThemeProvider>
+    </>
   );
 }
 
