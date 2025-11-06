@@ -15,14 +15,10 @@ const breathing = keyframes`
   50% { background-position: 0% 55%; }
 `;
 
-// 🔹 Mouvements aléatoires pour étiquettes
 const floatLabel = keyframes`
-  0% { transform: translate(0,0); }
-  20% { transform: translate(${Math.random()*6-3}px, ${Math.random()*6-3}px); }
-  40% { transform: translate(${Math.random()*6-3}px, ${Math.random()*6-3}px); }
-  60% { transform: translate(${Math.random()*6-3}px, ${Math.random()*6-3}px); }
-  80% { transform: translate(${Math.random()*6-3}px, ${Math.random()*6-3}px); }
-  100% { transform: translate(0,0); }
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
 `;
 
 // 🔹 Calcul contraste
@@ -163,71 +159,75 @@ const CTA = styled.a`
 
 // 🔹 Navigation wrapper
 const NavWrapper = styled.div`
-      position: fixed;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    width: 60px;
-    height: 32%;
-    padding: 2rem 1rem;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-    border-top-right-radius: 1px;
-    border-bottom-right-radius: 1px;
-    background: rgb(187 255 58 / 76%);
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 12px 45px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    gap: 1.8rem;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 32%;
+  padding: 2rem 1rem;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-top-right-radius: 1px;
+  border-bottom-right-radius: 1px;
+  background: rgb(187 255 58 / 76%);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+`;
+
+// 🔹 Wrapper interne pour dimmer dots
+const NavDotWrapper = styled.div`
+  position: relative;
+  filter: ${({dimmed})=>dimmed?"brightness(0.85) blur(1px)":"brightness(1) blur(0px)"};
+  transition: filter 0.25s ease;
+`;
+
+// 🔹 Label à gauche du dot
+const Label = styled.div`
+  position: absolute;
+  right: 100%;
+  margin-right: 3rem; // espace minimum
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 1px;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  opacity: ${({visible})=>visible?1:0};
+  transform: ${({visible})=>visible?"translateX(0)":"translateX(10px)"};
+  transition: all 0.25s ease-out;
+  animation: ${floatLabel} 4s ease-in-out infinite alternate;
 `;
 
 // 🔹 NavDot
 const NavDot = styled.button`
- width: 3rem;
-    height: 3rem;
+  width: 3rem;
+  height: 3rem;
   border-radius:50%;
   border:none;
   background: ${({active})=>active?"linear-gradient(145deg,#00eaff,#0077ff)":"#333"};
   cursor:pointer;
-  position:relative;
+  position: relative;
   transition: all 0.3s ease;
 
   &:hover{
-    transform:scale(1.6);
     background: linear-gradient(145deg,#00ffff,#00b3ff);
-    box-shadow:0 0 18px #00eaff;
-  }
-
-  & > span {
-    display:none;
-  }
-
-  &:hover > span {
-    display:block;
-    position:absolute;
-    left:-150%;
-    top:50%;
-    transform:translateY(-50%);
-    max-width: max-content;
-    white-space: nowrap;
-    padding: 0.5rem 0.9rem;
-    border-radius:1px;
-    background: rgba(0,0,0,0.85);
-    color:#fff;
-    font-weight:700;
-    font-size:1.2rem;
-    animation: ${floatLabel} 4s ease-in-out infinite;
   }
 `;
 
 // 🔹 Composant
 export default function SectionsContainer({sections}){
   const scrollY = useScrollY();
+  const [hoveredDot,setHoveredDot] = useState(null);
 
   const handleScrollTo = (id)=>document.getElementById(`section-${id}`)?.scrollIntoView({behavior:"smooth"});
 
@@ -268,9 +268,15 @@ export default function SectionsContainer({sections}){
 
       <NavWrapper>
         {sections.map((s,i)=>(
-          <NavDot key={i} active={currentSection===i} onClick={()=>handleScrollTo(i)}>
-            <span>{s.title}</span>
-          </NavDot>
+          <NavDotWrapper key={i} dimmed={hoveredDot!==null && hoveredDot!==i}>
+            <Label visible={hoveredDot === i}>{s.title}</Label>
+            <NavDot
+              active={currentSection===i}
+              onClick={()=>handleScrollTo(i)}
+              onMouseEnter={()=>setHoveredDot(i)}
+              onMouseLeave={()=>setHoveredDot(null)}
+            />
+          </NavDotWrapper>
         ))}
       </NavWrapper>
     </>
