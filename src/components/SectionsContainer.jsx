@@ -1,5 +1,5 @@
 // src/components/SectionsContainer.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
 
 // 🔹 Animations
@@ -33,17 +33,6 @@ const getContrastColor = (hexColor) => {
   return brightness > 150 ? "#000" : "#fff";
 };
 
-// 🔹 Hook scroll (pour suivi si besoin)
-const useScrollY = () => {
-  const [scrollY, setScrollY] = useState(0);
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-  return scrollY;
-};
-
 // 🔹 Conteneur global
 const Container = styled.div`
   position: relative;
@@ -53,7 +42,7 @@ const Container = styled.div`
   font-family: "Space Grotesk", sans-serif;
 `;
 
-// 🔹 Section (superposées pour fade/zoom)
+// 🔹 Section superposées (fade/zoom)
 const Section = styled.section`
   position: absolute;
   top: 0;
@@ -72,11 +61,9 @@ const Section = styled.section`
   animation: ${breathing} 12s ease-in-out infinite;
   box-shadow: 0 10px 25px rgba(10, 10, 10, 0.08);
 
-  /* transition fade + zoom */
   opacity: ${({ active }) => (active ? 1 : 0)};
   transform: ${({ active }) => (active ? "scale(1)" : "scale(0.9)")};
   transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
-
   z-index: ${({ active }) => (active ? 2 : 1)};
 
   @media (max-width: 768px) {
@@ -84,7 +71,7 @@ const Section = styled.section`
   }
 `;
 
-// 🔹 Décor
+// 🔹 Deco originale (barres verticales)
 const Deco = styled.div`
   position: absolute;
   top: ${({ top }) => top || "20%"};
@@ -98,8 +85,6 @@ const Deco = styled.div`
     ${({ midColor }) => midColor || "#bafff7"},
     ${({ bottomColor }) => bottomColor || "#000"}
   );
-  transform: ${({ waveX, waveY }) =>
-    `translateX(${waveX}px) translateY(${waveY}px) skewX(-8deg)`};
   transition: all 0.25s ease;
   opacity: 0.15;
 `;
@@ -189,7 +174,6 @@ const NavWrapper = styled.div`
   background: transparent;
 `;
 
-// Nav dot + label
 const NavDotWrapper = styled.div`
   position: relative;
 `;
@@ -239,34 +223,85 @@ const NavDot = styled.button`
   }
 `;
 
+// 🔹 Bulles décoratives autour du curseur
+const Bubble = styled.div`
+  position: absolute;
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from ${({ angle }) => angle}deg,
+    rgba(255, 255, 255, 0.15),
+    rgba(0, 200, 255, 0.3)
+  );
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: width 0.1s, height 0.1s;
+  z-index: 3;
+`;
+
 // 🔹 Composant principal
 export default function SectionsContainer({ sections }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredDot, setHoveredDot] = useState(null);
+  const [bubbles, setBubbles] = useState([]);
+  const containerRef = useRef(null);
+  const lastMouse = useRef({ x: 0, y: 0, time: 0 });
+
+  // initialisation des bulles
+  useEffect(() => {
+    const initialBubbles = Array.from({ length: 6 }, (_, i) => ({
+      x: 0,
+      y: 0,
+      size: 10 + i * 5,
+      angle: i * 60,
+    }));
+    setBubbles(initialBubbles);
+  }, []);
+
+  // déplacement des bulles selon curseur
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const now = performance.now();
+      const dx = e.clientX - lastMouse.current.x;
+      const dy = e.clientY - lastMouse.current.y;
+      const dt = now - lastMouse.current.time || 16;
+      const speed = Math.sqrt(dx * dx + dy * dy) / dt;
+
+      setBubbles((prev) =>
+        prev.map((b, i) => ({
+          x: b.x + (e.clientX - b.x) * 0.15,
+          y: b.y + (e.clientY - b.y) * 0.15,
+          size: 10 + i * 5 + speed * 20,
+          angle: (b.angle + speed * 30) % 360,
+        }))
+      );
+
+      lastMouse.current = { x: e.clientX, y: e.clientY, time: now };
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   const handleScrollTo = (index) => {
     setActiveIndex(index);
   };
 
-  const waveX = (i, t) => Math.sin(t * 0.003 + i) * (30 + i * 10);
-  const waveY = (i, t) => Math.sin(t * 0.004 + i * 1.3) * (20 + i * 10);
-
   return (
     <>
-      <Container>
+      <Container ref={containerRef}>
         {sections.map((s, i) => {
           const textColor = getContrastColor("#bfbfbf");
           return (
             <Section key={i} active={i === activeIndex} textColor={textColor}>
               <Deco
                 {...s.deco}
-                waveX={waveX(i, activeIndex)}
-                waveY={waveY(i, activeIndex)}
+                left={i % 2 !== 0 ? "6vw" : "auto"}
+                right={i % 2 === 0 ? "6vw" : "6vw"}
                 topColor={s.deco?.topColor}
                 midColor={s.deco?.midColor}
                 bottomColor={s.deco?.bottomColor}
-                left={i % 2 !== 0 ? "6vw" : "auto"}
-                right={i % 2 === 0 ? "6vw" : "6vw"}
               />
               <Title firstPanel={i === 0}>
                 {s.title.split("").map((letter, idx) => (
@@ -281,8 +316,14 @@ export default function SectionsContainer({ sections }) {
             </Section>
           );
         })}
+
+        {/* bulles */}
+        {bubbles.map((b, i) => (
+          <Bubble key={i} style={{ left: b.x, top: b.y }} size={b.size} angle={b.angle} />
+        ))}
       </Container>
 
+      {/* navigation */}
       <NavWrapper>
         {sections.map((s, i) => (
           <NavDotWrapper key={i}>
