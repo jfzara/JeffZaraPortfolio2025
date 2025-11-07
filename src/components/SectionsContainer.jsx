@@ -1,3 +1,4 @@
+// src/components/SectionsContainer.jsx
 import React, { useEffect, useState } from "react";
 import styled, { keyframes, css } from "styled-components";
 
@@ -32,7 +33,7 @@ const getContrastColor = (hexColor) => {
   return brightness > 150 ? "#000" : "#fff";
 };
 
-// 🔹 Hook scroll
+// 🔹 Hook scroll (pour suivi si besoin)
 const useScrollY = () => {
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
@@ -45,27 +46,38 @@ const useScrollY = () => {
 
 // 🔹 Conteneur global
 const Container = styled.div`
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-  font-family: "Space Grotesk", sans-serif;
   position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Space Grotesk", sans-serif;
 `;
 
-// 🔹 Section
+// 🔹 Section (superposées pour fade/zoom)
 const Section = styled.section`
-  position: relative;
-  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 6vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 6vw;
   text-align: left;
   color: ${({ textColor }) => textColor};
   background: linear-gradient(170deg, #777 0%, #fff 50%, #00000000 100%);
   background-size: 100% 200%;
   animation: ${breathing} 12s ease-in-out infinite;
   box-shadow: 0 10px 25px rgba(10, 10, 10, 0.08);
+
+  /* transition fade + zoom */
+  opacity: ${({ active }) => (active ? 1 : 0)};
+  transform: ${({ active }) => (active ? "scale(1)" : "scale(0.9)")};
+  transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+
+  z-index: ${({ active }) => (active ? 2 : 1)};
 
   @media (max-width: 768px) {
     padding: 4vw;
@@ -86,8 +98,8 @@ const Deco = styled.div`
     ${({ midColor }) => midColor || "#bafff7"},
     ${({ bottomColor }) => bottomColor || "#000"}
   );
-  transform: ${({ scrollOffset, waveX, waveY }) =>
-    `translateX(${waveX}px) translateY(${waveY + scrollOffset}px) skewX(-8deg)`};
+  transform: ${({ waveX, waveY }) =>
+    `translateX(${waveX}px) translateY(${waveY}px) skewX(-8deg)`};
   transition: all 0.25s ease;
   opacity: 0.15;
 `;
@@ -160,51 +172,26 @@ const CTA = styled.a`
   }
 `;
 
-/* ✅ NAVIGATION ADAPTÉE */
+// 🔹 NAVIGATION
 const NavWrapper = styled.div`
   position: fixed;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
   width: 60px;
-  height: 32%;
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
   align-items: center;
   justify-content: center;
-  z-index: 999;
-  transition: all 0.4s ease;
-
-  /* ✅ invisibilité totale du wrapper */
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    height: auto;
-    bottom: 0;
-    top: auto;
-    right: 0;
-    transform: none;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 0.6rem 0.4rem;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-  }
+  z-index: 1000;
+  background: transparent;
 `;
 
+// Nav dot + label
 const NavDotWrapper = styled.div`
   position: relative;
-  filter: ${({ dimmed }) =>
-    dimmed ? "brightness(0.8) blur(0.5px)" : "brightness(1)"};
-  transition: filter 0.25s ease;
 `;
 
 const Label = styled.div`
@@ -230,7 +217,6 @@ const Label = styled.div`
   }
 `;
 
-/* ✅ Boutons circulaires */
 const NavDot = styled.button`
   width: 2.8rem;
   height: 2.8rem;
@@ -255,32 +241,27 @@ const NavDot = styled.button`
 
 // 🔹 Composant principal
 export default function SectionsContainer({ sections }) {
-  const scrollY = useScrollY();
+  const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredDot, setHoveredDot] = useState(null);
 
-  const handleScrollTo = (id) =>
-    document
-      .getElementById(`section-${id}`)
-      ?.scrollIntoView({ behavior: "smooth" });
+  const handleScrollTo = (index) => {
+    setActiveIndex(index);
+  };
 
   const waveX = (i, t) => Math.sin(t * 0.003 + i) * (30 + i * 10);
   const waveY = (i, t) => Math.sin(t * 0.004 + i * 1.3) * (20 + i * 10);
-
-  const currentSection = Math.round(scrollY / window.innerHeight);
 
   return (
     <>
       <Container>
         {sections.map((s, i) => {
           const textColor = getContrastColor("#bfbfbf");
-          const scrollOffset = scrollY * 0.15;
           return (
-            <Section key={i} id={`section-${i}`} textColor={textColor}>
+            <Section key={i} active={i === activeIndex} textColor={textColor}>
               <Deco
                 {...s.deco}
-                scrollOffset={scrollOffset}
-                waveX={waveX(i, scrollY)}
-                waveY={waveY(i, scrollY)}
+                waveX={waveX(i, activeIndex)}
+                waveY={waveY(i, activeIndex)}
                 topColor={s.deco?.topColor}
                 midColor={s.deco?.midColor}
                 bottomColor={s.deco?.bottomColor}
@@ -304,10 +285,10 @@ export default function SectionsContainer({ sections }) {
 
       <NavWrapper>
         {sections.map((s, i) => (
-          <NavDotWrapper key={i} dimmed={hoveredDot !== null && hoveredDot !== i}>
+          <NavDotWrapper key={i}>
             <Label visible={hoveredDot === i}>{s.title}</Label>
             <NavDot
-              active={currentSection === i}
+              active={i === activeIndex}
               onClick={() => handleScrollTo(i)}
               onMouseEnter={() => setHoveredDot(i)}
               onMouseLeave={() => setHoveredDot(null)}
