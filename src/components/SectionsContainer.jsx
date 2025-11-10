@@ -220,72 +220,75 @@ const NavDot = styled.button`
   }
 `;
 
-// 🔹 Curseur bulles
-const Bubble = styled.div`
+// 🔹 Bulles / effets au clic
+const Ripple = styled.div`
   position: fixed;
   border-radius: 50%;
   pointer-events: none;
-  transform: translate(-50%, -50%);
-  opacity: ${({ visible }) => (visible ? 0.8 : 0)};
-  transition: width 0.25s ease, height 0.25s ease, opacity 0.1s ease;
-
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0.3;
+  background: rgb(167, 218, 248);
+  width: 15px;
+  height: 15px;
   z-index: 9999;
+  animation: rippleAnim 0.7s ease-out forwards;
+
+  @keyframes rippleAnim {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0.35;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(8);
+      opacity: 0;
+    }
+  }
 `;
 
+// 🔹 Palette légère
 const COLORS = [
-  "linear-gradient( rgb(184, 214, 255)0%, #ffffff 100%)",
-  "linear-gradient( rgb(255, 225, 185) 0%, #ffffff  100%)",
-  "linear-gradient( rgb(255, 203, 203)0%, #ffffff  100%)",
-  "linear-gradient( rgb(246, 217, 255) 0%, #ffffff 100%)",
-  "linear-gradient( rgb(240, 255, 205)  0%, #ffffff  100%)",
+  "rgba(184, 214, 255, 0.4)",
+  "rgba(255, 225, 185, 0.4)",
+  "rgba(255, 203, 203, 0.4)",
+  "rgba(246, 217, 255, 0.4)",
+  "rgba(240, 255, 205, 0.4)",
 ];
 
 // 🔹 Composant principal
 export default function SectionsContainer({ sections }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [bubbles, setBubbles] = useState(
-    Array.from({ length: 5 }, (_, i) => ({
-      x: 0,
-      y: 0,
-      size: 0,
-      maxSize: [2, 6, 10, 15, 20][i],
-      color: COLORS[i],
-    }))
-  );
-
-  const lastMouse = useRef({ x: 0, y: 0, time: performance.now() });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      const now = performance.now();
-      const dx = e.clientX - lastMouse.current.x;
-      const dy = e.clientY - lastMouse.current.y;
-      const dt = now - lastMouse.current.time || 16;
-      const speed = Math.sqrt(dx * dx + dy * dy) / dt;
-
-      setBubbles((prev) =>
-        prev.map((b, i) => {
-          const factor = 0.12 + i * 0.05;
-          const newX = b.x + (e.clientX - b.x) * factor;
-          const newY = b.y + (e.clientY - b.y) * factor;
-          const newSize = Math.min(
-            b.maxSize,
-            Math.max(2, b.size * 0.75 + speed * b.maxSize)
-          );
-          return { ...b, x: newX, y: newY, size: newSize };
-        })
-      );
-
-      lastMouse.current = { x: e.clientX, y: e.clientY, time: now };
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  const [ripples, setRipples] = useState([]);
 
   const handleScrollTo = (index) => {
     setActiveIndex(index);
   };
+
+  // 🔹 Gestion clic + tactile pour ripple
+  useEffect(() => {
+    const createRipple = (x, y) => {
+      const id = Date.now() + Math.random().toString(36).slice(2, 5);
+      setRipples((prev) => [...prev, { id, x, y }]);
+      setTimeout(() => {
+        setRipples((prev) => prev.filter((r) => r.id !== id));
+      }, 600);
+    };
+
+    const handleClick = (e) => createRipple(e.clientX, e.clientY);
+    const handleTouchStart = (e) => {
+      if (e.touches && e.touches.length > 0) {
+        const t = e.touches[0];
+        createRipple(t.clientX, t.clientY);
+      }
+    };
+
+    window.addEventListener("click", handleClick, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+
+    return () => {
+      window.removeEventListener("click", handleClick);
+      window.removeEventListener("touchstart", handleTouchStart);
+    };
+  }, []);
 
   return (
     <Container>
@@ -315,20 +318,20 @@ export default function SectionsContainer({ sections }) {
         );
       })}
 
-      {/* 🔹 Bulles curseur */}
-      {bubbles.map((b, i) => (
-        <Bubble
-          key={i}
-          visible={b.size > 0}
-          style={{
-            left: `${b.x}px`,
-            top: `${b.y}px`,
-            width: `${b.size}px`,
-            height: `${b.size}px`,
-            background: b.color,
-          }}
-        />
+      {/* 🔹 Ripples */}
+      {ripples.map((r) => (
+        <Ripple key={r.id} style={{ left: r.x, top: r.y }} />
       ))}
+
+      {/* 🔹 Navigation */}
+      <NavWrapper>
+        {sections.map((_, i) => (
+          <NavDotWrapper key={i}>
+            <NavDot active={i === activeIndex} onClick={() => handleScrollTo(i)} />
+            <Label visible={i === activeIndex}>{sections[i].title}</Label>
+          </NavDotWrapper>
+        ))}
+      </NavWrapper>
     </Container>
   );
 }
