@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
 
-// 🔹 Animations
+// 🔹 Animations existantes
 const flashColors = keyframes`
   0% { color: #FF0077; filter: brightness(1.8); }
   20% { color: #00FFF0; }
@@ -33,7 +33,7 @@ const getContrastColor = (hexColor) => {
   return brightness > 150 ? "#000" : "#fff";
 };
 
-// 🔹 Conteneur global
+// 🔹 Conteneurs et styles existants
 const Container = styled.div`
   position: relative;
   width: 100%;
@@ -42,7 +42,6 @@ const Container = styled.div`
   font-family: "Space Grotesk", sans-serif;
 `;
 
-// 🔹 Section superposées (fade/zoom)
 const Section = styled.section`
   position: absolute;
   top: 0;
@@ -60,7 +59,6 @@ const Section = styled.section`
   background-size: 100% 200%;
   animation: ${breathing} 12s ease-in-out infinite;
   box-shadow: 0 10px 25px rgba(10, 10, 10, 0.08);
-
   opacity: ${({ active }) => (active ? 1 : 0)};
   transform: ${({ active }) => (active ? "scale(1)" : "scale(0.9)")};
   transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
@@ -71,7 +69,6 @@ const Section = styled.section`
   }
 `;
 
-// 🔹 Deco originale (barres verticales)
 const Deco = styled.div`
   position: absolute;
   top: ${({ top }) => top || "20%"};
@@ -89,7 +86,6 @@ const Deco = styled.div`
   opacity: 0.15;
 `;
 
-// 🔹 Titres
 const Title = styled.h1`
   font-size: clamp(3rem, 10vw, 8rem);
   font-weight: 800;
@@ -157,7 +153,6 @@ const CTA = styled.a`
   }
 `;
 
-// 🔹 NAVIGATION
 const NavWrapper = styled.div`
   position: fixed;
   right: 0;
@@ -207,7 +202,9 @@ const NavDot = styled.button`
   border-radius: 50%;
   border: none;
   background: ${({ active }) =>
-    active ? "linear-gradient(145deg, #0095ff, #f3f3f3)" : "rgb(163 160 160 / 80%)"};
+    active
+      ? "linear-gradient(145deg, #0095ff, #f3f3f3)"
+      : "rgb(163 160 160 / 80%)"};
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
@@ -223,43 +220,41 @@ const NavDot = styled.button`
   }
 `;
 
-// 🔹 Bulles décoratives autour du curseur
+// 🔹 Curseur bulles
 const Bubble = styled.div`
-  position: absolute;
-  width: ${({ size }) => size}px;
-  height: ${({ size }) => size}px;
+  position: fixed;
   border-radius: 50%;
-  background: conic-gradient(
-    from ${({ angle }) => angle}deg,
-    rgba(255, 255, 255, 0.15),
-    rgba(0, 200, 255, 0.3)
-  );
   pointer-events: none;
   transform: translate(-50%, -50%);
-  transition: width 0.1s, height 0.1s;
-  z-index: 3;
+  opacity: ${({ visible }) => (visible ? 0.8 : 0)};
+  transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+  filter: blur(3px);
+  z-index: 9999;
 `;
+
+const COLORS = [
+  "radial-gradient(circle, #ffffff 0%, #b3e5fc 100%)",
+  "radial-gradient(circle, #ffffff 0%, #f8bbd0 100%)",
+  "radial-gradient(circle, #ffffff 0%, #c8e6c9 100%)",
+  "radial-gradient(circle, #ffffff 0%, #d1c4e9 100%)",
+  "radial-gradient(circle, #ffffff 0%, #fff9c4 100%)",
+];
 
 // 🔹 Composant principal
 export default function SectionsContainer({ sections }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [hoveredDot, setHoveredDot] = useState(null);
-  const [bubbles, setBubbles] = useState([]);
-  const containerRef = useRef(null);
-  const lastMouse = useRef({ x: 0, y: 0, time: 0 });
-
-  // initialisation des bulles
-  useEffect(() => {
-    const initialBubbles = Array.from({ length: 6 }, (_, i) => ({
+  const [bubbles, setBubbles] = useState(
+    Array.from({ length: 5 }, (_, i) => ({
       x: 0,
       y: 0,
-      size: 10 + i * 5,
-      angle: i * 60,
-    }));
-    setBubbles(initialBubbles);
-  }, []);
+      size: 0,
+      maxSize: [10, 15, 20, 25, 30][i],
+      color: COLORS[i],
+    }))
+  );
 
-  // déplacement des bulles selon curseur
+  const lastMouse = useRef({ x: 0, y: 0, time: performance.now() });
+
   useEffect(() => {
     const handleMouseMove = (e) => {
       const now = performance.now();
@@ -269,12 +264,16 @@ export default function SectionsContainer({ sections }) {
       const speed = Math.sqrt(dx * dx + dy * dy) / dt;
 
       setBubbles((prev) =>
-        prev.map((b, i) => ({
-          x: b.x + (e.clientX - b.x) * 0.15,
-          y: b.y + (e.clientY - b.y) * 0.15,
-          size: 10 + i * 5 + speed * 20,
-          angle: (b.angle + speed * 30) % 360,
-        }))
+        prev.map((b, i) => {
+          const factor = 0.12 + i * 0.05;
+          const newX = b.x + (e.clientX - b.x) * factor;
+          const newY = b.y + (e.clientY - b.y) * factor;
+          const newSize = Math.min(
+            b.maxSize,
+            Math.max(2, b.size * 0.75 + speed * b.maxSize)
+          );
+          return { ...b, x: newX, y: newY, size: newSize };
+        })
       );
 
       lastMouse.current = { x: e.clientX, y: e.clientY, time: now };
@@ -289,54 +288,47 @@ export default function SectionsContainer({ sections }) {
   };
 
   return (
-    <>
-      <Container ref={containerRef}>
-        {sections.map((s, i) => {
-          const textColor = getContrastColor("#bfbfbf");
-          return (
-            <Section key={i} active={i === activeIndex} textColor={textColor}>
-              <Deco
-                {...s.deco}
-                left={i % 2 !== 0 ? "6vw" : "auto"}
-                right={i % 2 === 0 ? "6vw" : "6vw"}
-                topColor={s.deco?.topColor}
-                midColor={s.deco?.midColor}
-                bottomColor={s.deco?.bottomColor}
-              />
-              <Title firstPanel={i === 0}>
-                {s.title.split("").map((letter, idx) => (
-                  <span key={idx} style={{ animationDelay: `${idx * 0.05}s` }}>
-                    {letter}
-                  </span>
-                ))}
-              </Title>
-              <Subtitle>{s.subtitle}</Subtitle>
-              <Body dangerouslySetInnerHTML={{ __html: s.body }} />
-              {s.ctaHref && <CTA href={s.ctaHref}>{s.ctaText}</CTA>}
-            </Section>
-          );
-        })}
-
-        {/* bulles */}
-        {bubbles.map((b, i) => (
-          <Bubble key={i} style={{ left: b.x, top: b.y }} size={b.size} angle={b.angle} />
-        ))}
-      </Container>
-
-      {/* navigation */}
-      <NavWrapper>
-        {sections.map((s, i) => (
-          <NavDotWrapper key={i}>
-            <Label visible={hoveredDot === i}>{s.title}</Label>
-            <NavDot
-              active={i === activeIndex}
-              onClick={() => handleScrollTo(i)}
-              onMouseEnter={() => setHoveredDot(i)}
-              onMouseLeave={() => setHoveredDot(null)}
+    <Container>
+      {sections.map((s, i) => {
+        const textColor = getContrastColor("#bfbfbf");
+        return (
+          <Section key={i} active={i === activeIndex} textColor={textColor}>
+            <Deco
+              {...s.deco}
+              left={i % 2 !== 0 ? "6vw" : "auto"}
+              right={i % 2 === 0 ? "6vw" : "6vw"}
+              topColor={s.deco?.topColor}
+              midColor={s.deco?.midColor}
+              bottomColor={s.deco?.bottomColor}
             />
-          </NavDotWrapper>
-        ))}
-      </NavWrapper>
-    </>
+            <Title firstPanel={i === 0}>
+              {s.title.split("").map((letter, idx) => (
+                <span key={idx} style={{ animationDelay: `${idx * 0.05}s` }}>
+                  {letter}
+                </span>
+              ))}
+            </Title>
+            <Subtitle>{s.subtitle}</Subtitle>
+            <Body>{s.body}</Body>
+            {s.cta && <CTA href={s.cta.link}>{s.cta.label}</CTA>}
+          </Section>
+        );
+      })}
+
+      {/* 🔹 Bulles curseur */}
+      {bubbles.map((b, i) => (
+        <Bubble
+          key={i}
+          visible={b.size > 0}
+          style={{
+            left: `${b.x}px`,
+            top: `${b.y}px`,
+            width: `${b.size}px`,
+            height: `${b.size}px`,
+            background: b.color,
+          }}
+        />
+      ))}
+    </Container>
   );
 }
