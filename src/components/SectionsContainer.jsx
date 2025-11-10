@@ -227,17 +227,17 @@ const Bubble = styled.div`
   pointer-events: none;
   transform: translate(-50%, -50%);
   opacity: ${({ visible }) => (visible ? 0.8 : 0)};
-  transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
-  filter: blur(3px);
+  transition: width 0.25s ease, height 0.25s ease, opacity 0.1s ease;
+
   z-index: 9999;
 `;
 
 const COLORS = [
-  "radial-gradient(circle, #ffffff 0%, #b3e5fc 100%)",
-  "radial-gradient(circle, #ffffff 0%, #f8bbd0 100%)",
-  "radial-gradient(circle, #ffffff 0%, #c8e6c9 100%)",
-  "radial-gradient(circle, #ffffff 0%, #d1c4e9 100%)",
-  "radial-gradient(circle, #ffffff 0%, #fff9c4 100%)",
+  "linear-gradient( rgb(184, 214, 255)0%, #ffffff 100%)",
+  "linear-gradient( rgb(255, 225, 185) 0%, #ffffff  100%)",
+  "linear-gradient( rgb(255, 203, 203)0%, #ffffff  100%)",
+  "linear-gradient( rgb(246, 217, 255) 0%, #ffffff 100%)",
+  "linear-gradient( rgb(240, 255, 205)  0%, #ffffff  100%)",
 ];
 
 // 🔹 Composant principal
@@ -248,7 +248,7 @@ export default function SectionsContainer({ sections }) {
       x: 0,
       y: 0,
       size: 0,
-      maxSize: [10, 15, 20, 25, 30][i],
+      maxSize: [2, 6, 10, 15, 20][i],
       color: COLORS[i],
     }))
   );
