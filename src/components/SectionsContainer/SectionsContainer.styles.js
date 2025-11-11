@@ -107,7 +107,7 @@ export const Title = styled.h1`
       color 0.1s ease-in;
 
     &:hover {
-      color: #00C2FF; /* bleu électrique immédiat */
+      color: rgba(0, 255, 240, 1); /* bleu électrique immédiat */
      
       transform: translateY(-0.4rem); /* monte avec "poids" */
     }
@@ -126,24 +126,7 @@ export const Body = styled.div`
   margin-bottom: 2rem;
 `;
 
-/* =========================
-   DECORATIONS
-========================= */
-export const Deco = styled.div`
-  position: absolute;
-  top: 10%;
-  left: ${(props) => props.left || "auto"};
-  right: ${(props) => props.right || "auto"};
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(
-    ${(props) => props.topColor || "#ff0077"},
-    ${(props) => props.midColor || "rgba(0, 255, 240, 1)"},
-    ${(props) => props.bottomColor || "#ffb800"}
-  );
-  animation: ${parallaxFloat} 3s ease-in-out infinite;
-`;
+
 
 /* =========================
    CALL TO ACTION
