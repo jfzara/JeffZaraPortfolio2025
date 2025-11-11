@@ -1,8 +1,61 @@
-import styled, { css } from "styled-components";
-import * as animations from "./animations";
+// src/components/SectionsContainer.jsx
+import React, { useEffect, useState, useRef } from "react";
+import styled, { keyframes, css } from "styled-components";
 
 
-export const Container = styled.div`
+// 🔹 Animations premium
+const flashColors = keyframes`
+  0% { color: #FF0077; filter: brightness(1.8); }
+  20% { color: #00FFF0; }
+  50% { color: #FFB800; }
+  80% { color: #00C2FF; }
+  100% { color: inherit; filter: brightness(1); }
+`;
+
+const breathing = keyframes`
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 0% 55%; }
+`;
+
+const floatLabel = keyframes`
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+`;
+
+// ✨ NOUVEAU : Grain subtil pour texture organique
+const grainAnimation = keyframes`
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+`;
+
+// ✨ NOUVEAU : Parallax subtil pour la profondeur
+const parallaxFloat = keyframes`
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+`;
+
+// 🔹 Calcul contraste
+const getContrastColor = (hexColor) => {
+  if (!hexColor) return "#000";
+  const c = hexColor.replace("#", "");
+  const r = parseInt(c.substr(0, 2), 16);
+  const g = parseInt(c.substr(2, 2), 16);
+  const b = parseInt(c.substr(4, 2), 16);
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness > 150 ? "#000" : "#fff";
+};
+
+// 🔹 ✨ Container premium avec grain et vignette
+const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100vh;
@@ -11,6 +64,7 @@ export const Container = styled.div`
   background-color: ${({ bgColor }) => bgColor || "transparent"};
   transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   
+  /* ✨ Grain texture pour effet film analogique */
   &::before {
     content: "";
     position: fixed;
@@ -22,11 +76,12 @@ export const Container = styled.div`
     height: 200%;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
     pointer-events: none;
-    animation: ${animations.grainAnimation} 8s steps(10) infinite;
+    animation: ${grainAnimation} 8s steps(10) infinite;
     opacity: 0.4;
     z-index: 10;
   }
   
+  /* ✨ Vignette subtile pour focus central */
   &::after {
     content: "";
     position: fixed;
@@ -41,7 +96,8 @@ export const Container = styled.div`
   }
 `;
 
-export const Section = styled.section`
+// 🔹 ✨ Section premium avec glassmorphism et ombres douces
+const Section = styled.section`
   position: absolute;
   top: 0;
   left: 0;
@@ -55,6 +111,7 @@ export const Section = styled.section`
   text-align: left;
   color: ${({ textColor }) => textColor};
   
+  /* ✨ Fond avec glassmorphism subtil */
   background: linear-gradient(
     165deg,
     rgba(255, 255, 255, 0.95) 0%,
@@ -65,19 +122,22 @@ export const Section = styled.section`
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   
   background-size: 100% 200%;
-  animation: ${animations.breathing} 12s ease-in-out infinite;
+  animation: ${breathing} 12s ease-in-out infinite;
   
+  /* ✨ Ombres douces et élégantes */
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.02),
     0 8px 32px rgba(0, 0, 0, 0.04),
     0 32px 64px rgba(0, 0, 0, 0.03);
   
+  /* Crossfade fluide avec légère translation et flou */
   opacity: ${({ active }) => (active ? 1 : 0)};
   transform: ${({ active }) => 
     active ? "translateY(0) scale(1)" : "translateY(20px) scale(0.98)"
   };
   filter: ${({ active }) => (active ? "blur(0px)" : "blur(3px)")};
   
+  /* Transition douce avec courbe d'accélération premium */
   transition: 
     opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1),
     transform 1s cubic-bezier(0.25, 0.1, 0.25, 1),
@@ -92,7 +152,8 @@ export const Section = styled.section`
   }
 `;
 
-export const Deco = styled.div`
+// ✨ Déco premium avec dégradé lumineux et animation
+const Deco = styled.div`
   position: absolute;
   top: ${({ top }) => top || "20%"};
   left: ${({ left }) => left || "auto"};
@@ -107,10 +168,12 @@ export const Deco = styled.div`
   );
   transition: all 0.5s ease;
   opacity: 0.25;
-  animation: ${animations.parallaxFloat} 6s ease-in-out infinite;
+  animation: ${parallaxFloat} 6s ease-in-out infinite;
   
+  /* ✨ Glow effect */
   filter: drop-shadow(0 0 8px ${({ midColor }) => midColor || "#bafff7"});
   
+  /* ✨ Reflet lumineux */
   &::after {
     content: "";
     position: absolute;
@@ -128,22 +191,30 @@ export const Deco = styled.div`
   }
 `;
 
-export const Title = styled.h1`
+// ✨ Titre premium avec texte dégradé et ombres subtiles
+const Title = styled.h1`
   font-size: clamp(3rem, 10vw, 8rem);
   font-weight: 800;
- 
+  margin: 0 0 0 3vw;
   text-transform: uppercase;
   line-height: 0.85;
   letter-spacing: -0.02em;
   position: relative;
   z-index: 2;
   
-  
+  /* ✨ Dégradé de texte premium */
+  background: linear-gradient(
+    135deg,
+    #1a1a1a 0%,
+    #4a4a4a 50%,
+    #1a1a1a 100%
+  );
   background-clip: text;
   -webkit-background-clip: text;
-  -webkit-text-fill-color:  black;
+  -webkit-text-fill-color: black;
   background-size: 200% 200%;
   
+  /* ✨ Ombre portée subtile pour profondeur */
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
 
   span {
@@ -151,7 +222,7 @@ export const Title = styled.h1`
     ${({ firstPanel }) =>
       firstPanel &&
       css`
-        animation: ${animations.flashColors} 1.8s ease-in-out forwards;
+        animation: ${flashColors} 1.8s ease-in-out forwards;
       `}
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
                 color 0.4s ease;
@@ -172,17 +243,19 @@ export const Title = styled.h1`
   }
 `;
 
-export const Subtitle = styled.h2`
+// ✨ Subtitle premium avec espacement optimal
+const Subtitle = styled.h2`
   margin-top: 2rem;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 1.5rem;
-  opacity: 0.7;
+  opacity: 0.85;
   letter-spacing: 0.01em;
   line-height: 1.4;
   color: #2a2a2a;
 `;
 
-export const Body = styled.p`
+// ✨ Body premium avec typographie optimale
+const Body = styled.p`
   margin: 2rem 0;
   font-size: 1.1rem;
   line-height: 1.8;
@@ -193,7 +266,8 @@ export const Body = styled.p`
   letter-spacing: 0.005em;
 `;
 
-export const CTA = styled.a`
+// ✨ CTA premium avec effet néomorphique
+const CTA = styled.a`
   display: inline-block;
   padding: 1.2rem 2.5rem;
   font-weight: 700;
@@ -202,13 +276,14 @@ export const CTA = styled.a`
   letter-spacing: 0.08em;
   border-radius: 60px;
   text-decoration: none;
-  color: #fff;
+  color: #270000;
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   cursor: pointer;
   margin-top: 2.5rem;
   position: relative;
   z-index: 2;
   
+  /* ✨ Ombres multiples pour effet néomorphique */
   box-shadow: 
     0 1px 2px rgba(0, 0, 0, 0.1),
     0 4px 8px rgba(0, 0, 0, 0.08),
@@ -217,6 +292,7 @@ export const CTA = styled.a`
   
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   
+  /* ✨ Pseudo-élément pour effet de survol */
   &::before {
     content: "";
     position: absolute;
@@ -265,7 +341,8 @@ export const CTA = styled.a`
   }
 `;
 
-export const NavWrapper = styled.div`
+// ✨ Navigation wrapper avec fond glassmorphique
+const NavWrapper = styled.div`
   position: fixed;
   right: 0;
   top: 50%;
@@ -279,6 +356,7 @@ export const NavWrapper = styled.div`
   justify-content: center;
   z-index: 1000;
   
+  /* ✨ Glassmorphism subtil */
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -288,11 +366,12 @@ export const NavWrapper = styled.div`
     -8px 0 24px rgba(0, 0, 0, 0.04);
 `;
 
-export const NavDotWrapper = styled.div`
+const NavDotWrapper = styled.div`
   position: relative;
 `;
 
-export const Label = styled.div`
+// ✨ Label premium avec glassmorphism
+const Label = styled.div`
   position: absolute;
   right: 100%;
   margin-right: 3.5rem;
@@ -307,18 +386,21 @@ export const Label = styled.div`
   white-space: nowrap;
   letter-spacing: 0.02em;
   
+  /* ✨ Ombres élégantes */
   box-shadow: 
     0 2px 4px rgba(0, 0, 0, 0.05),
     0 8px 20px rgba(0, 0, 0, 0.08);
   
+  /* ✨ Bordure subtile */
   border: 1px solid rgba(255, 255, 255, 0.6);
   
   opacity: ${({ visible }) => (visible ? 1 : 0)};
   transform: ${({ visible }) =>
     visible ? "translateX(0)" : "translateX(10px)"};
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  animation: ${animations.floatLabel} 4s ease-in-out infinite alternate;
+  animation: ${floatLabel} 4s ease-in-out infinite alternate;
   
+  /* ✨ Petit triangle pointer */
   &::after {
     content: "";
     position: absolute;
@@ -337,7 +419,8 @@ export const Label = styled.div`
   }
 `;
 
-export const NavDot = styled.button`
+// ✨ NavDot premium avec effet néomorphique
+const NavDot = styled.button`
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
@@ -349,6 +432,7 @@ export const NavDot = styled.button`
   cursor: pointer;
   position: relative;
   
+  /* ✨ Ombres néomorphiques */
   box-shadow: ${({ active }) =>
     active
       ? `
@@ -363,6 +447,7 @@ export const NavDot = styled.button`
   
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   
+  /* ✨ Point central actif */
   &::before {
     content: "";
     position: absolute;
@@ -403,7 +488,8 @@ export const NavDot = styled.button`
   }
 `;
 
-export const Ripple = styled.div`
+// ✨ Ripple premium avec dégradé
+const Ripple = styled.div`
   position: fixed;
   border-radius: 50%;
   pointer-events: none;
@@ -431,3 +517,97 @@ export const Ripple = styled.div`
     }
   }
 `;
+
+// 🔹 ✨ Palette premium avec tons neutres sophistiqués
+const BACKGROUND_COLORS = [
+  "#fafafa", // Blanc cassé élégant
+  "#f5f5f7", // Gris Apple
+  "#f9f9fb", // Blanc-bleu subtil
+  "#faf8f6", // Beige crème
+  "#f7f9fa", // Blanc-vert menthe
+];
+
+// 🔹 Composant principal
+export default function SectionsContainer({ sections }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [ripples, setRipples] = useState([]);
+
+  const handleScrollTo = (index) => {
+    setActiveIndex(index);
+  };
+
+  // 🔹 Gestion clic + tactile pour ripple
+  useEffect(() => {
+    const createRipple = (x, y) => {
+      const id = Date.now() + Math.random().toString(36).slice(2, 5);
+      setRipples((prev) => [...prev, { id, x, y }]);
+      setTimeout(() => {
+        setRipples((prev) => prev.filter((r) => r.id !== id));
+      }, 600);
+    };
+
+    const handleClick = (e) => createRipple(e.clientX, e.clientY);
+    const handleTouchStart = (e) => {
+      if (e.touches && e.touches.length > 0) {
+        const t = e.touches[0];
+        createRipple(t.clientX, t.clientY);
+      }
+    };
+
+    window.addEventListener("click", handleClick, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+
+    return () => {
+      window.removeEventListener("click", handleClick);
+      window.removeEventListener("touchstart", handleTouchStart);
+    };
+  }, []);
+
+  // 🔹 ✨ AMÉLIORATION : Couleur de fond basée sur la section active
+  const currentBgColor = BACKGROUND_COLORS[activeIndex % BACKGROUND_COLORS.length];
+
+  return (
+    <Container bgColor={currentBgColor}>
+      {sections.map((s, i) => {
+        const textColor = getContrastColor("#bfbfbf");
+        return (
+          <Section key={i} active={i === activeIndex} textColor={textColor}>
+            <Deco
+              {...s.deco}
+              left={i % 2 !== 0 ? "6vw" : "auto"}
+              right={i % 2 === 0 ? "6vw" : "6vw"}
+              topColor={s.deco?.topColor}
+              midColor={s.deco?.midColor}
+              bottomColor={s.deco?.bottomColor}
+            />
+            <Title firstPanel={i === 0}>
+              {s.title.split("").map((letter, idx) => (
+                <span key={idx} style={{ animationDelay: `${idx * 0.05}s` }}>
+                  {letter}
+                </span>
+              ))}
+            </Title>
+            <Subtitle>{s.subtitle}</Subtitle>
+            <Body dangerouslySetInnerHTML={{ __html: s.body }} />
+            {s.cta && <CTA href={s.cta.link}><span>{s.cta.label}</span></CTA>}
+          </Section>
+        );
+      })}
+
+      {/* 🔹 Ripples */}
+      {ripples.map((r) => (
+        <Ripple key={r.id} style={{ left: r.x, top: r.y }} />
+      ))}
+
+      {/* 🔹 Navigation */}
+      <NavWrapper>
+        {sections.map((_, i) => (
+          <NavDotWrapper key={i}>
+            <NavDot active={i === activeIndex} onClick={() => handleScrollTo(i)} />
+            <Label visible={i === activeIndex}>{sections[i].title}</Label>
+          </NavDotWrapper>
+        ))}
+      </NavWrapper>
+    </Container>
+  );
+}
