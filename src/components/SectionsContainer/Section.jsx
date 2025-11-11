@@ -6,11 +6,7 @@ export default function Section({ data, active, textColor, decoSide }) {
 
   return (
     <S.Section active={active} textColor={textColor}>
-      <S.Deco
-        {...deco}
-        left={decoSide === "left" ? "6vw" : "auto"}
-        right={decoSide === "right" ? "6vw" : "auto"}
-      />
+   
 
       <S.Title firstPanel={false}>
         {title.split("").map((letter, idx) => (
