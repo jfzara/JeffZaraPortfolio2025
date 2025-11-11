@@ -1,15 +1,38 @@
 import styled, { keyframes } from "styled-components";
 
+
+
+
+
+
+/*==========================
+VIDEO================== */
+
+export const BackgroundVideo = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+ 
+  /* Filtre translucide / atténué */
+  
+  opacity: 0.3; /* rend la vidéo plus transparente */
+  z-index: 0;
+`;
+
 /* =========================
    ANIMATIONS
 ========================= */
 export const flashColors = keyframes`
-  0% { color: #ff0077a4; filter: brightness(1.8); }
-  20% { color: #00ffee9a; }
-  50% { color: #ffb7009c; }
-  80% { color: #00c3ff96; }
-  100% { color: inherit; filter: brightness(1); }
+  0% { filter: brightness(1.4) saturate(1.3); }
+  20% { filter: brightness(2) saturate(1.6); }
+  50% { filter: brightness(1.6) saturate(1.4); }
+  100% { filter: brightness(1) saturate(1); }
 `;
+
+
 
 export const breathing = keyframes`
   0%, 100% { background-position: 0% 50%; }
@@ -65,21 +88,28 @@ export const Section = styled.div`
 export const Title = styled.h1`
   font-size: 5.5rem;
   margin-bottom: 1rem;
-  color: black;
   letter-spacing: 0.1em;
+  display: inline-block;
+  color: black;
 
- span {
+  span {
     display: inline-block;
-    color: black;
     cursor: default;
+    color: black;
+
+    /* Animation au montage : filtre uniquement */
+    animation: ${flashColors} 1.2s ease-out forwards;
+    animation-delay: calc(var(--idx) * 0.05s);
+
+    /* Transition pour hover : mouvement lourd + text-shadow */
     transition: 
-      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-      text-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    
+      transform 0.7s cubic-bezier(0.25, 1.5, 0.5, 1), 
+      color 0.1s ease-in;
+
     &:hover {
-      color: #00C2FF; /* changement immédiat */
-      transform: translateY(-1rem);
-  
+      color: #00C2FF; /* bleu électrique immédiat */
+     
+      transform: translateY(-0.4rem); /* monte avec "poids" */
     }
   }
 `;
@@ -109,7 +139,7 @@ export const Deco = styled.div`
   border-radius: 50%;
   background: linear-gradient(
     ${(props) => props.topColor || "#ff0077"},
-    ${(props) => props.midColor || "#00fff0"},
+    ${(props) => props.midColor || "rgba(0, 255, 240, 1)"},
     ${(props) => props.bottomColor || "#ffb800"}
   );
   animation: ${parallaxFloat} 3s ease-in-out infinite;
@@ -151,7 +181,8 @@ export const NavWrapper = styled.div`
   gap: 1rem;
   
   &:hover .label {
-    opacity: 0.5; /* labels grisés lorsque hover sur le wrapper */
+
+    opacity: 0.2; /* labels grisés lorsque hover sur le wrapper */
   }
 `;
 
@@ -163,20 +194,22 @@ export const NavDotWrapper = styled.div`
 `;
 
 export const NavDot = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
-  background: ${(props) => (props.active ? "#ff0077" : "#ccc")};
+  background: ${(props) => (props.active ? "rgba(0, 255, 240, 1)" : "#ccc")};
   cursor: pointer;
   transition: background 0.3s;
 
   &:hover + .label {
     opacity: 1; /* label correspondant devient full opacity au hover */
     color: #000;
+    font-weight:600;
   }
 
   &:hover ~ .label {
-    opacity: 0.3; /* autres labels deviennent plus transparents */
+    opacity: 0.02; /* autres labels deviennent plus transparents */
+    
   }
 `;
 

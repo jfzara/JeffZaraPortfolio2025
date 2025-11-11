@@ -11,7 +11,7 @@ const Nav = styled.nav`
     padding: 1rem 2rem;
     position: sticky;
     top: 0;
-    background: rgb(199 199 199 / 88%);
+    background:  rgba(255, 255, 255, 0.1 );
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 100;
@@ -30,7 +30,7 @@ display: flex;
     align-items: center;
     font-weight: 500;
     font-size: 1rem;
-    color: #000000;
+    color:rgba(0, 255, 240, 1);
     text-decoration: none;
     letter-spacing: 6.5px;
     text-transform: uppercase; /* toutes lettres capitalisées */
@@ -69,7 +69,7 @@ const ContactButton = styled.a`
   cursor: pointer;
 
   &:hover {
-    background: #b0d2ff;
+    background: rgba(0, 255, 240, 1);
     color: #000000;
   }
 `;
