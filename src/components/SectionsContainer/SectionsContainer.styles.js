@@ -1,432 +1,184 @@
-import styled, { css } from "styled-components";
-import * as animations from "./animations";
+import styled, { keyframes } from "styled-components";
 
+/* =========================
+   ANIMATIONS
+========================= */
+export const flashColors = keyframes`
+  0% { color: #FF0077; filter: brightness(1.8); }
+  20% { color: #00FFF0; }
+  50% { color: #FFB800; }
+  80% { color: #00C2FF; }
+  100% { color: inherit; filter: brightness(1); }
+`;
 
+export const breathing = keyframes`
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 0% 55%; }
+`;
+
+export const floatLabel = keyframes`
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+`;
+
+export const grainAnimation = keyframes`
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+`;
+
+export const parallaxFloat = keyframes`
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+`;
+
+/* =========================
+   CONTAINERS
+========================= */
 export const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100vh;
+  background: ${(props) => props.bgColor};
   overflow: hidden;
-  font-family: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: ${({ bgColor }) => bgColor || "transparent"};
-  transition: background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  &::before {
-    content: "";
-    position: fixed;
-    top: -50%;
-    left: -50%;
-    right: -50%;
-    bottom: -50%;
-    width: 200%;
-    height: 200%;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    animation: ${animations.grainAnimation} 8s steps(10) infinite;
-    opacity: 0.4;
-    z-index: 10;
-  }
-  
-  &::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(
-      circle at 50% 40%, 
-      transparent 0%, 
-      rgba(0, 0, 0, 0.15) 100%
-    );
-    pointer-events: none;
-    z-index: 11;
-  }
 `;
 
-export const Section = styled.section`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 6vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  text-align: left;
-  color: ${({ textColor }) => textColor};
-  
-  background: linear-gradient(
-    165deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(255, 255, 255, 0.6) 100%
-  );
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  
-  background-size: 100% 200%;
-  animation: ${animations.breathing} 12s ease-in-out infinite;
-  
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.02),
-    0 8px 32px rgba(0, 0, 0, 0.04),
-    0 32px 64px rgba(0, 0, 0, 0.03);
-  
-  opacity: ${({ active }) => (active ? 1 : 0)};
-  transform: ${({ active }) => 
-    active ? "translateY(0) scale(1)" : "translateY(20px) scale(0.98)"
-  };
-  filter: ${({ active }) => (active ? "blur(0px)" : "blur(3px)")};
-  
-  transition: 
-    opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1),
-    transform 1s cubic-bezier(0.25, 0.1, 0.25, 1),
-    filter 1s cubic-bezier(0.25, 0.1, 0.25, 1),
-    background 0.5s ease;
-  
-  z-index: ${({ active }) => (active ? 2 : 1)};
-  pointer-events: ${({ active }) => (active ? "all" : "none")};
-
-  @media (max-width: 768px) {
-    padding: 4vw;
-  }
-`;
-
-export const Deco = styled.div`
-  position: absolute;
-  top: ${({ top }) => top || "20%"};
-  left: ${({ left }) => left || "auto"};
-  right: ${({ right }) => right || "auto"};
-  width: 2px;
-  height: 40vh;
-  background: linear-gradient(
-    to bottom,
-    ${({ topColor }) => topColor || "#000"},
-    ${({ midColor }) => midColor || "#bafff7"},
-    ${({ bottomColor }) => bottomColor || "#000"}
-  );
-  transition: all 0.5s ease;
-  opacity: 0.25;
-  animation: ${animations.parallaxFloat} 6s ease-in-out infinite;
-  
-  filter: drop-shadow(0 0 8px ${({ midColor }) => midColor || "#bafff7"});
-  
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      rgba(255, 255, 255, 0.6) 50%,
-      transparent
-    );
-  }
-`;
-
-export const Title = styled.h1`
-  font-size: clamp(3rem, 10vw, 8rem);
-  font-weight: 800;
- 
-  text-transform: uppercase;
-  line-height: 0.85;
-  letter-spacing: -0.02em;
+export const Section = styled.div`
+  display: ${(props) => (props.active ? "block" : "none")};
+  color: ${(props) => props.textColor};
+  padding: 3rem;
   position: relative;
-  z-index: 2;
-  
-  
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color:  black;
-  background-size: 200% 200%;
-  
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+  transition: opacity 0.5s ease, transform 0.5s ease;
+`;
+
+/* =========================
+   TITLE & TEXT
+========================= */
+export const Title = styled.h1`
+  font-size: 3rem;
+  margin-bottom: 1rem;
 
   span {
     display: inline-block;
-    ${({ firstPanel }) =>
-      firstPanel &&
-      css`
-        animation: ${animations.flashColors} 1.8s ease-in-out forwards;
-      `}
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                color 0.4s ease;
-  }
-
-  span:hover {
-    transform: translateY(-8px) scale(1.05);
-    filter: drop-shadow(0 8px 16px rgba(0, 234, 255, 0.3));
-    background: linear-gradient(135deg, #00eaff, #0095ff);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  @media (max-width: 768px) {
-    font-size: clamp(2rem, 8vw, 5rem);
-    margin-left: 1.5vw;
+    animation: ${flashColors} 1.5s infinite;
   }
 `;
 
 export const Subtitle = styled.h2`
-  margin-top: 2rem;
-  font-weight: 500;
-  font-size: 1.5rem;
-  opacity: 0.7;
-  letter-spacing: 0.01em;
-  line-height: 1.4;
-  color: #2a2a2a;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
 `;
 
-export const Body = styled.p`
-  margin: 2rem 0;
-  font-size: 1.1rem;
-  line-height: 1.8;
-  opacity: 0.8;
-  max-width: 650px;
-  color: #3a3a3a;
-  font-weight: 400;
-  letter-spacing: 0.005em;
+export const Body = styled.div`
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
 `;
 
+/* =========================
+   DECORATIONS
+========================= */
+export const Deco = styled.div`
+  position: absolute;
+  top: 10%;
+  left: ${(props) => props.left || "auto"};
+  right: ${(props) => props.right || "auto"};
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(
+    ${(props) => props.topColor || "#ff0077"},
+    ${(props) => props.midColor || "#00fff0"},
+    ${(props) => props.bottomColor || "#ffb800"}
+  );
+  animation: ${parallaxFloat} 3s ease-in-out infinite;
+`;
+
+/* =========================
+   CALL TO ACTION
+========================= */
 export const CTA = styled.a`
   display: inline-block;
-  padding: 1.2rem 2.5rem;
-  font-weight: 700;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  border-radius: 60px;
-  text-decoration: none;
+  padding: 0.8rem 1.5rem;
+  background: #ff0077;
   color: #fff;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  cursor: pointer;
-  margin-top: 2.5rem;
-  position: relative;
-  z-index: 2;
-  
-  box-shadow: 
-    0 1px 2px rgba(0, 0, 0, 0.1),
-    0 4px 8px rgba(0, 0, 0, 0.08),
-    0 12px 24px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 60px;
-    background: linear-gradient(135deg, #00eaff 0%, #0095ff 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-  
-  &::after {
-    content: "→";
-    position: absolute;
-    right: 2rem;
-    top: 50%;
-    transform: translateY(-50%) translateX(0);
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  span {
+    display: inline-block;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    padding-right: 3.5rem;
-    box-shadow: 
-      0 2px 4px rgba(0, 0, 0, 0.12),
-      0 8px 16px rgba(0, 0, 0, 0.1),
-      0 20px 40px rgba(0, 234, 255, 0.2);
-    
-    &::before {
-      opacity: 1;
-    }
-    
-    &::after {
-      opacity: 1;
-      transform: translateY(-50%) translateX(0.5rem);
-    }
-  }
-  
-  &:active {
-    transform: translateY(0);
-  }
-  
-  span {
-    position: relative;
-    z-index: 1;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
 `;
 
+/* =========================
+   NAVIGATION DOTS
+========================= */
 export const NavWrapper = styled.div`
-  position: fixed;
-  right: 0;
+  position: absolute;
+  right: 2rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 70px;
-  padding: 2.5rem 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-left: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 
-    -2px 0 8px rgba(0, 0, 0, 0.02),
-    -8px 0 24px rgba(0, 0, 0, 0.04);
+  gap: 1rem;
 `;
 
 export const NavDotWrapper = styled.div`
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 `;
 
-export const Label = styled.div`
-  position: absolute;
-  right: 100%;
-  margin-right: 3.5rem;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  color: #1a1a1a;
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 0.7rem 1.2rem;
-  border-radius: 12px;
-  white-space: nowrap;
-  letter-spacing: 0.02em;
-  
-  box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.05),
-    0 8px 20px rgba(0, 0, 0, 0.08);
-  
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
-  transform: ${({ visible }) =>
-    visible ? "translateX(0)" : "translateX(10px)"};
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  animation: ${animations.floatLabel} 4s ease-in-out infinite alternate;
-  
-  &::after {
-    content: "";
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid rgba(255, 255, 255, 0.95);
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-  }
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-export const NavDot = styled.button`
-  width: 3rem;
-  height: 3rem;
+export const NavDot = styled.div`
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  border: none;
-  background: ${({ active }) =>
-    active
-      ? "linear-gradient(145deg, #ffffff, #e6e6e6)"
-      : "linear-gradient(145deg, #f5f5f5, #e0e0e0)"};
+  background: ${(props) => (props.active ? "#ff0077" : "#ccc")};
   cursor: pointer;
-  position: relative;
-  
-  box-shadow: ${({ active }) =>
-    active
-      ? `
-        inset 2px 2px 5px rgba(0, 0, 0, 0.1),
-        inset -2px -2px 5px rgba(255, 255, 255, 0.7),
-        0 2px 8px rgba(0, 149, 255, 0.3)
-      `
-      : `
-        3px 3px 8px rgba(0, 0, 0, 0.1),
-        -3px -3px 8px rgba(255, 255, 255, 0.7)
-      `};
-  
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  
-  &::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: ${({ active }) => (active ? "12px" : "6px")};
-    height: ${({ active }) => (active ? "12px" : "6px")};
-    border-radius: 50%;
-    background: ${({ active }) =>
-      active
-        ? "linear-gradient(135deg, #0095ff, #00eaff)"
-        : "rgba(0, 0, 0, 0.15)"};
-    transition: all 0.3s ease;
-  }
-
-  &:hover {
-    transform: scale(1.15);
-    box-shadow: 
-      3px 3px 12px rgba(0, 0, 0, 0.15),
-      -3px -3px 12px rgba(255, 255, 255, 0.8),
-      0 0 20px rgba(0, 149, 255, 0.2);
-    
-    &::before {
-      width: 10px;
-      height: 10px;
-      background: linear-gradient(135deg, #0095ff, #00eaff);
-    }
-  }
-  
-  &:active {
-    transform: scale(1);
-  }
-
-  @media (max-width: 768px) {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
+  transition: background 0.3s;
 `;
 
+export const Label = styled.span`
+  font-size: 0.9rem;
+  opacity: ${(props) => (props.visible ? 1 : 0)};
+  transition: opacity 0.3s;
+`;
+
+/* =========================
+   RIPPLE EFFECT
+========================= */
 export const Ripple = styled.div`
   position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0.4;
-  background: radial-gradient(
-    circle,
-    rgba(0, 234, 255, 0.6) 0%,
-    rgba(0, 149, 255, 0.3) 50%,
-    transparent 100%
-  );
   width: 20px;
   height: 20px;
-  z-index: 9999;
-  animation: rippleAnim 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: rippleAnim 0.6s forwards;
 
   @keyframes rippleAnim {
     0% {
       transform: translate(-50%, -50%) scale(0);
-      opacity: 0.5;
+      opacity: 0.8;
     }
     100% {
-      transform: translate(-50%, -50%) scale(10);
+      transform: translate(-50%, -50%) scale(3);
       opacity: 0;
     }
   }
