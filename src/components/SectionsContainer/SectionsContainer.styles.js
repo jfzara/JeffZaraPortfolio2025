@@ -63,13 +63,24 @@ export const Section = styled.div`
    TITLE & TEXT
 ========================= */
 export const Title = styled.h1`
-  font-size: 4.5rem;
+  font-size: 5.5rem;
   margin-bottom: 1rem;
   color: black;
+  letter-spacing: 0.1em;
 
-  span {
+ span {
     display: inline-block;
-    animation: ${flashColors} 1s forwards;
+    color: black;
+    cursor: default;
+    transition: 
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      text-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    
+    &:hover {
+      color: #00C2FF; /* changement immédiat */
+      transform: translateY(-1rem);
+  
+    }
   }
 `;
 
