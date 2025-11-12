@@ -1,9 +1,9 @@
 export const BACKGROUND_COLORS = [
-  "#fafafa", // Blanc cassé élégant
-  "#f5f5f7", // Gris Apple
-  "#f9f9fb", // Blanc-bleu subtil
-  "#faf8f6", // Beige crème
-  "#f7f9fa", // Blanc-vert menthe
+  "#ffffff", 
+  "#effff0", 
+  "#ffe3c5", 
+  "#fffbf6", 
+  "#cfdce2ff", 
 ];
 
 export const getContrastColor = (hexColor) => {

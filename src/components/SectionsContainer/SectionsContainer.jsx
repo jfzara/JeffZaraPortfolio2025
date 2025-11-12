@@ -3,7 +3,7 @@ import * as S from "./SectionsContainer.styles";
 import Section from "./Section";
 import RipplesLayer from "./RipplesLayer";
 import NavDots from "./NavDots";
-import { BACKGROUND_COLORS } from "../constants/colors";
+import { BACKGROUND_COLORS, getContrastColor } from "../constants/colors";
 import textureVideo from "../../assets/texture_papier.mp4";
 
 export default function SectionsContainer({ sections }) {
@@ -32,15 +32,16 @@ export default function SectionsContainer({ sections }) {
         <source src={textureVideo} type="video/mp4" />
       </S.BackgroundVideo>
 
-      {sections.map((s, i) => (
-        <Section
-          key={i}
-          data={s}
-          active={i === activeIndex}
-          textColor="#bfbfbf"
-          decoSide={i % 2 === 0 ? "right" : "left"}
-        />
-      ))}
+    {sections.map((s, i) => (
+  <Section
+    key={i}
+    data={s}
+    active={i === activeIndex}
+    textColor={getContrastColor(BACKGROUND_COLORS[i % BACKGROUND_COLORS.length])}
+    bgColor={BACKGROUND_COLORS[i % BACKGROUND_COLORS.length] + "80"} // 80 = 50% opacity
+    decoSide={i % 2 === 0 ? "right" : "left"}
+  />
+))}
 
       <RipplesLayer ripples={ripples} setRipples={setRipples} />
 
