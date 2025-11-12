@@ -182,17 +182,17 @@ export const NavDot = styled.div`
   border-radius: 50%;
   background: ${(props) => (props.active ? "rgba(0, 255, 240, 1)" : "#ccc")};
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 
   &:hover + .label {
-    opacity: 1; /* label correspondant devient full opacity au hover */
-    color: #000;
-    font-weight:600;
+    opacity: 1;
+    transform: scale(1);
+    font-weight: 500;
+    text-shadow: 0 0.6px 0 rgba(0, 0, 0, 0.2);
   }
 
   &:hover ~ .label {
-    opacity: 0.02; /* autres labels deviennent plus transparents */
-    
+    opacity: 0.1;
   }
 `;
 
@@ -200,9 +200,16 @@ export const Label = styled.span`
   font-size: 2.5rem;
   opacity: 0;
   color: #000;
-  transition: opacity 0.3s, color 0.3s;
+  font-weight: 300;
+  transform: scale(0.7);
+  transition: 
+    opacity 0.4s ease,
+    color 0.4s ease,
+    transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+    text-shadow 0.4s ease;
+  
   &.label {
-    pointer-events: none; /* pour éviter d’interférer avec le hover sur dot */
+    pointer-events: none;
   }
 `;
 
