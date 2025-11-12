@@ -1,5 +1,5 @@
 import styled, { keyframes , css }  from "styled-components";
-import {titleFromSpace } from "./animations";
+import { titleFromSpace, fadeIn, revealMask, titleWithShadow} from "./animations";
 
 
 
@@ -87,7 +87,37 @@ export const Section = styled.div`
 ========================= */
 // src/components/SectionsContainer/SectionsContainer.styles.js
 
+export const TitleGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* alignement à gauche */
+  text-align: left;
 
+  margin-bottom: 2.5rem;
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    padding-left: 2rem;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Optionnel : effet subtil à l’apparition du bloc */
+  animation: fadeInBlock 1.2s ease-out forwards;
+
+  @keyframes fadeInBlock {
+    from {
+      opacity: 0;
+      transform: translateY(2vh);
+      filter: blur(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+`;
 
 export const Title = styled.h1`
   font-size: 5.5rem;
@@ -96,14 +126,22 @@ export const Title = styled.h1`
   display: inline-block;
   color: black;
   position: relative;
-  /* overflow hidden retiré pour ne pas couper l'animation */
-  
-  /* Animation "venant de l’espace" uniquement sur le premier panneau actif */
+
+  /* Ombre portée animée via text-shadow */
   ${({ firstPanel }) =>
     firstPanel &&
     css`
       animation: ${titleFromSpace} 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
       transform-origin: center;
+
+      /* Ombre réaliste sur le texte, qui suit le scale du titre */
+      text-shadow: 
+        0 0 0 rgba(0,0,0,0),
+        0 0 0 rgba(0,0,0,0),
+        0 0 0 rgba(0,0,0,0);
+
+      animation: ${titleFromSpace} 1.5s cubic-bezier(0.19,1,0.22,1) forwards,
+                 shadowPop 1.5s forwards;
     `}
 
   span {
@@ -111,11 +149,9 @@ export const Title = styled.h1`
     cursor: default;
     color: black;
 
-    /* Animation actuelle : flash de couleurs */
     animation: ${flashColors} 1.2s ease-out forwards;
     animation-delay: calc(var(--idx) * 0.05s);
 
-    /* Transition hover : mouvement lourd et text-shadow */
     transition: 
       transform 0.7s cubic-bezier(0.25, 1.5, 0.5, 1), 
       color 0.1s ease-in;
@@ -127,11 +163,70 @@ export const Title = styled.h1`
   }
 `;
 
+/* Animation text-shadow pour l’effet d’ombre portée */
+export const shadowPop = keyframes`
+  0% {
+    text-shadow: 0 0 0 rgba(0,0,0,0);
+  }
+  50% {
+    text-shadow: 0 1rem 1rem rgba(0,0,0,0.35),
+                 0 2rem 2rem rgba(0,0,0,0.25),
+                 0 3rem 3rem rgba(0,0,0,0.15);
+  }
+  100% {
+    text-shadow: 0 0.5rem 0.5rem rgba(0,0,0,0.35),
+                 0 1rem 1rem rgba(0,0,0,0.25),
+                 0 1.5rem 1.5rem rgba(0,0,0,0.15);
+  }
+`;
+
+
 export const Subtitle = styled.h2`
   font-size: 1.8rem;
+  margin-top: 2rem; /* espace sous le H1 */
   margin-bottom: 1rem;
-  color: ${(props) => props.textColor};;
+  color: ${(props) => props.color || "#525252ff"}; /* couleur par défaut mais modifiable via prop */
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+
+  span {
+    display: inline-block;
+    position: relative;
+    transform-origin: bottom center;
+    opacity: 0;
+
+    /* === Masque dynamique couleur cyan === */
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 255, 240, 1);
+      transform: translateY(0);
+      animation: ${revealMask} 0.6s ease-out forwards; /* plus rapide */
+      animation-delay: calc(var(--idx) * 0.03s);      /* lettres plus rapides */
+    }
+
+    /* === Fade in simple === */
+    animation: ${fadeIn} 0.5s ease-out forwards;      /* plus rapide */
+    animation-delay: calc(var(--idx) * 0.03s);
+  }
+
+  /* Désactive les animations si ce n’est pas le premier panneau */
+  ${({ firstPanel }) =>
+    !firstPanel &&
+    css`
+      span::before {
+        display: none;
+      }
+      span {
+        animation: none;
+        opacity: 1;
+      }
+    `}
 `;
+
+
 
 export const Body = styled.div`
   font-size: 1rem;

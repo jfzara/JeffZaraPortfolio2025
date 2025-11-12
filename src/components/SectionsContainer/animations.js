@@ -59,3 +59,43 @@ export const titleFromSpace = keyframes`
   95%  { transform: scale(1.01) translateY(0); opacity: 1; filter: blur(0); color: #000; }
   100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); color: #000; }
 `;
+
+export const fadeIn = keyframes`
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+`;
+
+export const revealMask = keyframes`
+  0% { transform: translateY(0); background: rgba(0, 255, 240, 1); }
+  40% { transform: translateY(-50%); background: rgba(0, 255, 240, 0.9); }
+  70% { transform: translateY(-80%); background: rgba(0, 255, 240, 0.6); }
+  100% { transform: translateY(-100%); background: rgba(0, 255, 240, 0); }
+`;
+
+export const titleWithShadow = keyframes`
+  0% {
+    transform: scale(20) translateY(-15vh);
+    text-shadow: 0 0 50px rgba(0,0,0,0.2);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(8) translateY(-9vh);
+    text-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(3) translateY(-5vh);
+    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0.7;
+  }
+  75% {
+    transform: scale(1.2) translateY(-0.5vh);
+    text-shadow: 0 5px 15px rgba(0,0,0,0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    opacity: 1;
+  }
+`;
