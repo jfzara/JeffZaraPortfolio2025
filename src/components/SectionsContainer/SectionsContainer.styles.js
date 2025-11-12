@@ -1,5 +1,5 @@
-import styled, { keyframes } from "styled-components";
-
+import styled, { keyframes , css }  from "styled-components";
+import {titleFromSpace } from "./animations";
 
 
 
@@ -85,31 +85,44 @@ export const Section = styled.div`
 /* =========================
    TITLE & TEXT
 ========================= */
+// src/components/SectionsContainer/SectionsContainer.styles.js
+
+
+
 export const Title = styled.h1`
   font-size: 5.5rem;
   margin-bottom: 1rem;
   letter-spacing: 0.1em;
   display: inline-block;
   color: black;
+  position: relative;
+  /* overflow hidden retiré pour ne pas couper l'animation */
+  
+  /* Animation "venant de l’espace" uniquement sur le premier panneau actif */
+  ${({ firstPanel }) =>
+    firstPanel &&
+    css`
+      animation: ${titleFromSpace} 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      transform-origin: center;
+    `}
 
   span {
     display: inline-block;
     cursor: default;
     color: black;
 
-    /* Animation au montage : filtre uniquement */
+    /* Animation actuelle : flash de couleurs */
     animation: ${flashColors} 1.2s ease-out forwards;
     animation-delay: calc(var(--idx) * 0.05s);
 
-    /* Transition pour hover : mouvement lourd + text-shadow */
+    /* Transition hover : mouvement lourd et text-shadow */
     transition: 
       transform 0.7s cubic-bezier(0.25, 1.5, 0.5, 1), 
       color 0.1s ease-in;
 
     &:hover {
-      color: rgba(0, 255, 240, 1); /* bleu électrique immédiat */
-     
-      transform: translateY(-0.4rem); /* monte avec "poids" */
+      color: rgba(0, 255, 240, 1);
+      transform: translateY(-0.4rem);
     }
   }
 `;

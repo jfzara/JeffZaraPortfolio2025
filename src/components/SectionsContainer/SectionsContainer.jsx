@@ -32,15 +32,24 @@ export default function SectionsContainer({ sections }) {
         <source src={textureVideo} type="video/mp4" />
       </S.BackgroundVideo>
 
-    {sections.map((s, i) => (
+{sections.map((s, i) => (
   <Section
     key={i}
     data={s}
+    index={i} 
     active={i === activeIndex}
     textColor={getContrastColor(BACKGROUND_COLORS[i % BACKGROUND_COLORS.length])}
-    bgColor={BACKGROUND_COLORS[i % BACKGROUND_COLORS.length] + "80"} // 80 = 50% opacity
+    bgColor={BACKGROUND_COLORS[i % BACKGROUND_COLORS.length] + "80"}
     decoSide={i % 2 === 0 ? "right" : "left"}
-  />
+  >
+    <S.Title firstPanel={i === 0}>
+      {s.title.split("").map((char, idx) => (
+        <span key={idx} style={{ "--idx": idx }}>
+          {char}
+        </span>
+      ))}
+    </S.Title>
+  </Section>
 ))}
 
       <RipplesLayer ripples={ripples} setRipples={setRipples} />

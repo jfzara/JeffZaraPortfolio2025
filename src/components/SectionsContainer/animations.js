@@ -36,3 +36,19 @@ export const parallaxFloat = keyframes`
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }
 `;
+export const titleFromSpace = keyframes`
+  0% {
+    transform: scale(20) translateY(-10vh);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  60% {
+    transform: scale(1.2) translateY(0);
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+`;
