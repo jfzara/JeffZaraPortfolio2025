@@ -102,7 +102,7 @@ export const Title = styled.h1`
   ${({ firstPanel }) =>
     firstPanel &&
     css`
-      animation: ${titleFromSpace} 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      animation: ${titleFromSpace} 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
       transform-origin: center;
     `}
 
@@ -216,10 +216,10 @@ export const Label = styled.span`
   font-weight: 300;
   transform: scale(0.7);
   transition: 
-    opacity 0.4s ease,
-    color 0.4s ease,
+    opacity 0.8s ease,
+    color 0.8s ease,
     transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
-    text-shadow 0.4s ease;
+    text-shadow 0.8s ease;
   
   &.label {
     pointer-events: none;
