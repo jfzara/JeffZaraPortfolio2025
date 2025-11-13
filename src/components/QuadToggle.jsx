@@ -1,20 +1,30 @@
-// src/components/QuadToggle.jsx
-import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
+import React, { useRef, useEffect } from "react";
+import styled, { keyframes } from "styled-components";
 
-const QuadToggle = ({ isOpen, onClose }) => {
+const neonPulse = keyframes`
+  0% { box-shadow: 0 0 4px rgba(0, 255, 240, 0.4); }
+  50% { box-shadow: 0 0 12px rgba(0, 255, 240, 0.8); }
+  100% { box-shadow: 0 0 4px rgba(0, 255, 240, 0.4); }
+`;
+
+const QuadToggle = ({ isOpen, onClose, parentRef }) => {
   const ref = useRef();
 
   // Ferme le popover si clic à l'extérieur
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
+      if (
+        ref.current &&
+        !ref.current.contains(e.target) &&
+        parentRef?.current &&
+        !parentRef.current.contains(e.target)
+      ) {
         onClose();
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose]);
+  }, [onClose, parentRef]);
 
   if (!isOpen) return null;
 
@@ -31,19 +41,21 @@ const QuadToggle = ({ isOpen, onClose }) => {
 export default QuadToggle;
 
 /* === Styled Components === */
+
 const Popover = styled.div`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: #1c1c1c;
-  border-radius: 12px;
-  padding: 8px;
-  display: grid;
-  grid-template-columns: repeat(2, 50px);
-  grid-template-rows: repeat(2, 50px);
-  gap: 6px;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.25);
-  z-index: 1000;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 87%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 6px;
+    padding: 8px;
+    background: rgba(28, 28, 28, 0.28);
+    border-radius: 1px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -56,20 +68,19 @@ const Quadrant = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
-  border-radius: 8px;
+  border-radius: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background-color: #f3f3f3;
+  background-color: rgba(243, 243, 243, 0.8);
   color: #000;
 
   &.dark {
-    background-color: #111;
+    background-color: rgba(17, 17, 17, 0.8);
     color: #fff;
   }
 
   &:hover {
-    transform: scale(1.08);
-    filter: brightness(1.15);
-    box-shadow: 0 0 8px rgba(0, 255, 240, 0.6); /* bleu électrique subtil */
+    transform: scale(1.1);
+    animation: ${neonPulse} 0.6s ease-in-out infinite alternate;
   }
 `;
