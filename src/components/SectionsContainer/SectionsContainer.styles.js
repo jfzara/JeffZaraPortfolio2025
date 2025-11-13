@@ -69,7 +69,7 @@ export const parallaxFloat = keyframes`
 export const Container = styled.div`
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 50vh;
   background: ${(props) => props.bgColor};
   overflow: hidden;
 `;
@@ -78,6 +78,7 @@ export const Section = styled.div`
   display: ${(props) => (props.active ? "block" : "none")};
   color: ${(props) => props.textColor};
   padding: 3rem;
+  scroll-margin-top: 200px;
   position: relative;
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
@@ -120,9 +121,9 @@ export const TitleGroup = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 5.5rem;
+  font-size: 8rem;
   margin-bottom: 1rem;
-  letter-spacing: 0.1em;
+  letter-spacing: -0.02em;
   display: inline-block;
   color: black;
   position: relative;
@@ -182,7 +183,7 @@ export const shadowPop = keyframes`
 
 
 export const Subtitle = styled.h2`
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-top: 2rem; /* espace sous le H1 */
   margin-bottom: 1rem;
   color: ${(props) => props.color || "#525252ff"}; /* couleur par défaut mais modifiable via prop */
@@ -229,7 +230,7 @@ export const Subtitle = styled.h2`
 
 
 export const Body = styled.div`
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1.6;
   margin-bottom: 2rem;
 `;
@@ -255,7 +256,7 @@ export const CTA = styled.a`
 
   &:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  
   }
 `;
 
@@ -291,6 +292,11 @@ export const NavDot = styled.div`
   background: ${(props) => (props.active ? "rgba(0, 255, 240, 1)" : "#ccc")};
   cursor: pointer;
   transition: background 0.3s ease;
+
+   &:hover{
+ background: #a3a3a3ff;
+ box-shadow: 0 0.6px 0 rgba(0, 0, 0, 0.2);
+}
 
   &:hover + .label {
     opacity: 1;
