@@ -1,3 +1,4 @@
+// src/components/SectionsContainer/RipplesLayer.jsx
 import React, { useEffect } from "react";
 import * as S from "./SectionsContainer.styles";
 
@@ -9,7 +10,10 @@ export default function RipplesLayer({ ripples, setRipples }) {
       setTimeout(() => setRipples((prev) => prev.filter((r) => r.id !== id)), 600);
     };
 
-    const handleClick = (e) => createRipple(e.clientX, e.clientY);
+    const handleClick = (e) => {
+      createRipple(e.clientX, e.clientY);
+    };
+
     const handleTouchStart = (e) => {
       if (e.touches?.length) {
         const t = e.touches[0];
@@ -26,5 +30,21 @@ export default function RipplesLayer({ ripples, setRipples }) {
     };
   }, [setRipples]);
 
-  return ripples.map((r) => <S.Ripple key={r.id} style={{ left: r.x, top: r.y }} />);
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        pointerEvents: "none",
+        zIndex: 9999, // toujours au-dessus
+      }}
+    >
+      {ripples.map((r) => (
+        <S.Ripple key={r.id} style={{ left: r.x + "px", top: r.y + "px" }} />
+      ))}
+    </div>
+  );
 }

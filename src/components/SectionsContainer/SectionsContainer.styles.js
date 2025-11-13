@@ -328,27 +328,49 @@ export const Label = styled.span`
 `;
 
 
-/* =========================
-   RIPPLE EFFECT
-========================= */
+
+// RIPPLE EFFECT (raffiné)
+// =========================
+const rippleAnimSoft = keyframes`
+  0% { 
+    transform: scale(0.4);
+    opacity: 0;
+    filter: blur(1px);
+  }
+  15% { 
+    transform: scale(1);
+    opacity: 0.25;
+    filter: blur(2px);
+  }
+  35% {
+    transform: scale(2.5);
+    opacity: 0.45;
+    filter: blur(3px);
+  }
+  55% {
+    transform: scale(4.5);
+    opacity: 0.35;
+    filter: blur(5px);
+  }
+  75% { 
+    transform: scale(7);
+    opacity: 0.15;
+    filter: blur(8px);
+  }
+  100% { 
+    transform: scale(9);
+    opacity: 0;
+    filter: blur(10px);
+  }
+`;
+
 export const Ripple = styled.div`
-  position: fixed;
-  width: 20px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.5);
+  position: absolute;
+  width: 10px;   // plus petit
+  height: 10px;  // plus petit
+  background: rgba(51, 51, 51, 1); // plus subtil
   border-radius: 50%;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  animation: rippleAnim 0.6s forwards;
-
-  @keyframes rippleAnim {
-    0% {
-      transform: translate(-50%, -50%) scale(0);
-      opacity: 0.8;
-    }
-    100% {
-      transform: translate(-50%, -50%) scale(3);
-      opacity: 0;
-    }
-  }
+  animation: ${rippleAnimSoft} 0.5s ease-in-out forwards;
 `;
