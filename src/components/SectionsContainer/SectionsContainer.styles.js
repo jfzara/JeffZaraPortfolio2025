@@ -368,9 +368,11 @@ export const Ripple = styled.div`
   position: absolute;
   width: 10px;   // plus petit
   height: 10px;  // plus petit
-  background: rgba(51, 51, 51, 1); // plus subtil
+  background: rgba(104, 104, 104, 1); // plus subtil
   border-radius: 50%;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  animation: ${rippleAnimSoft} 0.5s ease-in-out forwards;
+
+  animation: ${rippleAnimSoft} 0.4s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+  mix-blend-mode: screen; /* rend l'effet encore plus léger */
 `;
