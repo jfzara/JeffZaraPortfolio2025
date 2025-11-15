@@ -1,20 +1,23 @@
 import React from "react";
 import * as S from "./ProjectsSection.styles";
+import livanoPreview from "../assets/projects/major/livano/livanoPreview.mp4";
+import youChefPreview from "../assets/projects/major/youchef/YouChefPreview.mp4";
 
 export default function ProjectsSection() {
-  // 🔹 Données de projets (placeholders)
   const majorProjects = [
     {
       id: 1,
-      title: "Projet Majeur 1",
-      description: "Une application web moderne avec React, Node et MongoDB.",
-      color: "#00FFF0",
+      title: "Livano – Application immobilière",
+      description:
+        "Plateforme web complète avec réservation, formulaires dynamiques et dashboard.",
+      video: livanoPreview,
     },
     {
       id: 2,
-      title: "Projet Majeur 2",
-      description: "Un tableau de bord interactif avec animations fluides.",
-      color: "#FF0077",
+      title: "YouChef – Application de recettes",
+      description:
+        "Gestion de recettes CRUD, dashboard utilisateur et animations interactives.",
+      video: youChefPreview,
     },
   ];
 
@@ -33,6 +36,17 @@ export default function ProjectsSection() {
       <S.MajorProjects>
         {majorProjects.map((p) => (
           <S.MajorCard key={p.id} color={p.color}>
+            {/* 🔹 Ajout de la vidéo si elle existe */}
+            {p.video && (
+              <video
+                className="project-video"
+                src={p.video}
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+            )}
             <div className="overlay" />
             <S.CardContent>
               <h3>{p.title}</h3>
