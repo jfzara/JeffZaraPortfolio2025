@@ -1,9 +1,15 @@
 import styled, { keyframes } from "styled-components";
 
-/* == Anim apparition == */
+/* == Animations == */
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(40px); }
   to { opacity: 1; transform: translateY(0); }
+`;
+
+const popUp = keyframes`
+  0% { transform: scale(0.6) translateY(10px); opacity: 0; }
+  70% { transform: scale(1.1) translateY(-2px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
 `;
 
 export const SectionContainer = styled.section`
@@ -21,22 +27,9 @@ export const Title = styled.h1`
   margin-bottom: 4rem;
   width: 100%;
   padding-left: 2vw;
-
   color: #111;
   position: relative;
   animation: ${fadeUp} 1s ease-out forwards;
-
-  /* Glow premium léger */
-  &:after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 2vw;
-    z-index: -1;
-    color: #00fff0;
-    opacity: 0.08;
-    filter: blur(8px);
-  }
 `;
 
 export const MajorProjects = styled.div`
@@ -56,15 +49,18 @@ export const MajorCard = styled.div`
 
   background: white;
   color: #111;
-  overflow: hidden;
-  cursor: default;
+  overflow: visible; /* important pour dépasser les tags */
   padding: 2.2rem;
 
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
   transition: transform 0.6s cubic-bezier(.22,1,.36,1),
               box-shadow 0.6s ease;
 
-  /* --- Vidéo invisible par défaut --- */
+  &:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+  }
+
   .project-video {
     position: absolute;
     inset: 0;
@@ -78,61 +74,37 @@ export const MajorCard = styled.div`
     transition: opacity 0.5s ease, filter 0.5s ease, transform 0.6s ease;
   }
 
-  /* --- Les tags premium --- */
-  .tag {
-    position: absolute;
-    background: #bbbbbbff;
-    color: black;
-    padding: 0.4rem 1rem;
-    font-size: 0.85rem;
-    border-radius:2px;
-    opacity: 0;
-    transform: translateY(12px) scale(0.95);
-    transition: all 0.6s cubic-bezier(.22,1,.36,1);
-    cursor: pointer;
-    letter-spacing: 0.04em;
-    pointer-events: all;
-  }
-
-  .tag-demo {
-    top: -18px;
-    left: 22px;
-  }
-
-  .tag-tech {
-    top: 40%;
-    right: -20px;
-  }
-
-  .tag-case {
-    bottom: -18px;
-    left: 30%;
-  }
-
-  /* --- Apparition élégante des tags sur hover card --- */
-  &:hover .tag {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  /* --- Afficher la vidéo UNIQUEMENT en hover du tag DEMO --- */
-  .tag-demo:hover ~ .project-video {
-    opacity: 0.55;
-    transform: scale(1);
-    filter: blur(0) brightness(1.2);
-  }
+  /* apparaitre séquentiellement et pop-up */
+ .tag {
+  position: absolute;
+  background: #bbbbbbff;
+  color: black;
+  padding: 0.4rem 1rem;
+  font-size: 0.85rem;
+  border: 0.2px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  opacity: 0;
+  transform: scale(0.6) translateY(10px);
+  cursor: pointer;
+  pointer-events: all;
+  letter-spacing: 0.04em;
+  transition: clip-path 0.6s ease-in-out, transform 0.35s ease, box-shadow 0.35s ease;
 
   &:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  }
+}
+
+  &:hover .tag {
+    opacity: 1;
+    animation: ${popUp} 0.35s forwards;
   }
 
-  @media (max-width: 900px) {
-    width: 100%;
-    height: 300px;
-  }
+&.tag-demo { animation-delay: 0.05s; }
+&.tag-tech { animation-delay: 0.15s; }
+&.tag-case { animation-delay: 0.25s; }
 `;
-
 
 export const CardContent = styled.div`
   position: absolute;
@@ -142,16 +114,8 @@ export const CardContent = styled.div`
   color: white;
   animation: ${fadeUp} 1.2s ease-out forwards;
 
-  h3 {
-    font-size: 1.9rem;
-    margin-bottom: 0.4rem;
-  }
-
-  p {
-    font-size: 1.1rem;
-    max-width: 90%;
-    opacity: 0.95;
-  }
+  h3 { font-size: 1.9rem; margin-bottom: 0.4rem; }
+  p { font-size: 1.1rem; max-width: 90%; opacity: 0.95; }
 `;
 
 export const MinorGrid = styled.div`
