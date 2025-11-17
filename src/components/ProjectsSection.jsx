@@ -32,22 +32,24 @@ export default function ProjectsSection() {
     <S.SectionContainer>
       <S.Title>MES PROJETS</S.Title>
 
-      {/* === Grands projets === */}
       <S.MajorProjects>
         {majorProjects.map((p) => (
-          <S.MajorCard key={p.id} color={p.color}>
-            {/* 🔹 Ajout de la vidéo si elle existe */}
-            {p.video && (
-              <video
-                className="project-video"
-                src={p.video}
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
-            )}
-            <div className="overlay" />
+          <S.MajorCard key={p.id}>
+
+            {/*  TAGS autour de la carte */}
+            <div className="tag tag-demo">DEMO</div>
+            <div className="tag tag-tech">TECH STACK</div>
+            <div className="tag tag-case">CASE STUDY</div>
+
+            {/* Vidéo masquée par défaut */}
+            <video
+              className="project-video"
+              src={p.video}
+              loop
+              muted
+              playsInline
+            />
+
             <S.CardContent>
               <h3>{p.title}</h3>
               <p>{p.description}</p>
@@ -56,7 +58,6 @@ export default function ProjectsSection() {
         ))}
       </S.MajorProjects>
 
-      {/* === Petits projets === */}
       <S.MinorGrid>
         {minorProjects.map((p) => (
           <S.MinorCard key={p.id} color={p.color}>

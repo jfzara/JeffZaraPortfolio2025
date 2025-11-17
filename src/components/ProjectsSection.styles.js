@@ -52,61 +52,87 @@ export const MajorCard = styled.div`
   position: relative;
   width: 45%;
   height: 330px;
-  border-radius: 2rem;
-  background: ${(p) => p.color || "#111"};
+  border-radius: 2px;
+
+  background: white;
+  color: #111;
   overflow: hidden;
-  cursor: pointer;
-  transform: translateY(0);
-  
-  box-shadow: 0 10px 30px rgba(0,0,0,0.17);
+  cursor: default;
+  padding: 2.2rem;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
   transition: transform 0.6s cubic-bezier(.22,1,.36,1),
               box-shadow 0.6s ease;
 
-  /* Video layer */
+  /* --- Vidéo invisible par défaut --- */
   .project-video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-
-    opacity: 0.35;
-    filter: blur(3px) brightness(1.05);
-    transition: 
-      opacity 0.45s ease,
-      filter 0.45s ease,
-      transform 0.8s cubic-bezier(.25,.46,.45,.94);
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.08);
+    filter: blur(6px) brightness(1.1);
+    transition: opacity 0.5s ease, filter 0.5s ease, transform 0.6s ease;
   }
 
-  /* Dark overlay */
-  .overlay {
+  /* --- Les tags premium --- */
+  .tag {
     position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.28);
+    background: #bbbbbbff;
+    color: black;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    border-radius:2px;
     opacity: 0;
-    transition: opacity 0.45s ease;
+    transform: translateY(12px) scale(0.95);
+    transition: all 0.6s cubic-bezier(.22,1,.36,1);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    pointer-events: all;
+  }
+
+  .tag-demo {
+    top: -18px;
+    left: 22px;
+  }
+
+  .tag-tech {
+    top: 40%;
+    right: -20px;
+  }
+
+  .tag-case {
+    bottom: -18px;
+    left: 30%;
+  }
+
+  /* --- Apparition élégante des tags sur hover card --- */
+  &:hover .tag {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* --- Afficher la vidéo UNIQUEMENT en hover du tag DEMO --- */
+  .tag-demo:hover ~ .project-video {
+    opacity: 0.55;
+    transform: scale(1);
+    filter: blur(0) brightness(1.2);
   }
 
   &:hover {
-    transform: translateY(-12px) scale(1.03);
-    box-shadow: 0 18px 45px rgba(0,0,0,0.27);
-
-    .project-video {
-      opacity: 0.55;
-      filter: blur(0) brightness(1.2);
-      transform: scale(1.05);
-    }
-
-    .overlay {
-      opacity: 1;
-    }
+    transform: translateY(-12px);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.18);
   }
 
   @media (max-width: 900px) {
     width: 100%;
-    height: 280px;
+    height: 300px;
   }
 `;
+
 
 export const CardContent = styled.div`
   position: absolute;
@@ -138,7 +164,7 @@ export const MinorGrid = styled.div`
 export const MinorCard = styled.div`
   background: ${(p) => p.color};
   height: 160px;
-  border-radius: 1.5rem;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
