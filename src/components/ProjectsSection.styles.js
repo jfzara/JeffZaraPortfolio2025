@@ -1,5 +1,8 @@
 import styled, { keyframes } from "styled-components";
 
+/* =====================
+   ANIMATIONS
+===================== */
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(40px); }
   to { opacity: 1; transform: translateY(0); }
@@ -14,6 +17,7 @@ const popUp = keyframes`
 export const SectionContainer = styled.section`
   padding: 6rem 8vw;
   background: #fafafa;
+  color: #3a3a3a;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,6 +30,7 @@ export const Title = styled.h1`
   width: 100%;
   padding-left: 2vw;
   color: #111;
+  position: relative;
   animation: ${fadeUp} 1s ease-out forwards;
 `;
 
@@ -41,11 +46,19 @@ export const MajorCard = styled.div`
   position: relative;
   width: 45%;
   height: 330px;
-  border-radius: 2px;
+  border-radius: 20px;
   background: white;
   color: #111;
   overflow: visible;
   padding: 2.2rem;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+
+  &:hover {
+    transform: none;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+  }
 
   .project-video {
     position: absolute;
@@ -73,26 +86,25 @@ export const MajorCard = styled.div`
     pointer-events: all;
     letter-spacing: 0.05em;
     transform: scale(0.95);
-    transition: transform 0.6s cubic-bezier(0.22,1,.36,1),
-                clip-path 0.8s cubic-bezier(0.22,1,.36,1),
-                background 0.7s ease,
-                color 0.7s ease;
+    transition: 
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.7s ease,
+      color 0.7s ease;
+
+    /* Forme arrondie initiale */
     clip-path: polygon(25% 0%, 75% 5%, 95% 45%, 70% 85%, 30% 95%, 5% 50%);
   }
 
-  .tag.pop-up {
-    animation: ${popUp} 1s forwards;
-  }
+  /* Pop-up avec delays */
+  .tag.pop-up-demo { animation: ${popUp} 0.9s forwards 0s; }
+  .tag.pop-up-tech { animation: ${popUp} 0.9s forwards 0.3s; }
+  .tag.pop-up-case { animation: ${popUp} 0.9s forwards 0.6s; }
 
-  .tag-demo.pop-up { animation-delay: 0s; }
-  .tag-tech.pop-up { animation-delay: 0.3s; }
-  .tag-case.pop-up { animation-delay: 0.6s; }
-
+  /* Morphing au hover */
   .tag:hover {
-    transform: scale(1.08) translateY(-3px);
+    transform: scale(1.05);
     clip-path: polygon(20% 5%, 80% 0%, 100% 50%, 75% 95%, 25% 85%, 0% 50%);
-    transition: transform 0.4s cubic-bezier(0.68,-0.55,0.27,1.55),
-                clip-path 0.6s cubic-bezier(0.22,1,.36,1);
   }
 `;
 
