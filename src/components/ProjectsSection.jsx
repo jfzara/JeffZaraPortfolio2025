@@ -3,85 +3,81 @@ import * as S from "./ProjectsSection.styles";
 import livanoPreview from "../assets/projects/major/livano/livanoPreview.mp4";
 import youChefPreview from "../assets/projects/major/youchef/YouChefPreview.mp4";
 
-const clipPaths  = [
-  "polygon(10% 0%, 90% 10%, 85% 60%, 60% 100%, 15% 85%, 0% 50%)",
-  "polygon(0% 10%, 70% 0%, 100% 30%, 90% 80%, 40% 100%, 10% 60%)",
-  "polygon(5% 5%, 80% 0%, 95% 25%, 90% 75%, 50% 100%, 10% 85%)",
-  "polygon(0% 0%, 80% 10%, 100% 40%, 70% 90%, 20% 100%, 0% 60%)",
-  "polygon(10% 10%, 90% 5%, 95% 50%, 60% 95%, 15% 85%, 0% 40%)"
+const softBlobs = [
+  "polygon(25% 0%, 75% 5%, 95% 45%, 70% 85%, 30% 95%, 5% 50%)",
+  "polygon(20% 10%, 80% 0%, 95% 50%, 65% 85%, 25% 80%, 0% 45%)",
+  "polygon(15% 5%, 85% 10%, 90% 55%, 70% 85%, 25% 80%, 5% 50%)",
+  "polygon(10% 0%, 85% 15%, 90% 50%, 70% 85%, 20% 80%, 0% 40%)",
 ];
+
+const tagPositions = {
+  demo: { top: "-1rem", left: "50%", transform: "translateX(-50%)" },
+  tech: { top: "50%", right: "-1rem", transform: "translateY(-50%)" },
+  case: { bottom: "-1rem", left: "50%", transform: "translateX(-50%)" }
+};
 
 export default function ProjectsSection() {
   const majorProjects = [
-    {
-      id: 1,
-      title: "Livano – Application immobilière",
-      description: "Plateforme web complète ...",
-      video: livanoPreview,
-      tagPositions: {
-        demo: { top: "-20px", left: "-15px" },
-        tech: { top: "10%", right: "-30px" },
-        case: { bottom: "-25px", left: "35%" },
-      },
-    },
-    {
-      id: 2,
-      title: "YouChef – Application de recettes",
-      description: "Gestion de recettes CRUD ...",
-      video: youChefPreview,
-      tagPositions: {
-        demo: { top: "-25px", right: "-20px" },
-        tech: { top: "15%", left: "-25px" },
-        case: { bottom: "-20px", right: "30%" },
-      },
-    },
+    { id: 1, title: "Livano – Application immobilière", description: "Plateforme web complète ...", video: livanoPreview },
+    { id: 2, title: "YouChef – Application de recettes", description: "Gestion de recettes CRUD ...", video: youChefPreview },
   ];
 
   const [tagShapes, setTagShapes] = useState({});
+  const [tagsVisible, setTagsVisible] = useState({});
 
-const handleHover = (projectId, tagType) => {
-  const randomShape = irregularClipPaths[Math.floor(Math.random() * irregularClipPaths.length)];
-  setTagShapes(prev => ({
-    ...prev,
-    [projectId]: { ...prev[projectId], [tagType]: randomShape }
-  }));
-};
+  const handleCardHover = (projectId) => {
+    if (!tagsVisible[projectId]) {
+      setTagsVisible(prev => ({ ...prev, [projectId]: true }));
+
+      const newShapes = {};
+      ["demo","tech","case"].forEach(type => {
+        newShapes[type] = tagShapes[projectId]?.[type] || softBlobs[Math.floor(Math.random() * softBlobs.length)];
+      });
+      setTagShapes(prev => ({ ...prev, [projectId]: { ...prev[projectId], ...newShapes } }));
+    }
+  };
 
   return (
     <S.SectionContainer>
       <S.Title>MES PROJETS</S.Title>
-
       <S.MajorProjects>
-        {majorProjects.map((p) => (
-          <S.MajorCard key={p.id}>
-            {["demo","tech","case"].map(type => (
-              <div
-                key={type}
-                className={`tag tag-${type}`}
-                style={{
-                  ...p.tagPositions[type],
-                  clipPath: tagShapes[p.id]?.[type] || clipPaths[0]
-                }}
-                onMouseEnter={() => handleHover(p.id, type)}
-              >
-                {type==="demo"?"DEMO":type==="tech"?"TECH STACK":"CASE STUDY"}
-              </div>
-            ))}
+        {majorProjects.map(p => {
+          const tags = ["demo", "tech", "case"];
+          return (
+            <S.MajorCard 
+              key={p.id}
+              onMouseEnter={() => handleCardHover(p.id)}
+            >
+              {tags.map(type => (
+                <div
+                  key={type}
+                  className={`tag ${tagsVisible[p.id] ? `pop-up ${type}` : ""}`}
+                  style={{
+                    ...tagPositions[type],
+                    clipPath: tagShapes[p.id]?.[type] || softBlobs[0],
+                    background: tagsVisible[p.id] ? "#000" : "#00000000",
+                    color: tagsVisible[p.id] ? "#fff" : "transparent",
+                  }}
+                >
+                  {type === "demo" ? "DEMO" : type === "tech" ? "TECH STACK" : "CASE STUDY"}
+                </div>
+              ))}
 
-            <video
-              className="project-video"
-              src={p.video}
-              loop
-              muted
-              playsInline
-            />
+              <video
+                className="project-video"
+                src={p.video}
+                loop
+                muted
+                playsInline
+              />
 
-            <S.CardContent>
-              <h3>{p.title}</h3>
-              <p>{p.description}</p>
-            </S.CardContent>
-          </S.MajorCard>
-        ))}
+              <S.CardContent>
+                <h3>{p.title}</h3>
+                <p>{p.description}</p>
+              </S.CardContent>
+            </S.MajorCard>
+          );
+        })}
       </S.MajorProjects>
     </S.SectionContainer>
   );
