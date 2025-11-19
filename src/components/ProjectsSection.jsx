@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as S from "./ProjectsSection.styles";
 import livanoPreview from "../assets/projects/major/livano/livanoPreview.mp4";
-import youChefPreview from "../assets/projects/major/youchef/YouChefPreview.mp4";
+import youChefPreview from "../assets/projects/major/youchef/YouChef_Preview.mp4";
 
 const softBlobs = [
   "polygon(25% 0%, 75% 5%, 95% 45%, 70% 85%, 30% 95%, 5% 50%)",
