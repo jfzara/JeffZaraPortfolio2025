@@ -24,8 +24,8 @@ const tagPositionsSecondCard = {
 
 export default function ProjectsSection() {
   const majorProjects = [
-    { id: 1, title: "Livano – Application immobilière", description: "Plateforme web complète ", video: livanoPreview },
-    { id: 2, title: "YouChef – Application de recettes", description: "Gestion de recettes CRUD ", video: youChefPreview },
+    { id: 1, title: "Livano – Application immobilière", description: "Plateforme web complète", video: livanoPreview },
+    { id: 2, title: "YouChef – Application de recettes", description: "Gestion de recettes CRUD", video: youChefPreview },
   ];
 
   const [tagShapes, setTagShapes] = useState({});
@@ -50,23 +50,35 @@ export default function ProjectsSection() {
         {majorProjects.map((p, index) => {
           const tags = ["demo", "tech", "case"];
           const positions = index === 0 ? tagPositionsFirstCard : tagPositionsSecondCard;
-          const bgColor = index === 0 ? "rgb(255 222 97)" : "rgba(0, 255, 240, 1)";
+          const bgColor = index === 0 ? "rgb(255 222 97)" : "rgb(73 255 0)";
           return (
             <S.MajorCard key={p.id} onMouseEnter={() => handleCardHover(p.id)}>
               {tags.map((type, i) => (
-                <div
-                  key={type}
-                  className={`tag ${tagsVisible[p.id] ? `pop-up ${type}` : ""}`}
-                  style={{
-                    ...positions[type],
-                    clipPath: tagShapes[p.id]?.[type] || softBlobs[0],
-                    background: tagsVisible[p.id] ? bgColor : "#00000000",
-                    color: tagsVisible[p.id] ? "#000" : "transparent",
-                    animationDelay: tagsVisible[p.id] ? `${i * 0.3}s` : "0s"
-                  }}
-                >
-                  {type === "demo" ? "DEMO" : type === "tech" ? "TECH STACK" : "CASE STUDY"}
-                </div>
+            <div
+  key={type}
+  className={`tag tag-${type} ${tagsVisible[p.id] ? "pop-up" : ""}`}
+  style={{
+    ...positions[type],
+    clipPath: tagShapes[p.id]?.[type] || softBlobs[0],
+    background: tagsVisible[p.id] ? bgColor : "#00000000",
+    color: tagsVisible[p.id] ? "#020079" : "transparent",
+    transition: "all 0.03s ease-in",
+  }}
+  onMouseEnter={() => {
+    // Changer le clip-path au hover
+    const newShape = softBlobs[Math.floor(Math.random() * softBlobs.length)];
+    setTagShapes(prev => ({
+      ...prev,
+      [p.id]: {
+        ...prev[p.id],
+        [type]: newShape
+      }
+    }));
+  }}
+>
+  {type === "demo" ? "DEMO" : type === "tech" ? "TECH STACK" : "CASE STUDY"}
+</div>
+
               ))}
 
               <video

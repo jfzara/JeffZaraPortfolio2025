@@ -52,7 +52,7 @@ export const MajorCard = styled.div`
   position: relative;
   width: 45%;
   height: 330px;
-  border-radius: 7px; /* plus arrondi */
+  border-radius: 7px;
   background: white;
   color: #111;
   overflow: visible;
@@ -71,9 +71,6 @@ export const MajorCard = styled.div`
     transition: opacity 0.5s ease, filter 0.5s ease, transform 0.6s ease;
   }
 
-  /* =========================
-     TAGS / ÉTIQUETTES
-  ========================= */
   .tag {
     position: absolute;
     z-index: 2;
@@ -82,16 +79,15 @@ export const MajorCard = styled.div`
     font-weight: 700;
     padding: 1rem 2rem;
     font-size: 1rem;
-    border-radius: 50px; /* arrondi marqué */
+    border-radius: 50px;
     cursor: pointer;
     pointer-events: all;
     letter-spacing: 0.05em;
     transform: scale(0.95);
-    transition: 
-      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-      clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-      background 0.7s ease,
-      color 0.7s ease;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.7s ease,
+                color 0.7s ease;
     clip-path: polygon(25% 0%, 75% 5%, 95% 45%, 70% 85%, 30% 95%, 5% 50%);
     opacity: 0;
   }
@@ -103,7 +99,6 @@ export const MajorCard = styled.div`
   .tag-tech.pop-up { animation-delay: 0.3s; }
   .tag-case.pop-up { animation-delay: 0.6s; }
 
-  /* Morphing et effet "bounce" au hover */
   .tag:hover {
     transform: scale(1.05);
     clip-path: polygon(20% 5%, 80% 0%, 100% 50%, 75% 95%, 25% 85%, 0% 50%);
@@ -124,35 +119,5 @@ export const CardContent = styled.div`
   p {
     font-size: 1rem;
     color: #333;
-  }
-`;
-
-export const MinorGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 2rem;
-  width: 100%;
-`;
-
-export const MinorCard = styled.div`
-  background: ${(p) => p.color};
-  height: 160px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: white;
-  font-weight: 600;
-  font-size: 1.2rem;
-  letter-spacing: 0.05em;
-
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  cursor: pointer;
-  transition: 0.4s ease;
-
-  &:hover {
-    transform: translateY(-6px) scale(1.04);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.2);
   }
 `;
