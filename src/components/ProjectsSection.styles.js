@@ -36,6 +36,7 @@ export const MajorProjects = styled.div`
   flex-wrap: wrap;
   gap: 3rem;
   justify-content: center;
+  align-items: flex-start;
   margin-bottom: 6rem;
   width: 100%;
 `;
@@ -43,56 +44,91 @@ export const MajorProjects = styled.div`
 export const MajorCard = styled.div`
   position: relative;
   width: 45%;
-  min-height: 330px;
+  min-height: 500px; /* hauteur augmentée */
   border-radius: 7px;
   background: white;
   color: #111;
   overflow: visible;
   padding: 2.2rem;
 
-  .tag {
+.tag {
+  position: absolute;
+  z-index: 20;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &::before {
+    content: "";
     position: absolute;
-    z-index: 20;
-    font-weight: 700;
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    border-radius: 50px;
-    cursor: pointer;
-    pointer-events: all;
-    letter-spacing: 0.05em;
-    transform: scale(0.95);
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.5s ease, color 0.5s ease;
-    opacity: 0;
-
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: inherit;
-      border-radius: inherit;
-      filter: blur(6px);
-      z-index: -1;
-      opacity: 0.6;
-      transition: all 0.3s ease;
-    }
-
-    &:hover {
-      transform: scale(1.05);
-    }
-
-    &:hover::before {
-      filter: blur(10px);
-      opacity: 0.8;
-    }
+    inset: 0;
+    background: inherit;
+    filter: blur(6px);
+    z-index: -1;
+    opacity: 0.6;
+    transition: all 0.3s ease;
   }
 
-  .tag.pop-up {
+  &:hover {
+    transform: scale(1.05);
+  }
+  &:hover::before {
+    filter: blur(10px);
+    opacity: 0.8;
+  }
+}
+
+  .tag.pop-up { animation: ${popUp} 1s forwards; }
+`;
+
+
+export const Tag = styled.div`
+  position: absolute;
+  z-index: 20;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  border-radius: 50px;
+  cursor: pointer;
+  pointer-events: all;
+  letter-spacing: 0.05em;
+  transform: scale(0.95);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.5s ease, color 0.5s ease;
+  opacity: 1; /* visible par défaut maintenant */
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    border-radius: inherit;
+    filter: blur(6px);
+    z-index: -1;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:hover::before {
+    filter: blur(10px);
+    opacity: 0.8;
+  }
+
+  &.pop-up {
     animation: ${popUp} 1s forwards;
   }
 
-  .tag-demo.pop-up { animation-delay: 0s; }
-  .tag-tech.pop-up { animation-delay: 0.3s; }
-  .tag-case.pop-up { animation-delay: 0.6s; }
+  &.tag-demo.pop-up { animation-delay: 0s; }
+  &.tag-tech.pop-up { animation-delay: 0.3s; }
+  &.tag-case.pop-up { animation-delay: 0.6s; }
 `;
 
 export const CardContent = styled.div`
@@ -162,7 +198,6 @@ export const CaseStudyText = styled.div`
   }
 `;
 
-// Positions périphériques des tags pendant overlay
 export const tagPositionsAroundModal = {
   demo: { top: "-2rem", left: "50%", transform: "translateX(-50%)" },
   tech: { top: "50%", left: "-4rem", transform: "translateY(-50%)" },
