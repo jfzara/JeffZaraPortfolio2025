@@ -52,7 +52,7 @@ export const MajorCard = styled.div`
   position: relative;
   width: 45%;
   height: 330px;
-  border-radius: 20px; /* plus arrondi */
+  border-radius: 7px; /* plus arrondi */
   background: white;
   color: #111;
   overflow: visible;
