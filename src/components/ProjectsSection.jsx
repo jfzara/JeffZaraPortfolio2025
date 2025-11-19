@@ -5,10 +5,10 @@ import youChefPreview from "../assets/projects/major/youchef/YouChef_Preview.mp4
 import textureVideo from "../assets/texture_papier.mp4";
 
 const softBlobs = [
-  "polygon(25% 0%, 75% 5%, 95% 45%, 70% 85%, 30% 95%, 5% 50%)",
-  "polygon(20% 10%, 80% 0%, 95% 50%, 65% 85%, 25% 80%, 0% 45%)",
-  "polygon(15% 5%, 85% 10%, 90% 55%, 70% 85%, 25% 80%, 5% 50%)",
-  "polygon(10% 0%, 85% 15%, 90% 50%, 70% 85%, 20% 80%, 0% 40%)",
+  "25,0 75,5 95,45 70,85 30,95 5,50",
+  "20,10 80,0 95,50 65,85 25,80 0,45",
+  "15,5 85,10 90,55 70,85 25,80 5,50",
+  "10,0 85,15 90,50 70,85 20,80 0,40"
 ];
 
 const tagPositionsFirstCard = {
@@ -30,6 +30,7 @@ export default function ProjectsSection() {
       title: "Livano – Application immobilière", 
       description: "Plateforme web complète",
       video: livanoPreview,
+      tagColors: { demo: "video", tech: "#FFD700", case: "#FFD700" },
       techStack: ["React", "Node.js", "Styled-Components", "GraphQL", "TypeScript"],
       caseStudy: ["Conception UX/UI", "Gestion CRUD immobilière", "Recherche avancée", "Filtrage des annonces"]
     },
@@ -38,6 +39,7 @@ export default function ProjectsSection() {
       title: "YouChef – Application de recettes", 
       description: "Gestion de recettes CRUD",
       video: youChefPreview,
+      tagColors: { demo: "video", tech: "#39FF14", case: "#39FF14" },
       techStack: ["React", "Express", "MongoDB", "TailwindCSS"],
       caseStudy: ["Création et modification de recettes", "Filtrage et recherche par catégorie", "Gestion des utilisateurs"]
     },
@@ -45,7 +47,7 @@ export default function ProjectsSection() {
 
   const [tagShapes, setTagShapes] = useState({});
   const [tagsVisible, setTagsVisible] = useState({});
-  const [activeTag, setActiveTag] = useState(null); // id du projet actif
+  const [activeTag, setActiveTag] = useState(null);
   const [videoPlaying, setVideoPlaying] = useState({});
   const videoRefs = useRef({});
 
@@ -60,11 +62,15 @@ export default function ProjectsSection() {
     }
   };
 
+  const morphTag = (projectId,type) => {
+    const newShape = softBlobs[Math.floor(Math.random() * softBlobs.length)];
+    setTagShapes(prev => ({ ...prev, [projectId]: { ...prev[projectId], [type]: newShape } }));
+  };
+
   const handleDemoClick = (projectId) => {
     const videoEl = videoRefs.current[projectId];
     if(!videoEl) return;
 
-    // Stop autres vidéos
     Object.keys(videoRefs.current).forEach(id => {
       if(Number(id) !== projectId && videoRefs.current[id]){
         videoRefs.current[id].pause();
@@ -84,10 +90,7 @@ export default function ProjectsSection() {
   };
 
   const handleTagClick = (projectId, type) => {
-    if(type === "demo") {
-      handleDemoClick(projectId);
-      return;
-    }
+    if(type === "demo") return handleDemoClick(projectId);
     setActiveTag(prev => prev === projectId + "-" + type ? null : projectId + "-" + type);
   };
 
@@ -96,7 +99,6 @@ export default function ProjectsSection() {
       <S.Title>MES PROJETS</S.Title>
       <S.MajorProjects>
         {majorProjects.map((p, index) => {
-          const tags = ["demo", "tech", "case"];
           const positions = index === 0 ? tagPositionsFirstCard : tagPositionsSecondCard;
           const demoPlaying = videoPlaying[p.id];
           const overlayDemo = activeTag === p.id;
@@ -105,88 +107,61 @@ export default function ProjectsSection() {
 
           return (
             <S.MajorCard key={p.id} onMouseEnter={() => handleCardHover(p.id)}>
-              {tags.map(type => {
-                let label = type === "demo" ? (demoPlaying ? "■ Stop Demo" : "▶ Demo") : (type === "tech" ? "TECH STACK" : "CASE STUDY");
-                return (
-                 <S.Tag
-  key={type}
-  className={`tag tag-${type} ${tagsVisible[p.id] ? "pop-up" : ""}`}
-  style={{
-    ...positions[type],
-    clipPath: tagShapes[p.id]?.[type] || softBlobs[0],
-    background: type === "demo" ? "#f5f5f5" : "#fff",
-    color: "#020079",
-    border: "4px solid #000",  // bordure qui suit la forme
-    transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)"
-  }}
-  onClick={() => handleTagClick(p.id, type)}
-  onMouseEnter={() => {
-    const newShape = softBlobs[Math.floor(Math.random() * softBlobs.length)];
-    setTagShapes(prev => ({ ...prev, [p.id]: { ...prev[p.id], [type]: newShape } }));
-  }}
->
-  {type === "demo" && (
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      ref={el => { if(el){ el.playbackRate=0.5; videoRefs.current[p.id]=el } }}
-      style={{
-        position:"absolute",
-        top:0,
-        left:0,
-        width:"100%",
-        height:"100%",
-        objectFit:"cover",
-        opacity:0.2,
-        zIndex:0,
-        borderRadius:0  // plus de border-radius, clip-path définit la forme
-      }}
-    >
-      <source src={textureVideo} type="video/mp4" />
-    </video>
-  )}
-  <span style={{ position:"relative", zIndex:1 }}>{label}</span>
-</S.Tag>
+              {["demo","tech","case"].map(type => {
+                const label = type === "demo" ? (demoPlaying ? "■ Stop Demo" : "▶ Demo") : (type === "tech" ? "TECH STACK" : "CASE STUDY");
+                const shape = tagShapes[p.id]?.[type] || softBlobs[0];
+                const isVideo = p.tagColors[type]==="video";
 
+                return (
+                  <S.TagSVG
+                    key={type}
+                    className={tagsVisible[p.id] ? "pop-up" : ""}
+                    style={{ ...positions[type] }}
+                    onClick={() => handleTagClick(p.id,type)}
+                    onMouseEnter={() => morphTag(p.id,type)}
+                    bg={isVideo ? "#fff" : p.tagColors[type]}
+                    color={isVideo ? "#020079" : "#111"}
+                  >
+                    {isVideo && <video src={textureVideo} autoPlay loop muted />}
+                    <polygon points={shape} />
+                    <foreignObject x="0" y="0" width="100%" height="100%">
+                      <div>{label}</div>
+                    </foreignObject>
+                  </S.TagSVG>
                 )
               })}
 
-              {overlayDemo && (
-                <S.ClickOverlay style={{ background:"rgba(0,0,0,0.05)", height:"600px" }}>
-                  <video
-                    src={p.video}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    ref={el => videoRefs.current[p.id]=el}
-                    style={{ width:"95%", height:"85%", objectFit:"cover", borderRadius:"4px" }}
-                  />
+              {/* overlay content */}
+              {(overlayDemo || overlayTech || overlayCase) && (
+                <S.ClickOverlay>
+                  {overlayDemo && (
+                    <video
+                      src={p.video}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      ref={el => videoRefs.current[p.id]=el}
+                    />
+                  )}
+                  {overlayTech && (
+                    <div style={{ animation: "fadeIn 0.3s" }}>
+                      <h3>Tech Stack</h3>
+                      <ul>{p.techStack.map((t,i)=><li key={i}>{t}</li>)}</ul>
+                    </div>
+                  )}
+                  {overlayCase && (
+                    <div style={{ animation: "fadeIn 0.3s" }}>
+                      <h3>Case Study</h3>
+                      <ul>{p.caseStudy.map((c,i)=><li key={i}>{c}</li>)}</ul>
+                    </div>
+                  )}
                 </S.ClickOverlay>
               )}
 
-              {overlayTech && (
-                <S.ClickOverlay style={{ background:"#fff", flexDirection:"column", alignItems:"flex-start", padding:"2rem" }}>
-                  <h3>Tech Stack</h3>
-                  <ul>
-                    {p.techStack.map((tech,i) => <li key={i}>{tech}</li>)}
-                  </ul>
-                </S.ClickOverlay>
-              )}
-
-              {overlayCase && (
-                <S.ClickOverlay style={{ background:"#fff", flexDirection:"column", alignItems:"flex-start", padding:"2rem" }}>
-                  <h3>Case Study</h3>
-                  <ul>
-                    {p.caseStudy.map((item,i) => <li key={i}>{item}</li>)}
-                  </ul>
-                </S.ClickOverlay>
-              )}
-
+              {/* Card content fade-out */}
               {!overlayDemo && !overlayTech && !overlayCase && (
-                <S.CardContent>
+                <S.CardContent className={activeTag ? "fade-out" : "fade-in"}>
                   <h3>{p.title}</h3>
                   <p>{p.description}</p>
                 </S.CardContent>
@@ -199,4 +174,3 @@ export default function ProjectsSection() {
     </S.SectionContainer>
   );
 }
-

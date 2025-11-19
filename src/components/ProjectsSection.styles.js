@@ -1,14 +1,19 @@
 import styled, { keyframes } from "styled-components";
 
 const fadeUp = keyframes`
-  from { opacity: 0; transform: translateY(40px); }
+  from { opacity: 0; transform: translateY(0); }
   to { opacity: 1; transform: translateY(0); }
 `;
 
 const popUp = keyframes`
-  0% { transform: scale(0.8) translateY(10px); opacity: 0; }
-  70% { transform: scale(0.95) translateY(-2px); opacity: 1; }
-  100% { transform: scale(1) translateY(0); opacity: 1; }
+  0% { transform: scale(0.8); opacity: 0; }
+  70% { transform: scale(0.95); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+`;
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
 `;
 
 export const SectionContainer = styled.section`
@@ -44,97 +49,24 @@ export const MajorProjects = styled.div`
 export const MajorCard = styled.div`
   position: relative;
   width: 45%;
-  min-height: 500px; /* hauteur augmentée */
+  min-height: 500px;
   border-radius: 7px;
   background: white;
   color: #111;
   overflow: visible;
   padding: 2.2rem;
 
-.tag {
-  position: absolute;
-  z-index: 20;
-  font-weight: 700;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  cursor: pointer;
-  letter-spacing: 0.05em;
-  transform: scale(0.95);
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: inherit;
-    filter: blur(6px);
-    z-index: -1;
-    opacity: 0.6;
-    transition: all 0.3s ease;
-  }
-
-  &:hover {
-    transform: scale(1.05);
-  }
-  &:hover::before {
-    filter: blur(10px);
-    opacity: 0.8;
-  }
-}
-
-  .tag.pop-up { animation: ${popUp} 1s forwards; }
-`;
-
-
-export const Tag = styled.div`
-  position: absolute;
-  z-index: 20;
-  font-weight: 700;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  border-radius: 50px;
-  cursor: pointer;
-  pointer-events: all;
-  letter-spacing: 0.05em;
-  transform: scale(0.95);
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.5s ease, color 0.5s ease;
-  opacity: 1; /* visible par défaut maintenant */
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: inherit;
-    border-radius: inherit;
-    filter: blur(6px);
-    z-index: -1;
-    opacity: 0.6;
-    transition: all 0.3s ease;
-  }
-
-  &:hover {
-    transform: scale(1.05);
-  }
-
-  &:hover::before {
-    filter: blur(10px);
-    opacity: 0.8;
-  }
-
-  &.pop-up {
-    animation: ${popUp} 1s forwards;
-  }
-
-  &.tag-demo.pop-up { animation-delay: 0s; }
-  &.tag-tech.pop-up { animation-delay: 0.3s; }
-  &.tag-case.pop-up { animation-delay: 0.6s; }
+  .tag.pop-up { animation: ${popUp} 0.5s forwards; }
 `;
 
 export const CardContent = styled.div`
   position: relative;
   z-index: 5;
   margin-top: auto;
+  transition: opacity 0.3s ease;
+
+  &.fade-out { opacity: 0; }
+  &.fade-in { opacity: 1; }
 
   h3 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #111; }
   p { font-size: 1rem; color: #333; }
@@ -150,56 +82,63 @@ export const ClickOverlay = styled.div`
   padding: 1rem;
   border-radius: 12px;
   z-index: 15;
-  animation: fade 0.4s ease-out;
 
   video {
-    width: 60%;
-    max-height: 60%;
-    border-radius: 12px;
+    width: 95%;
+    height: 90%;
     object-fit: cover;
-  }
-
-  @keyframes fade {
-    from { opacity: 0; transform: scale(0.98); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  @media(max-width: 768px) {
-    video { width: 90%; max-height: 50%; }
+    border-radius: 4px;
   }
 `;
 
-export const TechStack = styled.div`
-  display: flex;
-  gap: 0.7rem;
-  flex-wrap: wrap;
+export const TagSVG = styled.svg`
+  position: absolute;
+  cursor: pointer;
+  width: 160px;
+  height: 60px;
+  z-index: 50;
+  overflow: visible;
 
-  span {
-    background: rgba(0,0,0,0.1);
-    padding: 0.5rem 0.9rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #111;
+  polygon {
+    fill: ${props => props.bg || "#fff"};
+    stroke: #000;
+    stroke-width: 0.2px;
+    transition: all 0.35s ease;
+  }
+
+  foreignObject {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      font-weight: bold;
+      font-size: 0.85rem;
+      color: ${props => props.color || "#020079"};
+      text-align: center;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  &.pop-up {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.25;
   }
 `;
-
-export const CaseStudyText = styled.div`
-  padding: 1rem 1.5rem;
-  background: rgba(0,0,0,0.05);
-  border-radius: 12px;
-  font-size: 1rem;
-  color: #111;
-  max-width: 250px;
-  text-align: center;
-
-  @media(max-width: 768px) {
-    max-width: 90%;
-  }
-`;
-
-export const tagPositionsAroundModal = {
-  demo: { top: "-2rem", left: "50%", transform: "translateX(-50%)" },
-  tech: { top: "50%", left: "-4rem", transform: "translateY(-50%)" },
-  case: { top: "50%", right: "-4rem", transform: "translateY(-50%)" },
-};
