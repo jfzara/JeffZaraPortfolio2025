@@ -1,9 +1,5 @@
 import styled, { keyframes } from "styled-components";
 
-/* =========================
-   ANIMATIONS
-========================= */
-
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(40px); }
   to { opacity: 1; transform: translateY(0); }
@@ -14,10 +10,6 @@ const popUp = keyframes`
   70% { transform: scale(0.95) translateY(-2px); opacity: 1; }
   100% { transform: scale(1) translateY(0); opacity: 1; }
 `;
-
-/* =========================
-   STYLED COMPONENTS
-========================= */
 
 export const SectionContainer = styled.section`
   padding: 6rem 8vw;
@@ -51,31 +43,16 @@ export const MajorProjects = styled.div`
 export const MajorCard = styled.div`
   position: relative;
   width: 45%;
-  height: 330px;
+  min-height: 330px;
   border-radius: 7px;
   background: white;
   color: #111;
   overflow: visible;
   padding: 2.2rem;
 
-  .project-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(1.08);
-    filter: blur(6px) brightness(1.1);
-    transition: opacity 0.5s ease, filter 0.5s ease, transform 0.6s ease;
-  }
-
   .tag {
     position: absolute;
-    z-index: 2;
-    background: rgb(255 222 97);
-    color: rgb(0 0 0);
+    z-index: 20;
     font-weight: 700;
     padding: 1rem 2rem;
     font-size: 1rem;
@@ -84,25 +61,38 @@ export const MajorCard = styled.div`
     pointer-events: all;
     letter-spacing: 0.05em;
     transform: scale(0.95);
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-                clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.7s ease,
-                color 0.7s ease;
-    clip-path: polygon(25% 0%, 75% 5%, 95% 45%, 70% 85%, 30% 95%, 5% 50%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.5s ease, color 0.5s ease;
     opacity: 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      border-radius: inherit;
+      filter: blur(6px);
+      z-index: -1;
+      opacity: 0.6;
+      transition: all 0.3s ease;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:hover::before {
+      filter: blur(10px);
+      opacity: 0.8;
+    }
   }
 
   .tag.pop-up {
     animation: ${popUp} 1s forwards;
   }
+
   .tag-demo.pop-up { animation-delay: 0s; }
   .tag-tech.pop-up { animation-delay: 0.3s; }
   .tag-case.pop-up { animation-delay: 0.6s; }
-
-  .tag:hover {
-    transform: scale(1.05);
-    clip-path: polygon(20% 5%, 80% 0%, 100% 50%, 75% 95%, 25% 85%, 0% 50%);
-  }
 `;
 
 export const CardContent = styled.div`
@@ -110,14 +100,71 @@ export const CardContent = styled.div`
   z-index: 5;
   margin-top: auto;
 
-  h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: #111;
+  h3 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #111; }
+  p { font-size: 1rem; color: #333; }
+`;
+
+export const ClickOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-radius: 12px;
+  z-index: 15;
+  animation: fade 0.4s ease-out;
+
+  video {
+    width: 60%;
+    max-height: 60%;
+    border-radius: 12px;
+    object-fit: cover;
   }
 
-  p {
-    font-size: 1rem;
-    color: #333;
+  @keyframes fade {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @media(max-width: 768px) {
+    video { width: 90%; max-height: 50%; }
   }
 `;
+
+export const TechStack = styled.div`
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+
+  span {
+    background: rgba(0,0,0,0.1);
+    padding: 0.5rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #111;
+  }
+`;
+
+export const CaseStudyText = styled.div`
+  padding: 1rem 1.5rem;
+  background: rgba(0,0,0,0.05);
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #111;
+  max-width: 250px;
+  text-align: center;
+
+  @media(max-width: 768px) {
+    max-width: 90%;
+  }
+`;
+
+// Positions périphériques des tags pendant overlay
+export const tagPositionsAroundModal = {
+  demo: { top: "-2rem", left: "50%", transform: "translateX(-50%)" },
+  tech: { top: "50%", left: "-4rem", transform: "translateY(-50%)" },
+  case: { top: "50%", right: "-4rem", transform: "translateY(-50%)" },
+};

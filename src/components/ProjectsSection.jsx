@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import * as S from "./ProjectsSection.styles";
 import livanoPreview from "../assets/projects/major/livano/livanoPreview.mp4";
 import youChefPreview from "../assets/projects/major/youchef/YouChef_Preview.mp4";
@@ -30,17 +30,37 @@ export default function ProjectsSection() {
 
   const [tagShapes, setTagShapes] = useState({});
   const [tagsVisible, setTagsVisible] = useState({});
+  const [activeTag, setActiveTag] = useState({});
+  const [videoPlaying, setVideoPlaying] = useState({});
+  const videoRefs = useRef({});
 
   const handleCardHover = (projectId) => {
     if (!tagsVisible[projectId]) {
       setTagsVisible(prev => ({ ...prev, [projectId]: true }));
-
       const newShapes = {};
       ["demo","tech","case"].forEach(type => {
         newShapes[type] = tagShapes[projectId]?.[type] || softBlobs[Math.floor(Math.random() * softBlobs.length)];
       });
       setTagShapes(prev => ({ ...prev, [projectId]: { ...prev[projectId], ...newShapes } }));
     }
+  };
+
+  const handleTagClick = (projectId, type) => {
+    if(type === "demo"){
+      const videoEl = videoRefs.current[projectId];
+      if(videoEl){
+        if(videoPlaying[projectId]){
+          videoEl.pause();
+        } else {
+          videoEl.play();
+        }
+        setVideoPlaying(prev => ({ ...prev, [projectId]: !prev[projectId] }));
+      }
+    }
+    setActiveTag(prev => ({
+      ...prev,
+      [projectId]: prev[projectId] === type ? null : type
+    }));
   };
 
   return (
@@ -51,48 +71,91 @@ export default function ProjectsSection() {
           const tags = ["demo", "tech", "case"];
           const positions = index === 0 ? tagPositionsFirstCard : tagPositionsSecondCard;
           const bgColor = index === 0 ? "rgb(255 222 97)" : "rgb(73 255 0)";
+          const demoPlaying = videoPlaying[p.id];
+          const overlayActive = activeTag[p.id] != null || demoPlaying;
+
           return (
             <S.MajorCard key={p.id} onMouseEnter={() => handleCardHover(p.id)}>
-              {tags.map((type, i) => (
-            <div
-  key={type}
-  className={`tag tag-${type} ${tagsVisible[p.id] ? "pop-up" : ""}`}
-  style={{
-    ...positions[type],
-    clipPath: tagShapes[p.id]?.[type] || softBlobs[0],
-    background: tagsVisible[p.id] ? bgColor : "#00000000",
-    color: tagsVisible[p.id] ? "#020079" : "transparent",
-    transition: "all 0.03s ease-in",
-  }}
-  onMouseEnter={() => {
-    // Changer le clip-path au hover
-    const newShape = softBlobs[Math.floor(Math.random() * softBlobs.length)];
-    setTagShapes(prev => ({
-      ...prev,
-      [p.id]: {
-        ...prev[p.id],
-        [type]: newShape
-      }
-    }));
-  }}
->
-  {type === "demo" ? "DEMO" : type === "tech" ? "TECH STACK" : "CASE STUDY"}
-</div>
+              {tags.map(type => {
+                let label;
+                if(type === "demo") label = demoPlaying ? "⏸ Stop Demo" : "▶ Demo";
+                else if(type === "tech") label = "TECH STACK";
+                else label = "CASE STUDY";
 
-              ))}
+                let tagBg = type === "demo" ? "#ffcc00" : bgColor;
 
-              <video
-                className="project-video"
-                src={p.video}
-                loop
-                muted
-                playsInline
-              />
+                // Tags autour de la modale si demo en cours
+                const tagPosition = overlayActive ? S.tagPositionsAroundModal[type] : positions[type];
 
-              <S.CardContent>
-                <h3>{p.title}</h3>
-                <p>{p.description}</p>
-              </S.CardContent>
+                return (
+                  <div
+                    key={type}
+                    className={`tag tag-${type} ${tagsVisible[p.id] ? "pop-up" : ""}`}
+                    style={{
+                      ...tagPosition,
+                      clipPath: tagShapes[p.id]?.[type] || softBlobs[0],
+                      background: tagBg,
+                      color: "#020079",
+                      transition: "all 0.03s ease-in",
+                    }}
+                    onClick={() => handleTagClick(p.id, type)}
+                    onMouseEnter={() => {
+                      const newShape = softBlobs[Math.floor(Math.random() * softBlobs.length)];
+                      setTagShapes(prev => ({
+                        ...prev,
+                        [p.id]: {
+                          ...prev[p.id],
+                          [type]: newShape
+                        }
+                      }));
+                    }}
+                  >
+                    {label}
+                  </div>
+                )
+              })}
+
+              {/* Overlays */}
+              {activeTag[p.id] === "demo" && (
+                <S.ClickOverlay>
+                  <video
+                    ref={el => videoRefs.current[p.id] = el}
+                    src={p.video}
+                    loop
+                    muted
+                    autoPlay
+                    playsInline
+                  />
+                </S.ClickOverlay>
+              )}
+
+              {activeTag[p.id] === "tech" && (
+                <S.ClickOverlay>
+                  <S.TechStack>
+                    <span>React</span>
+                    <span>Node.js</span>
+                    <span>Styled-Components</span>
+                    <span>GraphQL</span>
+                    <span>TypeScript</span>
+                  </S.TechStack>
+                </S.ClickOverlay>
+              )}
+
+              {activeTag[p.id] === "case" && (
+                <S.ClickOverlay>
+                  <S.CaseStudyText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  </S.CaseStudyText>
+                </S.ClickOverlay>
+              )}
+
+              {/* Masquer titre si overlay actif */}
+              {!overlayActive && (
+                <S.CardContent>
+                  <h3>{p.title}</h3>
+                  <p>{p.description}</p>
+                </S.CardContent>
+              )}
             </S.MajorCard>
           );
         })}
