@@ -24,8 +24,8 @@ const tagPositionsSecondCard = {
 
 export default function ProjectsSection() {
   const majorProjects = [
-    { id: 1, title: "Livano – Application immobilière", description: "Plateforme web complète ...", video: livanoPreview },
-    { id: 2, title: "YouChef – Application de recettes", description: "Gestion de recettes CRUD ...", video: youChefPreview },
+    { id: 1, title: "Livano – Application immobilière", description: "Plateforme web complète ", video: livanoPreview },
+    { id: 2, title: "YouChef – Application de recettes", description: "Gestion de recettes CRUD ", video: youChefPreview },
   ];
 
   const [tagShapes, setTagShapes] = useState({});
