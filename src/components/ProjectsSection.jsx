@@ -169,47 +169,73 @@ export default function ProjectsSection() {
                 // TagWrapper is positioned absolutely; TagSVG contains the polygon and stroke (stroke follows polygon exactly).
                 return (
                   <S.TagWrapper
-                    key={type}
-                    className={tagsVisible[p.id] ? "pop-up" : ""}
-                    style={{
-                      ...positions[type],
-                      width: 180,
-                      height: 60,
-                      transform: positions[type].transform || undefined,
-                    }}
-                    onMouseEnter={() => morphTag(p.id, type)}
-                    onClick={() => handleTagClick(p.id, type)}
-                  >
-                    {isVideoTag && (
-                      // background paper texture inside the tag (muted, loop)
-                      <S.TagVideo src={textureVideo} autoPlay loop muted playsInline />
-                    )}
+  key={type}
+  className={tagsVisible[p.id] ? "pop-up" : ""}
+  style={{
+    ...positions[type],
+    transform: positions[type].transform || undefined,
+    cursor: "pointer",
+    position: "absolute",
+  }}
+  onMouseEnter={() => morphTag(p.id, type)}
+  onClick={() => handleTagClick(p.id, type)}
+>
+  {isVideoTag && (
+    <S.TagVideo
+      src={textureVideo}
+      autoPlay
+      loop
+      muted
+      playsInline
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: 0,
+        pointerEvents: "none",
+      }}
+    />
+  )}
 
-                    <S.TagSVG viewBox="0 0 100 40" preserveAspectRatio="none">
-                      {/* fill & stroke chosen depending on type */}
-                     <polygon
-  points={shape}
-  fill={
-    type === "demo"
-      ? "none"          // ← permet à la vidéo d’être 100% visible
-      : type === "tech"
-      ? "#ffd900"
-      : "#26ff00"
-  }
-  stroke={
-    type === "demo"
-      ? "none"          // ← aucune bordure interne sur DEMO
-      : type === "tech"
-      ? "#ffef88"
-      : "#9aff6b"
-  }
-  strokeWidth={ type === "demo" ? 0 : 2 }  // ← DEMO: vrai 0, sinon 11px
-  style={{ transition: "all 0.36s cubic-bezier(0.22,1,0.36,1)" }}
-/>
-                    </S.TagSVG>
+  <S.TagSVG
+    viewBox="0 0 100 40"
+    preserveAspectRatio="xMidYMid meet" // <-- NE PAS ETIRER
+    style={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      zIndex: 1,
+    }}
+  >
+    <polygon
+      points={shape}
+      fill={
+        type === "demo"
+          ? "transparent"
+          : type === "tech"
+          ? "#FFD700"
+          : "#39FF14"
+      }
+      stroke={
+        type === "demo"
+          ? "#ffffff" // un stroke invisible ou très fin pour le morph
+          : type === "tech"
+          ? "#ffeb65"
+          : "#aeff8a"
+      }
+      strokeWidth={type === "demo" ? 1 : 11} // Demo : fin, les autres : large
+      style={{ transition: "all 0.36s cubic-bezier(0.22,1,0.36,1)" }}
+    />
+  </S.TagSVG>
 
-                    <S.TagLabel>{label}</S.TagLabel>
-                  </S.TagWrapper>
+  <S.TagLabel style={{ position: "relative", zIndex: 2 }}>{label}</S.TagLabel>
+</S.TagWrapper>
+
+
                 );
               })}
 
