@@ -120,20 +120,18 @@ export const TagWrapper = styled.div`
   z-index: 9999;
   pointer-events: auto;
 
-  /* Transition et ombre de base pour la profondeur */
-  transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.2s ease-out;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+  /* Transition pour les transformations */
+  transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 
   &.pop-up {
     animation: ${popUp} 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   
   &:hover {
-    /* Effet de 'pop' et d'élévation au survol */
-    transform: scale(1.05) translateY(-2px); 
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.35); 
+    transform: scale(1.05) translateY(-2px);
   }
 `;
+
 
 
 export const TagSVG = styled.svg`
@@ -154,7 +152,6 @@ export const TagSVG = styled.svg`
   /* IMPORTANT : le parent TagWrapper doit masquer tout débordement si nécessaire */
 `;
 
-
 export const TagVideo = styled.video`
   position: absolute;
   inset: 0;
@@ -164,7 +161,11 @@ export const TagVideo = styled.video`
   z-index: 0;
   opacity: 0.45;
   pointer-events: none;
+
+  /* Rendre l'élément vidéo transparent */
+  background-color: transparent;
 `;
+
 
 export const TagLabel = styled.div`
   position: absolute;
