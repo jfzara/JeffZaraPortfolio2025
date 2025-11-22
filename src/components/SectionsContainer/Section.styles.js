@@ -30,6 +30,10 @@ export const SectionContainer = styled.section`
 
 // Titre principal
 export const Title = styled.h1`
+text-shadow: 
+  0 0 10px ${(props) => props.textColor + "B0"},
+  0 0 20px ${(props) => props.textColor + "70"};
+
   font-size: 6rem;
   margin-bottom: 2rem;
   color: ${(props) => props.textColor || "#fff"};

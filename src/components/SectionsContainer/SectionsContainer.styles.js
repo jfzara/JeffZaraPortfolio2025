@@ -1,12 +1,29 @@
-import styled, { keyframes , css }  from "styled-components";
-import { titleFromSpace, fadeIn, revealMask, titleWithShadow} from "./animations";
+import styled, { keyframes, css } from "styled-components";
+import { titleFromSpace, fadeIn, revealMask, titleWithShadow } from "./animations";
+import { Color } from "../ProjectsSection.styles.js";
 
+// Fonction utilitaire pour récupérer la couleur à partir de la clé
+const getAccentColor = (key) => {
+  return Color[key] || Color.TechGold;
+};
 
-
-
+// Récupère une nuance plus sombre pour les bordures
+const getDarkAccentColor = (key) => {
+  switch (key) {
+    case "TechGold":
+      return Color.DarkTechGold || Color.TechGold;
+    case "CaseGreen":
+      return Color.DarkCaseGreen || Color.CaseGreen;
+    case "GlowTitle":
+      return Color.DarkGlowTitle || Color.GlowTitle;
+    default:
+      return getAccentColor(key);
+  }
+};
 
 /*==========================
-VIDEO================== */
+VIDEO
+==========================*/
 
 export const BackgroundVideo = styled.video`
   position: absolute;
@@ -15,24 +32,24 @@ export const BackgroundVideo = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
- 
-  /* Filtre translucide / atténué */
-  
-  opacity: 0.3; /* rend la vidéo plus transparente */
+  opacity: 0.3;
   z-index: 0;
+  filter: sepia(0.2) contrast(1.1) brightness(0.9); /* Adoucit les couleurs et ajoute une légère chaleur */
+mix-blend-mode: multiply; /* Fait interagir la texture avec la couleur de fond (plus chaleureux) */
+
+
 `;
 
 /* =========================
    ANIMATIONS
 ========================= */
+
 export const flashColors = keyframes`
   0% { filter: brightness(1.4) saturate(1.3); }
   20% { filter: brightness(2) saturate(1.6); }
   50% { filter: brightness(1.6) saturate(1.4); }
   100% { filter: brightness(1) saturate(1); }
 `;
-
-
 
 export const breathing = keyframes`
   0%, 100% { background-position: 0% 50%; }
@@ -66,6 +83,7 @@ export const parallaxFloat = keyframes`
 /* =========================
    CONTAINERS
 ========================= */
+
 export const Container = styled.div`
   position: relative;
   width: 100%;
@@ -86,14 +104,12 @@ export const Section = styled.div`
 /* =========================
    TITLE & TEXT
 ========================= */
-// src/components/SectionsContainer/SectionsContainer.styles.js
 
 export const TitleGroup = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* alignement à gauche */
+  align-items: flex-start;
   text-align: left;
-
   margin-bottom: 2.5rem;
   gap: 2rem;
 
@@ -103,7 +119,6 @@ export const TitleGroup = styled.div`
     margin-bottom: 2rem;
   }
 
-  /* Optionnel : effet subtil à l’apparition du bloc */
   animation: fadeInBlock 1.2s ease-out forwards;
 
   @keyframes fadeInBlock {
@@ -128,21 +143,17 @@ export const Title = styled.h1`
   color: black;
   position: relative;
 
-  /* Ombre portée animée via text-shadow */
   ${({ firstPanel }) =>
     firstPanel &&
     css`
       animation: ${titleFromSpace} 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
       transform-origin: center;
 
-      /* Ombre réaliste sur le texte, qui suit le scale du titre */
-      text-shadow: 
-        0 0 0 rgba(0,0,0,0),
-        0 0 0 rgba(0,0,0,0),
-        0 0 0 rgba(0,0,0,0);
+      text-shadow: 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0),
+        0 0 0 rgba(0, 0, 0, 0);
 
-      animation: ${titleFromSpace} 1.5s cubic-bezier(0.19,1,0.22,1) forwards,
-                 shadowPop 1.5s forwards;
+      animation: ${titleFromSpace} 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards,
+        shadowPop 1.5s forwards;
     `}
 
   span {
@@ -153,8 +164,7 @@ export const Title = styled.h1`
     animation: ${flashColors} 1.2s ease-out forwards;
     animation-delay: calc(var(--idx) * 0.05s);
 
-    transition: 
-      transform 0.7s cubic-bezier(0.25, 1.5, 0.5, 1), 
+    transition: transform 0.7s cubic-bezier(0.25, 1.5, 0.5, 1),
       color 0.1s ease-in;
 
     &:hover {
@@ -164,29 +174,29 @@ export const Title = styled.h1`
   }
 `;
 
-/* Animation text-shadow pour l’effet d’ombre portée */
 export const shadowPop = keyframes`
   0% {
     text-shadow: 0 0 0 rgba(0,0,0,0);
   }
   50% {
-    text-shadow: 0 1rem 1rem rgba(0,0,0,0.35),
-                 0 2rem 2rem rgba(0,0,0,0.25),
-                 0 3rem 3rem rgba(0,0,0,0.15);
+    text-shadow:
+      0 1rem 1rem rgba(0,0,0,0.35),
+      0 2rem 2rem rgba(0,0,0,0.25),
+      0 3rem 3rem rgba(0,0,0,0.15);
   }
   100% {
-    text-shadow: 0 0.5rem 0.5rem rgba(0,0,0,0.35),
-                 0 1rem 1rem rgba(0,0,0,0.25),
-                 0 1.5rem 1.5rem rgba(0,0,0,0.15);
+    text-shadow:
+      0 0.5rem 0.5rem rgba(0,0,0,0.35),
+      0 1rem 1rem rgba(0,0,0,0.25),
+      0 1.5rem 1.5rem rgba(0,0,0,0.15);
   }
 `;
 
-
 export const Subtitle = styled.h2`
   font-size: 2rem;
-  margin-top: 2rem; /* espace sous le H1 */
+  margin-top: 2rem;
   margin-bottom: 1rem;
-  color: ${(props) => props.color || "#525252ff"}; /* couleur par défaut mais modifiable via prop */
+  color: ${(props) => props.color || "#525252ff"};
   display: inline-block;
   position: relative;
   overflow: hidden;
@@ -197,23 +207,20 @@ export const Subtitle = styled.h2`
     transform-origin: bottom center;
     opacity: 0;
 
-    /* === Masque dynamique couleur cyan === */
     &::before {
       content: "";
       position: absolute;
       inset: 0;
       background: rgba(0, 255, 240, 1);
       transform: translateY(0);
-      animation: ${revealMask} 0.6s ease-out forwards; /* plus rapide */
-      animation-delay: calc(var(--idx) * 0.03s);      /* lettres plus rapides */
+      animation: ${revealMask} 0.6s ease-out forwards;
+      animation-delay: calc(var(--idx) * 0.03s);
     }
 
-    /* === Fade in simple === */
-    animation: ${fadeIn} 0.5s ease-out forwards;      /* plus rapide */
+    animation: ${fadeIn} 0.5s ease-out forwards;
     animation-delay: calc(var(--idx) * 0.03s);
   }
 
-  /* Désactive les animations si ce n’est pas le premier panneau */
   ${({ firstPanel }) =>
     !firstPanel &&
     css`
@@ -227,19 +234,16 @@ export const Subtitle = styled.h2`
     `}
 `;
 
-
-
 export const Body = styled.div`
   font-size: 1.2rem;
   line-height: 1.6;
   margin-bottom: 2rem;
 `;
 
-
-
 /* =========================
    CALL TO ACTION
 ========================= */
+
 export const CTA = styled.a`
   display: inline-block;
   padding: 0.8rem 1.5rem;
@@ -256,88 +260,180 @@ export const CTA = styled.a`
 
   &:hover {
     transform: translateY(-3px);
-  
   }
 `;
 
 /* =========================
    NAVIGATION DOTS
 ========================= */
+
 export const NavWrapper = styled.div`
-  position: absolute;
-  right: 2rem;
-  top: 50%;
+  position: fixed;
+  top: 30%;
+  right: 30px;
   transform: translateY(-50%);
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  
-  &:hover .label {
-
-    opacity: 0.2; /* labels grisés lorsque hover sur le wrapper */
-  }
+  gap: 2.5rem;
+  padding: 10px;
+  /* Ajout de perspective 3D */
+  perspective: 1000px;
 `;
 
 export const NavDotWrapper = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex-direction: row-reverse; /* pour mettre le label à gauche du dot */
+  cursor: pointer;
+  /* Ajout de l'opacité à la transition */
+  transition: transform 0.3s ease-out, opacity 0.3s ease; 
+
+  &:hover {
+    /* Ajout de la rotation 3D */
+    transform: translateX(-5px) rotateY(-5deg); 
+  }
 `;
 
-export const NavDot = styled.div`
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  background: ${(props) => (props.active ? "rgba(0, 255, 240, 1)" : "#ccc")};
+
+export const NavDot = styled.button`
+  width: 45px;
+  height: 45px;
+  border: none;
+  padding: 0;
+  margin: 0;
   cursor: pointer;
-  transition: background 0.3s ease;
+  z-index: 2;
+  background-color: transparent;
+  position: relative;
+  overflow: visible;
 
-   &:hover{
- background: #a3a3a3ff;
- box-shadow: 0 0.6px 0 rgba(0, 0, 0, 0.2);
-}
+  ${(props) => {
+    const ACCENT_COLOR = getAccentColor(props.colorKey);
+    const DARK_ACCENT_COLOR = getDarkAccentColor(props.colorKey);
 
-  &:hover + .label {
-    opacity: 1;
-    transform: scale(1);
-    font-weight: 500;
-    text-shadow: 0 0.6px 0 rgba(0, 0, 0, 0.2);
-  }
+    const ASYMMETRIC_SHAPE_A =
+      "polygon(10% 0%, 95% 20%, 80% 90%, 25% 100%, 5% 60%)";
+    const ASYMMETRIC_SHAPE_B =
+      "polygon(0% 40%, 85% 5%, 100% 70%, 50% 100%, 15% 75%)";
 
-  &:hover ~ .label {
-    opacity: 0.1;
-  }
+    return css`
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        display: block;
+        clip-path: ${ASYMMETRIC_SHAPE_A};
+        background: ${ACCENT_COLOR + "30"};
+        box-shadow: none;
+        transition: background-color 0.5s ease,
+          box-shadow 0.5s ease, transform 0.5s ease,
+          clip-path 0.5s cubic-bezier(0.65, 0.05, 0.36, 1);
+        transform-origin: center;
+        z-index: 1;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        display: block;
+        clip-path: ${ASYMMETRIC_SHAPE_A};
+        background: none;
+        border: 2px solid ${DARK_ACCENT_COLOR};
+        box-shadow: 0 0 2px ${ACCENT_COLOR + "A0"};
+        transition: border-color 0.5s ease,
+          box-shadow 0.5s ease, transform 0.5s ease,
+          clip-path 0.5s cubic-bezier(0.65, 0.05, 0.36, 1);
+        transform-origin: center;
+        z-index: 2;
+      }
+
+      &:hover::before,
+      &:hover::after {
+        clip-path: ${ASYMMETRIC_SHAPE_B};
+        transform: scale(1.15);
+      }
+
+      &:hover::before {
+        background: ${ACCENT_COLOR + "60"};
+        box-shadow: 0 0 15px ${ACCENT_COLOR + "80"};
+      }
+
+      &:hover::after {
+        border-color: ${DARK_ACCENT_COLOR};
+        box-shadow: 0 0 8px ${ACCENT_COLOR};
+      }
+
+      ${props.active &&
+      css`
+        &::before,
+        &::after {
+          clip-path: ${ASYMMETRIC_SHAPE_A};
+          transform: scale(1.1);
+        }
+        &::before {
+          background-color: ${ACCENT_COLOR};
+        }
+        &::after {
+          border: 2px solid ${DARK_ACCENT_COLOR};
+          box-shadow: 0 0 18px ${ACCENT_COLOR},
+            0 0 40px ${ACCENT_COLOR}80;
+        }
+      `}
+    `;
+  }}
 `;
 
 export const Label = styled.span`
-  font-size: 2.5rem;
+  position: absolute;
+  right: 55px;
+  white-space: nowrap;
+
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0;
+  border-radius: 0;
+
+  z-index: 1;
+  pointer-events: none;
+
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+
+  /* La couleur est désormais '#000000' (Noir) */
+  color: ${Color.TextOnBlack};
+  background-color: transparent;
+  box-shadow: none;
+
+  /* Effet d'ombre (glow) */
+ text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+  /* Alternatives possibles :
+     text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+     text-shadow: 0 0 2px ${Color.GlowTitle};
+  */
+
   opacity: 0;
-  color: #000;
-  font-weight: 300;
-  transform: scale(0.7);
-  transition: 
-    opacity 0.8s ease,
-    color 0.8s ease,
-    transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
-    text-shadow 0.8s ease;
-  
-  &.label {
-    pointer-events: none;
+  transform: translateX(10px);
+
+  ${NavDotWrapper}:hover & {
+    transform: translateX(0);
+    opacity: 1;
   }
 `;
 
 
+/* =========================
+   RIPPLE EFFECT
+========================= */
 
-// RIPPLE EFFECT (raffiné)
-// =========================
 const rippleAnimSoft = keyframes`
-  0% { 
+  0% {
     transform: scale(0.4);
     opacity: 0;
     filter: blur(1px);
   }
-  15% { 
+  15% {
     transform: scale(1);
     opacity: 0.25;
     filter: blur(2px);
@@ -352,12 +448,12 @@ const rippleAnimSoft = keyframes`
     opacity: 0.35;
     filter: blur(5px);
   }
-  75% { 
+  75% {
     transform: scale(7);
     opacity: 0.15;
     filter: blur(8px);
   }
-  100% { 
+  100% {
     transform: scale(9);
     opacity: 0;
     filter: blur(10px);
@@ -366,13 +462,12 @@ const rippleAnimSoft = keyframes`
 
 export const Ripple = styled.div`
   position: absolute;
-  width: 10px;   // plus petit
-  height: 10px;  // plus petit
-  background: rgba(104, 104, 104, 1); // plus subtil
+  width: 10px;
+  height: 10px;
+  background: rgba(104, 104, 104, 1);
   border-radius: 50%;
   pointer-events: none;
   transform: translate(-50%, -50%);
-
   animation: ${rippleAnimSoft} 0.4s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
-  mix-blend-mode: screen; /* rend l'effet encore plus léger */
+  mix-blend-mode: screen;
 `;

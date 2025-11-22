@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import * as S from "./SectionsContainer.styles";
+import { Color } from "../ProjectsSection.styles.js";
+
+const TAG_COLORS = ["TechGold", "CaseGreen", "GlowTitle"];
+
 
 export default function NavDots({ sections, activeIndex, onDotClick }) {
   const [hoveredDot, setHoveredDot] = useState(null);
@@ -14,35 +18,31 @@ export default function NavDots({ sections, activeIndex, onDotClick }) {
       }}
     >
       {sections.map((s, i) => {
-        let labelOpacity = 0;
+        const accentColorKey = TAG_COLORS[i % TAG_COLORS.length];
 
+        let labelOpacity = 0;
         if (wrapperHover) {
-          if (hoveredDot === null) {
-            // hover sur le wrapper mais pas sur un dot précis
-            labelOpacity = 0.5; // gris léger pour tous
-          } else if (hoveredDot === i) {
-            labelOpacity = 1; // dot survolé → full opacity
-          } else {
-            labelOpacity = 0.2; // les autres → plus clair encore
-          }
+          if (hoveredDot === null) labelOpacity = 0.5;
+          else if (hoveredDot === i) labelOpacity = 1;
+          else labelOpacity = 0.2;
         }
 
         return (
           <S.NavDotWrapper key={i}>
             <S.NavDot
+              colorKey={accentColorKey}
               active={i === activeIndex}
               onClick={() => {
                 onDotClick(i);
-                setWrapperHover(false); // labels disparaissent après click
+                setWrapperHover(false);
               }}
               onMouseEnter={() => setHoveredDot(i)}
               onMouseLeave={() => setHoveredDot(null)}
             />
             <S.Label
-              className="label"
               style={{
                 opacity: labelOpacity,
-                color: hoveredDot === i ? "#000" : "#555", // dot hover → noir, sinon gris
+                color: Color.TextOnBlack,
               }}
             >
               {s.title}

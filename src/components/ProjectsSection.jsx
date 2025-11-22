@@ -220,7 +220,7 @@ export default function ProjectsSection() {
       points={shape}
       fill={
         type === "demo"
-          ? "rgba(0,0,0,0.6)" 
+          ? "rgb(44, 44, 44)" 
           : type === "tech"
           ? "#FFD700" 
           : "#39FF14"
