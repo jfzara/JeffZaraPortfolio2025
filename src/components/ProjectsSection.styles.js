@@ -15,15 +15,17 @@ const popUp = keyframes`
 `;
 
 /* =========================
-   Palette MISE À JOUR FINALE (CORRIGÉE)
+   Palette
 ========================= */
 export const Color = {
   PrimaryAccent: "#39FF14",
   SectionBackground: "#F0F0F0",
-  CardBackground: "#0A0A0A",
-  TextOnBlack: "#000000",
-  TextSubtleOnBlack: "#B0B0B0",
-  TextOnLight: "#1A1A1A",
+  CardBackground: "#000000ff",
+
+  TitleFontColor: "#878484",
+
+  TextSubtleOnBlack: "#ffffffde",
+  TextOnLight: "#3a3a3a80",
   TechGold: "#FFD700",
   CaseGreen: "#39FF14",
 
@@ -34,6 +36,10 @@ export const Color = {
   DarkGlowTitle: "#4A3DCC",
 
   GlowShadow: "rgba(100, 88, 255, 0.8)",
+
+  MediumTechGold: "#E0C000",
+  LightTechGold: "#FFE040",
+  VeryLightTechGold: "#FFF0A0",
 };
 
 /* =========================
@@ -54,7 +60,7 @@ export const Title = styled.h1`
   margin-bottom: 4rem;
   width: 100%;
   padding-left: 2vw;
-  color: ${Color.TextOnLight};
+  color: ${Color.TitleFontColor};
   text-shadow: 1px 1px 0 ${Color.GlowTitle};
   animation: ${fadeUp} 0.9s ease-out forwards;
 `;
@@ -87,7 +93,9 @@ export const MajorCard = styled.div`
   box-sizing: border-box;
   z-index: 10;
 
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 
+              0 3px 8px rgba(0, 0, 0, 0.1);
+
   transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
               box-shadow 0.4s;
 
@@ -120,24 +128,19 @@ export const TagWrapper = styled.div`
   z-index: 9999;
   pointer-events: auto;
 
-  /* Transition pour les transformations */
   transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 
   &.pop-up {
     animation: ${popUp} 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
-  
+
   &:hover {
     transform: scale(1.05) translateY(-2px);
   }
 `;
 
-
-
 export const TagSVG = styled.svg`
-  /* Filtre pour le grain / l'adoucissement (plus organique) */
   filter: url(#grain-filter);
-
   position: absolute;
   inset: 0;
   width: 100%;
@@ -145,11 +148,7 @@ export const TagSVG = styled.svg`
   overflow: visible;
   display: block;
   pointer-events: none;
-
-  /* Fond transparent pour le conteneur SVG */
   background-color: transparent;
-
-  /* IMPORTANT : le parent TagWrapper doit masquer tout débordement si nécessaire */
 `;
 
 export const TagVideo = styled.video`
@@ -161,11 +160,20 @@ export const TagVideo = styled.video`
   z-index: 0;
   opacity: 0.45;
   pointer-events: none;
-
-  /* Rendre l'élément vidéo transparent */
   background-color: transparent;
 `;
 
+export const OverlayVideo = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  opacity: 0.15;
+  z-index: -1;
+`;
 
 export const TagLabel = styled.div`
   position: absolute;
@@ -177,7 +185,6 @@ export const TagLabel = styled.div`
   text-align: center;
   padding: 0 10px;
 
-  /* Style du texte pour l'effet Glow */
   font-weight: 800;
   color: ${Color.PrimaryAccent};
   font-size: 1.1rem;
@@ -187,13 +194,10 @@ export const TagLabel = styled.div`
   text-overflow: ellipsis;
   pointer-events: none;
 
-  /* Effet de lueur (Glow Effect) */
-  text-shadow: 
+  text-shadow:
     0 0 4px ${Color.PrimaryAccent},
     0 0 10px ${Color.PrimaryAccent}90;
 `;
-
-
 
 /* Overlay */
 export const ClickOverlay = styled.div`
@@ -206,20 +210,13 @@ export const ClickOverlay = styled.div`
   border-radius: 12px;
   z-index: 9000;
 
-  /* Fond de l'Overlay (assombrisseur) */
   background: rgba(0, 0, 0, 0.4);
   box-sizing: border-box;
   animation: fadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
   }
 
   video {
@@ -234,21 +231,22 @@ export const ClickOverlay = styled.div`
     width: 88%;
     max-height: 84%;
     overflow: auto;
-    color: ${Color.TextBlack};
-
-    /* Style du panneau (Glassmorphism) */
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(10px) saturate(1.4);
+position: relative;
+background: transparent;
+backdrop-filter: none;
+-webkit-backdrop-filter: none;
+    background:${Color.TextSubtleOnBlack};
+    backdrop-filter: blur(1px) saturate(1.8);
     -webkit-backdrop-filter: blur(10px) saturate(1.4);
 
-    border-radius: 8px;
+    border-radius: 4px;
     padding: 2.5rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 
     h3 {
-      margin: 0 0 1.2rem 0;
+      margin: 0 0 1.2rem;
       font-size: 1.8rem;
-      color: ${Color.TextBlack};
+      color: ${Color.TextOnLight};
     }
 
     ul {
@@ -256,14 +254,13 @@ export const ClickOverlay = styled.div`
       padding-left: 1.5rem;
 
       li {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
         line-height: 1.8;
-        color: ${Color.TextGrey};
+        color: ${Color.TextOnLight};
       }
     }
   }
 `;
-
 
 export const CardContent = styled.div`
   position: relative;
@@ -278,8 +275,9 @@ export const CardContent = styled.div`
     margin-bottom: 0.7rem;
     color: ${Color.GlowTitle};
     font-weight: 800;
-    text-shadow: 0 0 8px rgba(100, 88, 255, 0.8),
-                 0 0 20px rgba(100, 88, 255, 0.4);
+    text-shadow:
+      0 0 8px rgba(100, 88, 255, 0.8),
+      0 0 20px rgba(100, 88, 255, 0.4);
   }
 
   p {

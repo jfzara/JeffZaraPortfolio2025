@@ -1,12 +1,30 @@
 import { keyframes } from "styled-components";
+/* =========================
+   Palette MISE À JOUR FINALE (CORRIGÉE)
+========================= */
+export const Color = {
+  PrimaryAccent: "#39FF14",
+  SectionBackground: "#F0F0F0",
+  CardBackground: "#0A0A0A",
+  TextOnBlack: "#ffffff7e",
+  TextSubtleOnBlack: "#B0B0B0",
+  TextOnLight: "#6969694d",
+  TechGold: "#FFD700",
+  CaseGreen: "#39FF14",
 
-export const flashColors = keyframes`
-  0% { color: #FF0077; filter: brightness(1.8); }
-  20% { color: #00FFF0; }
-  50% { color: #FFB800; }
-  80% { color: #00C2FF; }
-  100% { color: inherit; filter: brightness(1); }
-`;
+  GlowTitle: "#6458FF",
+
+  DarkTechGold: "#CCA500",
+  DarkCaseGreen: "#2CBB0F",
+  DarkGlowTitle: "#4A3DCC",
+
+  GlowShadow: "rgba(100, 88, 255, 0.8)",
+  // 🌟 NOUVELLES NUANCES DE JAUNE POUR L'ANIMATION 🌟
+MediumTechGold: "#eed231ff", // Jaune moyen
+LightTechGold: "#ebd463ff", // Jaune clair
+VeryLightTechGold: "#fff6c4ff", // Jaune très clair (optionnel, ou on utilise le TechGold pur)
+
+};
 
 export const breathing = keyframes`
   0%, 100% { background-position: 0% 50%; }
@@ -66,11 +84,29 @@ export const fadeIn = keyframes`
 `;
 
 export const revealMask = keyframes`
-  0% { transform: translateY(0); background: rgba(0, 255, 240, 1); }
-  40% { transform: translateY(-50%); background: rgba(0, 255, 240, 0.9); }
-  70% { transform: translateY(-80%); background: rgba(0, 255, 240, 0.6); }
-  100% { transform: translateY(-100%); background: rgba(0, 255, 240, 0); }
+    /* Utilisation de TechGold pour un dégradé de 4 nuances */
+    0% { 
+        transform: translateY(0);
+        /* Jaune pur (le plus clair de la séquence) */
+        background: ${Color.TechGold || "#FFD700"};
+    }
+    40% { 
+        transform: translateY(-50%);
+        /* Nuance légèrement plus foncée */
+        background: ${Color.LightTechGold || "#FFE040"};
+    }
+    70% { 
+        transform: translateY(-80%);
+        /* Nuance plus foncée */
+        background: ${Color.MediumTechGold || "#E0C000"};
+    }
+    100% { 
+        transform: translateY(-100%);
+        /* Le masque disparaît totalement */
+        background: rgba(255, 254, 247, 0.18);
+    }
 `;
+
 
 export const titleWithShadow = keyframes`
   0% {

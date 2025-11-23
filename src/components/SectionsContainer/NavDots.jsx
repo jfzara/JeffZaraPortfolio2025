@@ -129,7 +129,7 @@ const Label = styled.span`
   position: absolute;
   right: calc(140px + 2vw);
   white-space: nowrap;
-  font-size: 1.4rem;
+  font-size:2.2rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   padding: 0;
@@ -137,11 +137,11 @@ const Label = styled.span`
   z-index: 1;
   pointer-events: none;
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-  color: ${Color.TextOnBlack};
+  color: ${Color.TextOnLight};
   background-color: transparent;
   box-shadow: none;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-  opacity: 0;
+  opacity: 0.5;
   transform: translateX(10px);
 
   ${NavDotWrapper}:hover & {

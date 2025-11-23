@@ -4,7 +4,7 @@ import Section from "./Section";
 import RipplesLayer from "./RipplesLayer";
 import NavDots from "./NavDots";
 import { BACKGROUND_COLORS, getContrastColor } from "../constants/colors";
-import textureVideo from "../../assets/texture_papier.mp4";
+import textureVideo from "../../assets/white_bg.mp4";
 
 export default function SectionsContainer({ sections }) {
   const [activeIndex, setActiveIndex] = useState(0);
