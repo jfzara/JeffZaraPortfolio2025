@@ -28,10 +28,20 @@ export const BackgroundVideo = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.9;
+
+  opacity: 0.9; /* Opacité par défaut */
+
   z-index: 0;
   filter: sepia(0.2) contrast(1.1) brightness(0.9);
   mix-blend-mode: multiply;
+
+  /* Fondu sortant conditionnel */
+  ${({ isFadingOut }) =>
+    isFadingOut &&
+    css`
+      transition: opacity 4.5s ease-out;
+      opacity: 0;
+    `}
 `;
 
 /* =========================
