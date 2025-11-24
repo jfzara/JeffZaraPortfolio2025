@@ -12,20 +12,15 @@ const BASE_SHAPES = [
   "10 0 85 10 90 22 70 34 20 30 0 18"
 ];
 
-/* =========================
-   Animations
-========================= */
+// Animation pop-up
 const popUp = keyframes`
   0% { transform: scale(0.9); opacity: 0; }
   70% { transform: scale(1.02); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 `;
 
-/* =========================
-   Helper functions
-========================= */
+// Helpers pour les couleurs
 const getAccentColor = (key) => Color[key] || Color.TechGold;
-
 const getDarkAccentColor = (key) => {
   switch (key) {
     case "TechGold": return Color.DarkTechGold || Color.TechGold;
@@ -35,9 +30,7 @@ const getDarkAccentColor = (key) => {
   }
 };
 
-/* =========================
-   Styled Components
-========================= */
+// Styled Components
 const NavWrapper = styled.div`
   position: fixed;
   top: 30%;
@@ -57,7 +50,7 @@ const NavDotWrapper = styled.div`
   align-items: center;
   cursor: pointer;
   width: 100%;
-  transition: transform 0.3s ease-out, opacity 0.3s ease;
+  transition: transform 0.15s ease-out, opacity 0.15s ease;
   &:hover {
     transform: translateX(-5px) rotateY(-5deg);
   }
@@ -67,13 +60,10 @@ const TagWrapper = styled.div`
   position: relative;
   width: 140px;
   height: 50px;
-  transform-origin: center;
-  overflow: visible;
   display: block;
-  background-color: transparent;
+  overflow: visible;
   cursor: pointer;
   z-index: 9999;
-  pointer-events: auto;
   transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 
   &.pop-up {
@@ -93,7 +83,6 @@ const TagSVG = styled.svg`
   overflow: visible;
   display: block;
   pointer-events: none;
-  background-color: transparent;
 `;
 
 const TagVideo = styled.video`
@@ -105,7 +94,6 @@ const TagVideo = styled.video`
   z-index: 0;
   opacity: 0.45;
   pointer-events: none;
-  background-color: transparent;
   clip-path: url(#clip-navdot);
 `;
 
@@ -116,33 +104,26 @@ const TagLabel = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
   font-weight: 800;
   font-size: 1.1rem;
   pointer-events: none;
-  text-shadow:
-    0 0 4px ${Color.PrimaryAccent},
-    0 0 10px ${Color.PrimaryAccent}90;
+  text-shadow: 0 0 4px ${Color.PrimaryAccent}, 0 0 10px ${Color.PrimaryAccent}90;
 `;
 
 const Label = styled.span`
   position: absolute;
   right: calc(140px + 2vw);
   white-space: nowrap;
-  font-size:2.2rem;
+  font-size: 2.2rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  padding: 0;
-  border-radius: 0;
   z-index: 1;
   pointer-events: none;
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
   color: ${Color.TextOnLight};
-  background-color: transparent;
-  box-shadow: none;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
   opacity: 0.5;
   transform: translateX(10px);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
 
   ${NavDotWrapper}:hover & {
     transform: translateX(0);
@@ -150,10 +131,8 @@ const Label = styled.span`
   }
 `;
 
-/* =========================
-   NavTag Component
-========================= */
-function NavTag({ colorKey, active, onClick, onMouseEnter, onMouseLeave, index }) {
+// NavTag Component
+function NavTag({ colorKey, active, onClick, index }) {
   const [currentShape, setCurrentShape] = useState(BASE_SHAPES[index % BASE_SHAPES.length]);
 
   const accentColor = getAccentColor(colorKey);
@@ -170,22 +149,11 @@ function NavTag({ colorKey, active, onClick, onMouseEnter, onMouseLeave, index }
 
   const fillBaseColor = isGlowTitle ? accentColor : `${darkAccentColor}20`;
   const fillActiveColor = isGlowTitle ? accentColor : accentColor;
-
-  const strokeColor = isGlowTitle
-    ? darkAccentColor
-    : active
-      ? accentColor
-      : darkAccentColor;
-
+  const strokeColor = isGlowTitle ? darkAccentColor : active ? accentColor : darkAccentColor;
   const labelColor = isGlowTitle ? Color.TextOnLight : Color.TextOnBlack;
 
   return (
-    <TagWrapper
-      className={active ? "pop-up" : ""}
-      onClick={onClick}
-      onMouseEnter={morphTag}
-      onMouseLeave={() => {}}
-    >
+    <TagWrapper className={active ? "pop-up" : ""} onClick={onClick} onMouseEnter={morphTag}>
       <TagSVG viewBox="0 0 100 40" preserveAspectRatio="xMidYMid meet">
         <defs>
           <clipPath id="clip-navdot">
@@ -198,32 +166,17 @@ function NavTag({ colorKey, active, onClick, onMouseEnter, onMouseLeave, index }
           fill={active ? fillActiveColor : fillBaseColor}
           stroke={strokeColor}
           strokeWidth={active ? 4.5 : 3.5}
-          style={{
-            transition: "all 0.36s cubic-bezier(0.22,1,0.36,1)"
-          }}
+          style={{ transition: "all 0.36s cubic-bezier(0.22,1,0.36,1)" }}
         />
       </TagSVG>
 
-      {textureVideo && (
-        <TagVideo
-          src={textureVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-      )}
-
-      <TagLabel style={{ color: labelColor }}>
-        •
-      </TagLabel>
+      {textureVideo && <TagVideo src={textureVideo} autoPlay loop muted playsInline />}
+      <TagLabel style={{ color: labelColor }}>•</TagLabel>
     </TagWrapper>
   );
 }
 
-/* =========================
-   Main NavDots Component
-========================= */
+// NavDots Component
 export default function NavDots({ sections, activeIndex, onDotClick }) {
   const [hoveredDot, setHoveredDot] = useState(null);
   const [wrapperHover, setWrapperHover] = useState(false);
@@ -252,20 +205,9 @@ export default function NavDots({ sections, activeIndex, onDotClick }) {
               colorKey={accentColorKey}
               active={i === activeIndex}
               index={i}
-              onClick={() => {
-                onDotClick(i);
-                setWrapperHover(false);
-              }}
-              onMouseEnter={() => setHoveredDot(i)}
-              onMouseLeave={() => setHoveredDot(null)}
+              onClick={() => onDotClick(i)}
             />
-
-            <Label
-              style={{
-                opacity: labelOpacity,
-                color: Color.TextOnBlack
-              }}
-            >
+            <Label style={{ opacity: labelOpacity, color: Color.TextOnBlack }}>
               {s.title}
             </Label>
           </NavDotWrapper>

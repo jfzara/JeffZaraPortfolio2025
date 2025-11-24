@@ -1,6 +1,7 @@
 import { keyframes } from "styled-components";
+
 /* =========================
-   Palette MISE À JOUR FINALE (CORRIGÉE)
+   PALETTE DE COULEURS
 ========================= */
 export const Color = {
   PrimaryAccent: "#39FF14",
@@ -11,7 +12,6 @@ export const Color = {
   TextOnLight: "#6969694d",
   TechGold: "#FFD700",
   CaseGreen: "#39FF14",
-
   GlowTitle: "#6458FF",
 
   DarkTechGold: "#CCA500",
@@ -19,13 +19,14 @@ export const Color = {
   DarkGlowTitle: "#4A3DCC",
 
   GlowShadow: "rgba(100, 88, 255, 0.8)",
-  // 🌟 NOUVELLES NUANCES DE JAUNE POUR L'ANIMATION 🌟
-MediumTechGold: "#eed231ff", // Jaune moyen
-LightTechGold: "#ebd463ff", // Jaune clair
-VeryLightTechGold: "#fff6c4ff", // Jaune très clair (optionnel, ou on utilise le TechGold pur)
-
+  MediumTechGold: "#eed231ff",
+  LightTechGold: "#ebd463ff",
+  VeryLightTechGold: "#fff6c4ff",
 };
 
+/* =========================
+   ANIMATIONS GÉNÉRALES
+========================= */
 export const breathing = keyframes`
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 0% 55%; }
@@ -54,6 +55,15 @@ export const parallaxFloat = keyframes`
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }
 `;
+
+export const fadeIn = keyframes`
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+`;
+
+/* =========================
+   TITRES
+========================= */
 export const titleFromSpace = keyframes`
   0%   { transform: scale(20) translateY(-15vh); opacity: 0; filter: blur(15px); color: #888; }
   5%   { transform: scale(18) translateY(-14vh); opacity: 0.05; filter: blur(13px); color: #777; }
@@ -78,60 +88,16 @@ export const titleFromSpace = keyframes`
   100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); color: #000; }
 `;
 
-export const fadeIn = keyframes`
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
-`;
-
 export const revealMask = keyframes`
-    /* Utilisation de TechGold pour un dégradé de 4 nuances */
-    0% { 
-        transform: translateY(0);
-        /* Jaune pur (le plus clair de la séquence) */
-        background: ${Color.TechGold || "#FFD700"};
-    }
-    40% { 
-        transform: translateY(-50%);
-        /* Nuance légèrement plus foncée */
-        background: ${Color.LightTechGold || "#FFE040"};
-    }
-    70% { 
-        transform: translateY(-80%);
-        /* Nuance plus foncée */
-        background: ${Color.MediumTechGold || "#E0C000"};
-    }
-    100% { 
-        transform: translateY(-100%);
-        /* Le masque disparaît totalement */
-        background: rgba(255, 254, 247, 0.18);
-    }
+  0%   { transform: translateY(0); background: ${Color.TechGold || "#FFD700"}; }
+  50%  { transform: translateY(-5%); background: ${Color.MediumTechGold || "#E0C000"}; }
+  100% { transform: translateY(-100%); background: rgba(255, 254, 247, 0.0); }
 `;
-
 
 export const titleWithShadow = keyframes`
-  0% {
-    transform: scale(20) translateY(-15vh);
-    text-shadow: 0 0 50px rgba(0,0,0,0.2);
-    opacity: 0;
-  }
-  25% {
-    transform: scale(8) translateY(-9vh);
-    text-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scale(3) translateY(-5vh);
-    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    opacity: 0.7;
-  }
-  75% {
-    transform: scale(1.2) translateY(-0.5vh);
-    text-shadow: 0 5px 15px rgba(0,0,0,0.6);
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(1) translateY(0);
-    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
-    opacity: 1;
-  }
+  0%   { transform: scale(20) translateY(-15vh); text-shadow: 0 0 50px rgba(0,0,0,0.2); opacity: 0; }
+  25%  { transform: scale(8) translateY(-9vh); text-shadow: 0 20px 60px rgba(0,0,0,0.3); opacity: 0.3; }
+  50%  { transform: scale(3) translateY(-5vh); text-shadow: 0 10px 30px rgba(0,0,0,0.5); opacity: 0.7; }
+  75%  { transform: scale(1.2) translateY(-0.5vh); text-shadow: 0 5px 15px rgba(0,0,0,0.6); opacity: 0.9; }
+  100% { transform: scale(1) translateY(0); text-shadow: 0 2px 6px rgba(0,0,0,0.7); opacity: 1; }
 `;
