@@ -203,20 +203,36 @@ export const Subtitle = styled.h2`
     display: inline-block;
     position: relative;
     transform-origin: bottom center;
-    opacity: 0;
 
+    /* Texte visible par défaut, pas d'animation */
+    opacity: 1;
+    animation: none;
+
+    /* Masque désactivé par défaut */
     &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: ${Color.TechGold || "#FFD700"};
-      transform: translateY(0);
-      animation: ${revealMask} 0.6s ease-out forwards;
-      animation-delay: calc(var(--idx) * 0.03s);
+      content: none;
+      animation: none;
+      background: transparent;
     }
 
-    animation: ${fadeIn} 0.9s ease-out forwards;
-    animation-delay: calc(var(--idx) * 0.03s);
+    /* Animation et masque uniquement pour la première section */
+    ${({ firstPanel }) =>
+      firstPanel &&
+      css`
+        opacity: 0;
+        animation: ${fadeIn} 0.9s ease-out forwards;
+        animation-delay: calc(var(--idx) * 0.03s);
+
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: ${Color.TechGold || "#FFD700"};
+          transform: translateY(0);
+          animation: ${revealMask} 0.6s ease-out forwards;
+          animation-delay: calc(var(--idx) * 0.03s);
+        }
+      `}
   }
 `;
 
