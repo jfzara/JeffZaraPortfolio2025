@@ -208,7 +208,7 @@ export const ClickOverlay = styled.div`
   border-radius: 12px;
   z-index: 9000;
 
-  background: rgba(0, 0, 0, 0.4);
+  background: rgb(73 72 72);
   box-sizing: border-box;
   animation: fadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 
