@@ -1,37 +1,49 @@
 import React from "react";
 import styled from "styled-components";
 
+// Couleur très attirante pour les liens
+const LINK_ACCENT_COLOR = "#007AFF"; // Bleu électrique vif (très visible sur blanc)
+const HOVER_COLOR = "#005CE6"; // Bleu légèrement plus foncé au survol
+
 const Wrap = styled.footer`
-  padding: 1rem 2rem;
+  padding: 1.5rem 4vw;
   text-align: center;
-  color: #e0e0e0; // gris clair, contraste suffisant
+  color: #666666;
   font-size: 0.9rem;
   position: relative;
   z-index: 10;
+  font-family: "Space Grotesk", sans-serif;
 
-  background: rgba(0, 0, 0, 0.3); // verre givré
-  backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(0, 255, 255, 0.3); // bordure neon subtile
-  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.05);
+  background: #ffffff;
+  border-top: 1px solid #eeeeee;
+  backdrop-filter: none;
+  box-shadow: none;
 
   a {
-    color: #00eaff; // néon bleu
+    color: ${LINK_ACCENT_COLOR}; // Nouveau bleu très attirant
     text-decoration: none;
-    font-weight: 700;
-    transition: all 0.3s ease;
+    font-weight: 600; // Un peu plus de gras pour la mise en évidence
+    transition: color 0.3s ease, text-decoration 0.3s ease;
   }
 
   a:hover {
-    text-shadow: 0 0 8px #00eaff, 0 0 16px #00eaff;
-    color: #00ffff;
+    text-decoration: underline;
+    color: ${HOVER_COLOR}; // Changement de couleur au survol pour feedback
   }
 `;
 
 export default function Footer() {
   return (
     <Wrap aria-label="Pied de page">
-      © 2025 Jean Fabrice ZARA — Montréal — Disponible pour projets — 
-      <a href="https://github.com/zarajeanfabrice" target="_blank" rel="noreferrer"> GitHub</a>
+      © 2025 Jean Fabrice ZARA — Montréal — Disponible pour projets —
+      <a
+        href="https://github.com/zarajeanfabrice"
+        target="_blank"
+        rel="noreferrer"
+      >
+        {" "}
+        GitHub
+      </a>
     </Wrap>
   );
 }

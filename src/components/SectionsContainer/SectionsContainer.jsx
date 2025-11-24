@@ -4,7 +4,7 @@ import Section from "./Section";
 import RipplesLayer from "./RipplesLayer";
 import NavDots from "./NavDots";
 import { BACKGROUND_COLORS, getContrastColor } from "../constants/colors";
-import textureVideo from "../../assets/white_bg.mp4";
+import textureVideo from "../../assets/texture_grainy_green.mp4";
 
 export default function SectionsContainer({ sections }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -15,7 +15,7 @@ export default function SectionsContainer({ sections }) {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = 0.1; // 0.3 = 30% de la vitesse normale
+      videoRef.current.playbackRate = 0.6; // 0.3 = 30% de la vitesse normale
     }
   }, []);
 
@@ -23,8 +23,7 @@ export default function SectionsContainer({ sections }) {
     <S.Container bgColor={currentBgColor}>
       {/* === Vidéo de fond === */}
       <S.BackgroundVideo
-        autoPlay
-        loop
+        autoPlay    
         muted
         playsInline
         ref={videoRef} // <- on attache la ref
