@@ -195,7 +195,7 @@ export default function ProjectsSection() {
                         points={shape}
                         fill={type === "demo" ? "rgb(44, 44, 44)" : type === "tech" ? "#FFD700" : "#39FF14"}
                         stroke={type === "demo" ? "#ffffff" : type === "tech" ? "#d4b800" : "#2eaf0e"}
-                        strokeWidth={4}
+                        strokeWidth={1}
                         style={{ transition: "all 0.36s cubic-bezier(0.22,1,0.36,1)" }}
                       />
                     </S.TagSVG>
@@ -213,7 +213,7 @@ export default function ProjectsSection() {
                         textAlign: 'center',
                         whiteSpace: 'normal',
                         zIndex: 2,
-                        fontSize: type === "demo" ? "0.9em" : "0.75em",
+                        fontSize: type === "demo" ? "1.2em" : "1em",
                         color: type === "demo" ? "#ffffff" : "#000000"
                       }}
                     >

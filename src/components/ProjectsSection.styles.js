@@ -158,20 +158,20 @@ export const TagVideo = styled.video`
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  opacity: 0.45;
+  opacity: 0.6;
   pointer-events: none;
   background-color: transparent;
 `;
 
 export const OverlayVideo = styled.video`
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0px;
+  left: 0px;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
-  opacity: 0.15;
+  opacity: 0.1;
   z-index: -1;
 `;
 
@@ -185,18 +185,16 @@ export const TagLabel = styled.div`
   text-align: center;
   padding: 0 10px;
 
-  font-weight: 800;
+  font-weight: 500;
   color: ${Color.PrimaryAccent};
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   pointer-events: none;
 
-  text-shadow:
-    0 0 4px ${Color.PrimaryAccent},
-    0 0 10px ${Color.PrimaryAccent}90;
+ 
 `;
 
 /* Overlay */
