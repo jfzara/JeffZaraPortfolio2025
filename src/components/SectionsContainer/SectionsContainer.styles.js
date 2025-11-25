@@ -1,5 +1,5 @@
 import styled, { keyframes, css } from "styled-components";
-import { titleFromSpace, fadeIn, revealMask, titleWithShadow } from "./animations";
+// import { titleFromSpace, fadeIn, revealMask, titleWithShadow } from "./animations"; // Garder commenté
 import { Color } from "../ProjectsSection.styles.js";
 
 // Utilitaires couleur
@@ -28,18 +28,14 @@ export const BackgroundVideo = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  z-index: 1;
+  overflow-x: hidden;
+  transition: opacity 2s ease-out;
+  opacity: 1;
 
-  opacity: 0.9; /* Opacité par défaut */
-
-  z-index: 0;
-  filter: sepia(0.2) contrast(1.1) brightness(0.9);
-  mix-blend-mode: multiply;
-
-  /* Fondu sortant conditionnel */
-  ${({ isFadingOut }) =>
-    isFadingOut &&
+  ${(props) =>
+    props.$isFadingOut &&
     css`
-      transition: opacity 4.5s ease-out;
       opacity: 0;
     `}
 `;
@@ -83,15 +79,45 @@ export const parallaxFloat = keyframes`
   50% { transform: translateY(-8px); }
 `;
 
+export const titleFromSpace = keyframes`
+  0% { opacity: 0; transform: scale(2.5) translateX(-10vw); filter: blur(10px); }
+  5% { opacity: 0.1; transform: scale(2.0) translateX(-8vw); filter: blur(8px); }
+  10% { opacity: 0.2; transform: scale(1.7) translateX(-6vw); filter: blur(6px); }
+  15% { opacity: 0.3; transform: scale(1.5) translateX(-4vw); filter: blur(4px); }
+  20% { opacity: 0.4; transform: scale(1.35) translateX(-2vw); filter: blur(3px); }
+  25% { opacity: 0.5; transform: scale(1.25) translateX(-1vw); filter: blur(2px); }
+  30% { opacity: 0.6; transform: scale(1.18) translateX(-0.5vw); filter: blur(1.5px); }
+  35% { opacity: 0.7; transform: scale(1.12); filter: blur(1px); }
+  40% { opacity: 0.8; transform: scale(1.08); filter: blur(0.8px); }
+  45% { opacity: 0.85; transform: scale(1.05); filter: blur(0.6px); }
+  50% { opacity: 0.9; transform: scale(1.03); filter: blur(0.4px); }
+  55% { opacity: 0.92; transform: scale(1.02); filter: blur(0.3px); }
+  60% { opacity: 0.94; transform: scale(1.015); filter: blur(0.2px); }
+  65% { opacity: 0.96; transform: scale(1.01); filter: blur(0.15px); }
+  70% { opacity: 0.97; transform: scale(1.007); filter: blur(0.1px); }
+  75% { opacity: 0.98; transform: scale(1.005); filter: blur(0.05px); }
+  80% { opacity: 0.99; transform: scale(1.003); filter: blur(0.02px); }
+  85% { opacity: 0.995; transform: scale(1.002); filter: blur(0.01px); }
+  90% { opacity: 0.998; transform: scale(1.001); filter: blur(0.005px); }
+  95% { opacity: 0.999; transform: scale(1.0005); filter: blur(0.002px); }
+  100% { opacity: 1; transform: scale(1) translateX(0); filter: blur(0); }
+`;
+
+export const shadowPop = keyframes`
+  0% { text-shadow: 0 0 0 rgba(0,0,0,0); }
+  50% { text-shadow: 0 1rem 1rem rgba(0,0,0,0.35), 0 2rem 2rem rgba(0,0,0,0.25), 0 3rem 3rem rgba(0,0,0,0.15); }
+  100% { text-shadow: 0 0.5rem 0.5rem rgba(0,0,0,0.35), 0 1rem 1rem rgba(0,0,0,0.25), 0 1.5rem 1.5rem rgba(0,0,0,0.15); }
+`;
+
 /* =========================
    CONTAINERS
 ========================= */
 export const Container = styled.div`
   position: relative;
-  width: 100%;
-  height: 50vh;
-  background: ${(props) => props.bgColor};
-  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  background: #ffffff;
+ 
 `;
 
 export const Section = styled.div`
@@ -101,11 +127,18 @@ export const Section = styled.div`
   scroll-margin-top: 200px;
   position: relative;
   transition: opacity 0.5s ease, transform 0.5s ease;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100vh;
+
+  ${({ isFirstSection }) =>
+    isFirstSection &&
+    css`
+      height: 20vh;
+    `}
 `;
 
-/* =========================
-   TITLE & TEXT
-========================= */
 export const TitleGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -113,6 +146,7 @@ export const TitleGroup = styled.div`
   text-align: left;
   margin-bottom: 2.5rem;
   gap: 2rem;
+  z-index: 20;
 
   @media (max-width: 768px) {
     padding-left: 2rem;
@@ -123,16 +157,8 @@ export const TitleGroup = styled.div`
   animation: fadeInBlock 1.2s ease-out forwards;
 
   @keyframes fadeInBlock {
-    from {
-      opacity: 0;
-      transform: translateY(2vh);
-      filter: blur(4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
-    }
+    from { opacity: 0; transform: translateY(2vh); filter: blur(4px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
   }
 `;
 
@@ -144,57 +170,31 @@ export const Title = styled.h1`
   color: ${Color.TitleFontColor || "black"};
   text-shadow: 1px 1px 0 ${Color.GlowTitle};
   position: relative;
+  z-index: 30;
 
-  ${({ firstPanel }) =>
-    firstPanel &&
+  ${({ isFirstSection }) =>
+    isFirstSection &&
     css`
-      animation: ${titleFromSpace} 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
       transform-origin: center;
-
-      text-shadow:
-        1px 1px 0 rgba(0, 0, 0, 0.5),
-        0 0 1px ${Color.TitleFontColor + "40"};
-
-      animation:
-        ${titleFromSpace} 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards,
-        shadowPop 1.5s forwards;
+      animation: ${titleFromSpace} 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards,
+                 ${shadowPop} 1.5s forwards;
+      text-shadow: 1px 1px 0 rgba(0,0,0,0.5), 0 0 1px ${Color.TitleFontColor + "40"};
     `}
-
-  &:not(${({ firstPanel }) => firstPanel}) {
-    color: ${Color.TitleFontColor};
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-  }
 
   span {
     display: inline-block;
-    cursor: default;
+    opacity: 0;
+    cursor: pointer;
     color: ${Color.TitleFontColor || "black"};
-
-    animation: ${flashColors} 1.2s ease-out forwards;
+    animation: ${titleFromSpace} 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards,
+               ${flashColors} 1.2s ease-out forwards;
     animation-delay: calc(var(--idx) * 0.05s);
-
-    transition: transform 0.7s cubic-bezier(0.25, 1.5, 0.5, 1), color 0.1s ease-in;
+    transition: transform 0.2s cubic-bezier(0.25,0.46,0.45,0.94), color 0.2s ease-out;
 
     &:hover {
       color: ${Color.CaseGreen};
-      transform: translateY(-0.4rem);
+      transform: translateY(-8px);
     }
-  }
-`;
-
-export const shadowPop = keyframes`
-  0% { text-shadow: 0 0 0 rgba(0,0,0,0); }
-  50% {
-    text-shadow:
-      0 1rem 1rem rgba(0,0,0,0.35),
-      0 2rem 2rem rgba(0,0,0,0.25),
-      0 3rem 3rem rgba(0,0,0,0.15);
-  }
-  100% {
-    text-shadow:
-      0 0.5rem 0.5rem rgba(0,0,0,0.35),
-      0 1rem 1rem rgba(0,0,0,0.25),
-      0 1.5rem 1.5rem rgba(0,0,0,0.15);
   }
 `;
 
@@ -203,25 +203,21 @@ export const Subtitle = styled.h2`
   margin-top: 2rem;
   margin-bottom: 1rem;
   color: ${Color.TitleFontColor || "#525252ff"};
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
-
+  text-shadow: 0 0 1px rgba(0,0,0,0.3);
   display: inline-block;
   position: relative;
-  overflow: hidden; /* Maintenu pour les bords propres */
+  overflow: hidden;
+  z-index: 30;
 
-  /* Spans simples, sans animation ni pseudo-éléments */
   span {
     display: inline-block;
     position: relative;
     transform-origin: bottom center;
     opacity: 1;
     animation: none;
-    &::before {
-      content: none;
-    }
+    &::before { content: none; }
   }
 `;
-
 
 export const Body = styled.div`
   font-size: 1.2rem;
@@ -229,9 +225,6 @@ export const Body = styled.div`
   margin-bottom: 2rem;
 `;
 
-/* =========================
-   RIPPLE EFFECT
-========================= */
 const rippleAnimSoft = keyframes`
   0% { transform: scale(0.4); opacity: 0; filter: blur(1px); }
   15% { transform: scale(1); opacity: 0.25; filter: blur(2px); }
@@ -245,10 +238,10 @@ export const Ripple = styled.div`
   position: absolute;
   width: 10px;
   height: 10px;
-  background: rgba(104, 104, 104, 1);
+  background: rgba(104,104,104,1);
   border-radius: 50%;
   pointer-events: none;
-  transform: translate(-50%, -50%);
-  animation: ${rippleAnimSoft} 0.4s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+  transform: translate(-50%,-50%);
+  animation: ${rippleAnimSoft} 0.4s cubic-bezier(0.2,0.8,0.4,1) forwards;
   mix-blend-mode: screen;
 `;

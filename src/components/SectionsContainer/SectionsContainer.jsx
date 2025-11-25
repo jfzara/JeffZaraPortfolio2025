@@ -6,8 +6,11 @@ import NavDots from "./NavDots";
 import { BACKGROUND_COLORS, getContrastColor } from "../constants/colors";
 import textureVideo from "../../assets/texture_grainy_green.mp4";
 
-const VIDEO_DELAY = 1200; // 1.2s avant le fondu
-const FADE_DURATION = 4500; // 4.5s de fondu
+// --- NOUVELLES CONSTANTES : Total Max 3 secondes ---
+const VIDEO_DELAY = 1000; // Délai avant de commencer le fade-out (1s)
+const FADE_DURATION = 2000; // Durée du fondu (2s)
+const TOTAL_VISIBILITY_DELAY = VIDEO_DELAY + FADE_DURATION; // 1000 + 2000 = 3000ms
+// ----------------------------------------------------
 
 export default function SectionsContainer({ sections }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -21,17 +24,26 @@ export default function SectionsContainer({ sections }) {
   useEffect(() => {
     if (!videoRef.current) return;
 
-    // Lecture de la vidéo
     videoRef.current.playbackRate = 0.6;
     videoRef.current.play();
 
-    // Déclenche le fondu et l'affichage des NavDots
-    const fadeTimeout = setTimeout(() => {
+    let fadeTimeout;
+    let visibilityTimeout;
+
+    // 1. Déclenche le début du fondu après 1.2s (isFadingOut = true)
+    fadeTimeout = setTimeout(() => {
       setIsFadingOut(true);
-      setNavDotsVisible(true);
     }, VIDEO_DELAY);
 
-    return () => clearTimeout(fadeTimeout);
+    // 2. Déclenche l'apparition du contenu APRÈS la fin du fondu (total: 5.7s)
+    visibilityTimeout = setTimeout(() => {
+      setNavDotsVisible(true);
+    }, TOTAL_VISIBILITY_DELAY);
+
+    return () => {
+      clearTimeout(fadeTimeout);
+      clearTimeout(visibilityTimeout);
+    };
   }, []);
 
   return (

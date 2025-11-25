@@ -11,6 +11,7 @@ export const fadeUp = keyframes`
 // Container principal de chaque section
 export const Section = styled.section`
   position: relative;
+  box-sizing: border-box;
   width: 100%;
   min-height: 100vh;
   padding: 6rem 8vw;
