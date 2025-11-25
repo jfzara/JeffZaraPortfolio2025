@@ -1,44 +1,41 @@
 import React, { useState, useRef, useEffect } from "react";
 import * as S from "./SectionsContainer.styles";
+
 import Section from "./Section";
 import RipplesLayer from "./RipplesLayer";
 import NavDots from "./NavDots";
+import MobileNavFab from "./MobileNavFab";
+
 import { BACKGROUND_COLORS, getContrastColor } from "../constants/colors";
 import textureVideo from "../../assets/texture_color_drops.mp4";
 
-// --- NOUVELLES CONSTANTES : Total Max 3 secondes ---
-const VIDEO_DELAY = 2500; // Délai avant de commencer le fade-out (1s)
-const FADE_DURATION = 2000; // Durée du fondu (2s)
-const TOTAL_VISIBILITY_DELAY = VIDEO_DELAY + FADE_DURATION; // 2500 + 1000 = 3500ms
-// ----------------------------------------------------
+const VIDEO_DELAY = 2500;
+const FADE_DURATION = 2000;
+const TOTAL_VISIBILITY_DELAY = VIDEO_DELAY + FADE_DURATION;
 
 export default function SectionsContainer({ sections }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [ripples, setRipples] = useState([]);
-  const videoRef = useRef(null);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [navDotsVisible, setNavDotsVisible] = useState(false);
 
-  const currentBgColor = BACKGROUND_COLORS[activeIndex % BACKGROUND_COLORS.length];
+  const videoRef = useRef(null);
 
+  const currentBgColor =
+    BACKGROUND_COLORS[activeIndex % BACKGROUND_COLORS.length];
+
+  // Gestion du fade + apparition de la navigation
   useEffect(() => {
     if (!videoRef.current) return;
 
     videoRef.current.playbackRate = 0.9;
     videoRef.current.play();
 
-    let fadeTimeout;
-    let visibilityTimeout;
-
-    // 1. Déclenche le début du fondu après 1.2s (isFadingOut = true)
-    fadeTimeout = setTimeout(() => {
-      setIsFadingOut(true);
-    }, VIDEO_DELAY);
-
-    // 2. Déclenche l'apparition du contenu APRÈS la fin du fondu (total: 5.7s)
-    visibilityTimeout = setTimeout(() => {
-      setNavDotsVisible(true);
-    }, TOTAL_VISIBILITY_DELAY);
+    const fadeTimeout = setTimeout(() => setIsFadingOut(true), VIDEO_DELAY);
+    const visibilityTimeout = setTimeout(
+      () => setNavDotsVisible(true),
+      TOTAL_VISIBILITY_DELAY
+    );
 
     return () => {
       clearTimeout(fadeTimeout);
@@ -48,7 +45,7 @@ export default function SectionsContainer({ sections }) {
 
   return (
     <S.Container bgColor={currentBgColor}>
-      {/* Vidéo de fond */}
+      {/* --- Vidéo de fond --- */}
       <S.BackgroundVideo
         autoPlay
         muted
@@ -59,33 +56,46 @@ export default function SectionsContainer({ sections }) {
         <source src={textureVideo} type="video/mp4" />
       </S.BackgroundVideo>
 
-      {/* Sections */}
-      {sections.map((s, i) => (
-        <Section
-          key={i}
-          data={s}
-          index={i}
-          active={i === activeIndex}
-          textColor={getContrastColor(BACKGROUND_COLORS[i % BACKGROUND_COLORS.length])}
-          bgColor={BACKGROUND_COLORS[i % BACKGROUND_COLORS.length] + "80"}
-          decoSide={i % 2 === 0 ? "right" : "left"}
-          isLoaded={navDotsVisible}
-        >
-          <S.Title isFirstSection={i === 0}>
-            {s.title.split("").map((char, idx) => (
-              <span key={idx} style={{ "--idx": idx }}>
-                {char}
-              </span>
-            ))}
-          </S.Title>
-        </Section>
-      ))}
+      {/* --- Sections --- */}
+      {sections.map((s, i) => {
+        const bg = BACKGROUND_COLORS[i % BACKGROUND_COLORS.length];
+        const textColor = getContrastColor(bg);
 
-      {/* Ripples */}
+        return (
+          <Section
+            key={i}
+            data={s}
+            index={i}
+            active={i === activeIndex}
+            textColor={textColor}
+            bgColor={bg + "80"}
+            decoSide={i % 2 === 0 ? "right" : "left"}
+            isLoaded={navDotsVisible}
+          >
+            <S.Title isFirstSection={i === 0}>
+              {s.title.split("").map((char, idx) => (
+                <span key={idx} style={{ "--idx": idx }}>
+                  {char}
+                </span>
+              ))}
+            </S.Title>
+          </Section>
+        );
+      })}
+
+      {/* --- Effet Ripples --- */}
       <RipplesLayer ripples={ripples} setRipples={setRipples} />
 
-      {/* Navigation */}
+      {/* --- Navigation desktop --- */}
       <NavDots
+        sections={sections}
+        activeIndex={activeIndex}
+        onDotClick={setActiveIndex}
+        navDotsVisible={navDotsVisible}
+      />
+
+      {/* --- Navigation mobile (FAB) --- */}
+      <MobileNavFab
         sections={sections}
         activeIndex={activeIndex}
         onDotClick={setActiveIndex}

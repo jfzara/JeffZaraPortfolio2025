@@ -8,27 +8,31 @@ export const fadeUp = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-// Container principal de chaque section
 export const Section = styled.section`
   position: relative;
   box-sizing: border-box;
+
   width: 100%;
   min-height: 100vh;
   padding: 6rem 8vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  color: ${(props) => props.textColor || "#fff"};
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  opacity: ${(props) => (props.active ? 1 : 0)};
-  transform: translateY(${(props) => (props.active ? "0" : "20px")});
-  animation: ${fadeUp} 0.8s ease-out forwards;
 
-  & > * {
-    z-index: 2;
+  /* Réduction de la hauteur après animation */
+  ${({ isHeroActive, isLoaded }) =>
+    isHeroActive &&
+    isLoaded &&
+    css`
+      min-height: 0;
+      height: auto;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+      transition: min-height 1.5s ease-out, padding 1.5s ease-out;
+    `}
+
+  @media (max-width: 768px) {
+    min-height: auto; /* Empêche tout débordement sur mobile */
   }
 `;
+
 
 // Titre principal
 export const Title = styled.h1`

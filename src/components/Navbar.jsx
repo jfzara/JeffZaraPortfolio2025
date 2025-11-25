@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 import QuadToggle from "./QuadToggle";
 
-// Mise à jour des couleurs pour le thème minimaliste (Blanc/Noir)
+// Palette minimaliste
 const Color = {
     PrimaryAccent: "#333333",
     TextDark: "#333333",
@@ -14,7 +14,8 @@ const CONTENT_PADDING = "4vw";
 const MAX_CONTENT_WIDTH = "1400px";
 const MOBILE_BREAKPOINT = "768px";
 
-// Nav : Fond blanc, légèrement accentué au défilement
+// ===== Styled Components =====
+
 const Nav = styled.nav`
     position: sticky;
     top: 0;
@@ -23,10 +24,8 @@ const Nav = styled.nav`
     z-index: 990;
     font-family: "Space Grotesk", sans-serif;
     background: ${Color.BackgroundWhite};
-    border-bottom: 1px solid
-      ${({ $scrolled }) => ($scrolled ? "#EEEEEE" : "transparent")};
-    box-shadow: ${({ $scrolled }) =>
-      $scrolled ? "0 1px 10px rgba(0, 0, 0, 0.05)" : "none"};
+    border-bottom: ${({ $scrolled }) => ($scrolled ? "1px solid #EEEEEE" : "transparent")};
+    box-shadow: ${({ $scrolled }) => ($scrolled ? "0 1px 10px rgba(0,0,0,0.05)" : "none")};
     transition: border-bottom 0.1s ease, box-shadow 0.3s ease;
 `;
 
@@ -71,32 +70,11 @@ const ButtonGroupWrapper = styled.div`
     }
 `;
 
-const HamburgerButton = styled.button`
-    display: none;
-    margin-left: auto;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: ${Color.TextDark};
-    cursor: pointer;
-    padding: 0.5rem;
-    transition: color 0.2s ease;
-
-    &:hover {
-        color: ${Color.PrimaryAccent};
-    }
-
-    @media (max-width: ${MOBILE_BREAKPOINT}) {
-        display: block;
-    }
-`;
-
 const TagButtonBase = css`
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-sizing: border-box;
     padding: 0.5rem 0.5rem;
     font-size: 0.95rem;
     font-weight: 500;
@@ -106,14 +84,11 @@ const TagButtonBase = css`
     border: none;
     background: transparent;
     color: ${Color.TextSubtle};
-    clip-path: none;
-    text-shadow: none;
     transition: color 0.2s ease, text-decoration 0.2s ease;
 
     &:hover {
         color: ${Color.TextDark};
         text-decoration: underline;
-        transform: none;
     }
 `;
 
@@ -135,22 +110,20 @@ const PreferencesButton = styled.button`
     ${({ $isActive }) =>
         $isActive &&
         `
-            color: ${Color.TextDark};
-            text-decoration: underline;
-        `}
+        color: ${Color.TextDark};
+        text-decoration: underline;
+    `}
 `;
+
+// ===== Composant =====
 
 export default function Navbar() {
     const [prefOpen, setPrefOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
     const buttonRef = useRef();
 
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
-        };
-
+        const handleScroll = () => setScrolled(window.scrollY > 20);
         handleScroll();
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
@@ -163,7 +136,6 @@ export default function Navbar() {
 
                 <ButtonGroupWrapper>
                     <ContactButton href="#contact">Contact</ContactButton>
-
                     <PreferencesWrapper>
                         <PreferencesButton
                             ref={buttonRef}
@@ -172,7 +144,6 @@ export default function Navbar() {
                         >
                             Préférences
                         </PreferencesButton>
-
                         <QuadToggle
                             isOpen={prefOpen}
                             onClose={() => setPrefOpen(false)}
@@ -180,10 +151,6 @@ export default function Navbar() {
                         />
                     </PreferencesWrapper>
                 </ButtonGroupWrapper>
-
-                <HamburgerButton onClick={() => setMenuOpen((p) => !p)}>
-                    {menuOpen ? "✕" : "☰"}
-                </HamburgerButton>
             </InnerNav>
         </Nav>
     );
