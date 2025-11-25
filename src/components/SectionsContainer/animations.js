@@ -88,11 +88,7 @@ export const titleFromSpace = keyframes`
   100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); color: #000; }
 `;
 
-export const revealMask = keyframes`
-  0%   { transform: translateY(0); background: ${Color.TechGold || "#FFD700"}; }
-  50%  { transform: translateY(-5%); background: ${Color.MediumTechGold || "#E0C000"}; }
-  100% { transform: translateY(-100%); background: rgba(255, 254, 247, 0.0); }
-`;
+
 
 export const titleWithShadow = keyframes`
   0%   { transform: scale(20) translateY(-15vh); text-shadow: 0 0 50px rgba(0,0,0,0.2); opacity: 0; }

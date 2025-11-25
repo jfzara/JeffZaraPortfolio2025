@@ -2,7 +2,7 @@ import styled, { keyframes, css } from "styled-components";
 // import { titleFromSpace, fadeIn, revealMask, titleWithShadow } from "./animations"; // Garder commenté
 import { Color } from "../ProjectsSection.styles.js";
 
-// Utilitaires couleur
+// Utilitaires couleur (inchangés)
 const getAccentColor = (key) => Color[key] || Color.TechGold;
 
 const getDarkAccentColor = (key) => {
@@ -19,7 +19,7 @@ const getDarkAccentColor = (key) => {
 };
 
 /* =========================
-   VIDEO
+   VIDEO — VERSION NETTOYÉE
 ========================= */
 export const BackgroundVideo = styled.video`
   position: absolute;
@@ -30,18 +30,24 @@ export const BackgroundVideo = styled.video`
   object-fit: cover;
   z-index: 1;
   overflow-x: hidden;
-  transition: opacity 2s ease-out;
-  opacity: 1;
+
+  /* Effets visuels + transitions */
+  transition: opacity 2s ease-out, filter 2s ease-out;
+
+  opacity: 0.85; 
+  filter: brightness(1.3) saturate(1.2);
 
   ${(props) =>
     props.$isFadingOut &&
     css`
       opacity: 0;
+      filter: blur(0);
     `}
 `;
 
+
 /* =========================
-   ANIMATIONS
+   ANIMATIONS (INCHANGÉ)
 ========================= */
 export const flashColors = keyframes`
   0% { filter: brightness(1.4) saturate(1.3); }
@@ -110,14 +116,13 @@ export const shadowPop = keyframes`
 `;
 
 /* =========================
-   CONTAINERS
+   CONTAINERS (INCHANGÉ)
 ========================= */
 export const Container = styled.div`
   position: relative;
   width: 100vw;
   height: 100vh;
   background: #ffffff;
- 
 `;
 
 export const Section = styled.div`

@@ -4,12 +4,12 @@ import Section from "./Section";
 import RipplesLayer from "./RipplesLayer";
 import NavDots from "./NavDots";
 import { BACKGROUND_COLORS, getContrastColor } from "../constants/colors";
-import textureVideo from "../../assets/texture_grainy_green.mp4";
+import textureVideo from "../../assets/texture_color_drops.mp4";
 
 // --- NOUVELLES CONSTANTES : Total Max 3 secondes ---
-const VIDEO_DELAY = 1000; // Délai avant de commencer le fade-out (1s)
+const VIDEO_DELAY = 2500; // Délai avant de commencer le fade-out (1s)
 const FADE_DURATION = 2000; // Durée du fondu (2s)
-const TOTAL_VISIBILITY_DELAY = VIDEO_DELAY + FADE_DURATION; // 1000 + 2000 = 3000ms
+const TOTAL_VISIBILITY_DELAY = VIDEO_DELAY + FADE_DURATION; // 2500 + 1000 = 3500ms
 // ----------------------------------------------------
 
 export default function SectionsContainer({ sections }) {
@@ -24,7 +24,7 @@ export default function SectionsContainer({ sections }) {
   useEffect(() => {
     if (!videoRef.current) return;
 
-    videoRef.current.playbackRate = 0.6;
+    videoRef.current.playbackRate = 0.9;
     videoRef.current.play();
 
     let fadeTimeout;
