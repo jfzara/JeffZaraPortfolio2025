@@ -42,7 +42,7 @@ export default function SectionsContainer({ sections }) {
         muted
         playsInline
         ref={videoRef}
-        isFadingOut={isFadingOut}
+        $isFadingOut={isFadingOut}
       >
         <source src={textureVideo} type="video/mp4" />
       </S.BackgroundVideo>
@@ -57,6 +57,7 @@ export default function SectionsContainer({ sections }) {
           textColor={getContrastColor(BACKGROUND_COLORS[i % BACKGROUND_COLORS.length])}
           bgColor={BACKGROUND_COLORS[i % BACKGROUND_COLORS.length] + "80"}
           decoSide={i % 2 === 0 ? "right" : "left"}
+          isLoaded={navDotsVisible}
         >
           <S.Title isFirstSection={i === 0}>
             {s.title.split("").map((char, idx) => (

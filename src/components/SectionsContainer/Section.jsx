@@ -1,16 +1,16 @@
 import React from "react";
 import * as S from "./SectionsContainer.styles";
+import ScrambledText from "./ScrambledText";
 
-export default function Section({ data, active, textColor, index }) {
+export default function Section({ data, active, textColor, index, isLoaded }) {
   const { title, subtitle, body, cta } = data;
-
-  // Détermine si c'est la première section pour activer l'animation
   const isFirstSection = index === 0;
 
   return (
     <S.Section active={active} textColor={textColor}>
       <S.TitleGroup>
-        {/* === TITRE === */}
+
+        {/* TITRE */}
         <S.Title firstPanel={isFirstSection}>
           {title.split("").map((letter, idx) => (
             <span key={idx} style={{ "--idx": idx }}>
@@ -19,20 +19,20 @@ export default function Section({ data, active, textColor, index }) {
           ))}
         </S.Title>
 
-        {/* === SOUS-TITRE === */}
-        <S.Subtitle firstPanel={isFirstSection} textColor={textColor}>
-          {subtitle.split("").map((letter, idx) => (
-            <span key={idx} style={{ "--idx": idx }}>
-              {letter}
-            </span>
-          ))}
+        {/* SOUS-TITRE */}
+        <S.Subtitle textColor={textColor}>
+          <ScrambledText
+            targetText={subtitle}
+            isLoaded={isLoaded && isFirstSection}
+          />
         </S.Subtitle>
+
       </S.TitleGroup>
 
-      {/* === TEXTE === */}
+      {/* TEXTE */}
       <S.Body dangerouslySetInnerHTML={{ __html: body }} />
 
-      {/* === BOUTON CTA === */}
+      {/* CTA */}
       {cta && (
         <S.CTA href={cta.link}>
           <span>{cta.label}</span>

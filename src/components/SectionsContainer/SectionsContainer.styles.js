@@ -207,44 +207,21 @@ export const Subtitle = styled.h2`
 
   display: inline-block;
   position: relative;
-  overflow: hidden;
+  overflow: hidden; /* Maintenu pour les bords propres */
 
+  /* Spans simples, sans animation ni pseudo-éléments */
   span {
     display: inline-block;
     position: relative;
     transform-origin: bottom center;
-
-    /* Texte visible par défaut, pas d'animation */
     opacity: 1;
     animation: none;
-
-    /* Masque désactivé par défaut */
     &::before {
       content: none;
-      animation: none;
-      background: transparent;
     }
-
-    /* Animation et masque uniquement pour la première section */
-    ${({ firstPanel }) =>
-      firstPanel &&
-      css`
-        opacity: 0;
-        animation: ${fadeIn} 0.9s ease-out forwards;
-        animation-delay: calc(var(--idx) * 0.03s);
-
-        &::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: ${Color.TechGold || "#FFD700"};
-          transform: translateY(0);
-          animation: ${revealMask} 0.6s ease-out forwards;
-          animation-delay: calc(var(--idx) * 0.03s);
-        }
-      `}
   }
 `;
+
 
 export const Body = styled.div`
   font-size: 1.2rem;

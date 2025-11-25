@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { Color } from "../ProjectsSection.styles.js";
 import textureVideo from "../../assets/texture_papier.mp4";
 
@@ -12,14 +12,12 @@ const BASE_SHAPES = [
   "10 0 85 10 90 22 70 34 20 30 0 18"
 ];
 
-// Animation pop-up
 const popUp = keyframes`
   0% { transform: scale(0.9); opacity: 0; }
   70% { transform: scale(1.02); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 `;
 
-// Helpers pour les couleurs
 const getAccentColor = (key) => Color[key] || Color.TechGold;
 const getDarkAccentColor = (key) => {
   switch (key) {
@@ -30,7 +28,7 @@ const getDarkAccentColor = (key) => {
   }
 };
 
-// Styled Components
+// ===== Styled Components =====
 const NavWrapper = styled.div`
   position: fixed;
   top: 30%;
@@ -42,6 +40,10 @@ const NavWrapper = styled.div`
   gap: 1.5rem;
   padding: 10px;
   perspective: 1000px;
+  opacity: 0;
+  transition: opacity 4.5s ease-in;
+
+  ${({ navDotsVisible }) => navDotsVisible && css`opacity: 1;`}
 `;
 
 const NavDotWrapper = styled.div`
@@ -51,28 +53,20 @@ const NavDotWrapper = styled.div`
   cursor: pointer;
   width: 100%;
   transition: transform 0.15s ease-out, opacity 0.15s ease;
-  &:hover {
-    transform: translateX(-5px) rotateY(-5deg);
-  }
+  &:hover { transform: translateX(-5px) rotateY(-5deg); }
 `;
 
 const TagWrapper = styled.div`
   position: relative;
   width: 140px;
   height: 50px;
-  display: block;
   overflow: visible;
   cursor: pointer;
   z-index: 9999;
   transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 
-  &.pop-up {
-    animation: ${popUp} 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  &:hover {
-    transform: scale(1.05) translateY(-2px);
-  }
+  &.pop-up { animation: ${popUp} 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  &:hover { transform: scale(1.05) translateY(-2px); }
 `;
 
 const TagSVG = styled.svg`
@@ -125,13 +119,10 @@ const Label = styled.span`
   transform: translateX(10px);
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
 
-  ${NavDotWrapper}:hover & {
-    transform: translateX(0);
-    opacity: 1;
-  }
+  ${NavDotWrapper}:hover & { transform: translateX(0); opacity: 1; }
 `;
 
-// NavTag Component
+// ===== NavTag Component =====
 function NavTag({ colorKey, active, onClick, index }) {
   const [currentShape, setCurrentShape] = useState(BASE_SHAPES[index % BASE_SHAPES.length]);
 
@@ -141,9 +132,8 @@ function NavTag({ colorKey, active, onClick, index }) {
 
   const morphTag = () => {
     let newShape;
-    do {
-      newShape = BASE_SHAPES[Math.floor(Math.random() * BASE_SHAPES.length)];
-    } while (newShape === currentShape);
+    do { newShape = BASE_SHAPES[Math.floor(Math.random() * BASE_SHAPES.length)]; }
+    while (newShape === currentShape);
     setCurrentShape(newShape);
   };
 
@@ -160,7 +150,6 @@ function NavTag({ colorKey, active, onClick, index }) {
             <polygon points={currentShape} />
           </clipPath>
         </defs>
-
         <polygon
           points={currentShape}
           fill={active ? fillActiveColor : fillBaseColor}
@@ -176,18 +165,16 @@ function NavTag({ colorKey, active, onClick, index }) {
   );
 }
 
-// NavDots Component
-export default function NavDots({ sections, activeIndex, onDotClick }) {
+// ===== NavDots Component =====
+export default function NavDots({ sections, activeIndex, onDotClick, navDotsVisible }) {
   const [hoveredDot, setHoveredDot] = useState(null);
   const [wrapperHover, setWrapperHover] = useState(false);
 
   return (
     <NavWrapper
+      navDotsVisible={navDotsVisible}
       onMouseEnter={() => setWrapperHover(true)}
-      onMouseLeave={() => {
-        setWrapperHover(false);
-        setHoveredDot(null);
-      }}
+      onMouseLeave={() => { setWrapperHover(false); setHoveredDot(null); }}
     >
       {sections.map((s, i) => {
         const accentColorKey = TAG_COLORS[i % TAG_COLORS.length];
