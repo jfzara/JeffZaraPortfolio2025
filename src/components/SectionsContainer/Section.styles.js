@@ -8,38 +8,50 @@ export const fadeUp = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
+// Container principal de chaque section
 export const Section = styled.section`
   position: relative;
   box-sizing: border-box;
-
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   padding: 6rem 8vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  color: ${(props) => props.textColor || "#fff"};
+  transition: height 2s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease, transform 0.5s ease;
+  opacity: ${(props) => (props.active ? 1 : 0)};
+  transform: translateY(${(props) => (props.active ? "0" : "20px")});
+  animation: ${fadeUp} 0.8s ease-out forwards;
 
-  /* Réduction de la hauteur après animation */
+  & > * {
+    z-index: 2;
+  }
+
+  /* Rétractation de la Hero Section */
   ${({ isHeroActive, isLoaded }) =>
     isHeroActive &&
     isLoaded &&
     css`
-      min-height: 0;
-      height: auto;
+      height: 30vh;
       padding-top: 2rem;
       padding-bottom: 2rem;
-      transition: min-height 1.5s ease-out, padding 1.5s ease-out;
+      overflow: hidden;
+      z-index: 5;
     `}
 
   @media (max-width: 768px) {
-    min-height: auto; /* Empêche tout débordement sur mobile */
+    height: auto;
+    min-height: auto;
   }
 `;
-
 
 // Titre principal
 export const Title = styled.h1`
   text-shadow: 
     0 0 10px ${(props) => props.textColor + "B0"},
     0 0 20px ${(props) => props.textColor + "70"};
-
   font-size: 6rem;
   margin-bottom: 2rem;
   color: ${(props) => props.textColor || "#fff"};
@@ -52,14 +64,12 @@ export const Title = styled.h1`
   }
 `;
 
-// Sous-titre avec logique du masque
+// Sous-titre avec masque
 export const Subtitle = styled.h2`
   font-size: 2rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin: 2rem 0 1rem 0;
   color: ${Color.TitleFontColor || "#525252ff"};
   text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
-
   display: inline-block;
   position: relative;
   overflow: hidden;
@@ -68,19 +78,15 @@ export const Subtitle = styled.h2`
     display: inline-block;
     position: relative;
     transform-origin: bottom center;
-
-    /* État par défaut pour toutes les pages */
     opacity: 1;
     animation: none;
 
-    /* Désactivation du masque par défaut */
     &::before {
       content: none;
       animation: none;
       background: transparent;
     }
 
-    /* Activation du masque et animation pour la première section */
     ${({ isFirstSection }) =>
       isFirstSection &&
       css`
@@ -100,5 +106,3 @@ export const Subtitle = styled.h2`
       `}
   }
 `;
-
-

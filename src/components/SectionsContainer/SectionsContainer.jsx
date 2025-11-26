@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import * as S from "./SectionsContainer.styles";
-
 import Section from "./Section";
 import RipplesLayer from "./RipplesLayer";
 import NavDots from "./NavDots";
@@ -20,9 +19,7 @@ export default function SectionsContainer({ sections }) {
   const [navDotsVisible, setNavDotsVisible] = useState(false);
 
   const videoRef = useRef(null);
-
-  const currentBgColor =
-    BACKGROUND_COLORS[activeIndex % BACKGROUND_COLORS.length];
+  const currentBgColor = BACKGROUND_COLORS[activeIndex % BACKGROUND_COLORS.length];
 
   // Gestion du fade + apparition de la navigation
   useEffect(() => {
@@ -32,10 +29,7 @@ export default function SectionsContainer({ sections }) {
     videoRef.current.play();
 
     const fadeTimeout = setTimeout(() => setIsFadingOut(true), VIDEO_DELAY);
-    const visibilityTimeout = setTimeout(
-      () => setNavDotsVisible(true),
-      TOTAL_VISIBILITY_DELAY
-    );
+    const visibilityTimeout = setTimeout(() => setNavDotsVisible(true), TOTAL_VISIBILITY_DELAY);
 
     return () => {
       clearTimeout(fadeTimeout);
@@ -46,13 +40,7 @@ export default function SectionsContainer({ sections }) {
   return (
     <S.Container bgColor={currentBgColor}>
       {/* --- Vidéo de fond --- */}
-      <S.BackgroundVideo
-        autoPlay
-        muted
-        playsInline
-        ref={videoRef}
-        $isFadingOut={isFadingOut}
-      >
+      <S.BackgroundVideo autoPlay muted playsInline ref={videoRef} $isFadingOut={isFadingOut}>
         <source src={textureVideo} type="video/mp4" />
       </S.BackgroundVideo>
 
@@ -60,6 +48,7 @@ export default function SectionsContainer({ sections }) {
       {sections.map((s, i) => {
         const bg = BACKGROUND_COLORS[i % BACKGROUND_COLORS.length];
         const textColor = getContrastColor(bg);
+        const sectionId = s.id || s.title.toLowerCase().replace(/\s/g, "");
 
         return (
           <Section
@@ -67,10 +56,12 @@ export default function SectionsContainer({ sections }) {
             data={s}
             index={i}
             active={i === activeIndex}
+            id={sectionId}
+            isHeroActive={i === 0}
+            isLoaded={navDotsVisible}
             textColor={textColor}
             bgColor={bg + "80"}
             decoSide={i % 2 === 0 ? "right" : "left"}
-            isLoaded={navDotsVisible}
           >
             <S.Title isFirstSection={i === 0}>
               {s.title.split("").map((char, idx) => (
