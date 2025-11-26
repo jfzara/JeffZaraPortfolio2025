@@ -7,6 +7,66 @@ export const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: translateY(0); }
 `;
+export const Body = styled.div`
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+
+    /* TYPOGRAPHIE WEB ÉLÉGANTE ET LISIBLE */
+    max-width: 75ch; /* Limite la longueur des lignes à environ 75 caractères */
+    margin-left: auto;
+    margin-right: auto;
+
+    /* JUSTIFICATION + CÉSURES (hyphens) */
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+
+    /* Assure que la dernière ligne est alignée à gauche */
+    text-align-last: left;
+
+    /* Ajustement mobile */
+    @media (max-width: 768px) {
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+`;
+
+/* =========================
+   NOUVEAU CONTENEUR UNIQUE POUR LE TEXTE
+========================= */
+export const TextContentWrapper = styled.div`
+    /* Flexbox par défaut pour un contrôle facile de l'alignement */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    z-index: 10;
+
+    /* Vous pouvez utiliser Grid si vous le souhaitez :
+    display: grid;
+    grid-template-areas:
+        "title"
+        "body"
+        "cta";
+    grid-template-rows: auto 1fr auto;
+    */
+
+    /* Styles d'alignement pour les blocs */
+    ${Body}, ${TitleGroup}, ${CTA} {
+        margin-left: initial;
+        margin-right: initial;
+        align-self: flex-start;
+    }
+
+    /* Le Body garde son centrage interne pour la justification */
+    ${Body} {
+        margin-left: auto;
+        margin-right: auto;
+    }
+`;
+
 
 // Container principal de chaque section
 export const Section = styled.section`

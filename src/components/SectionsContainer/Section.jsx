@@ -1,43 +1,47 @@
 import React from "react";
 import * as S from "./SectionsContainer.styles";
-import ScrambledText from "./ScrambledText";
+import ScrambledText from "../ScrambledText"; // Importation par défaut
 
 export default function Section({ data, active, textColor, index, isLoaded }) {
-  const { title, subtitle, body, cta } = data;
-  const isFirstSection = index === 0;
+    const { title, subtitle, body, cta } = data;
+    const isFirstSection = index === 0;
 
-  return (
-    <S.Section active={active} textColor={textColor}>
-      <S.TitleGroup>
+    return (
+        <S.Section active={active} textColor={textColor}>
+            {/* NOUVEAU CONTENEUR UNIQUE POUR TOUS LES TEXTES */}
+            <S.TextContentWrapper>
 
-        {/* TITRE */}
-        <S.Title firstPanel={isFirstSection}>
-          {title.split("").map((letter, idx) => (
-            <span key={idx} style={{ "--idx": idx }}>
-              {letter}
-            </span>
-          ))}
-        </S.Title>
+                {/* TITRE ET SOUS-TITRE */}
+                <S.TitleGroup>
 
-        {/* SOUS-TITRE */}
-        <S.Subtitle textColor={textColor}>
-          <ScrambledText
-            targetText={subtitle}
-            isLoaded={isLoaded && isFirstSection}
-          />
-        </S.Subtitle>
+                    {/* TITRE */}
+                    <S.Title firstPanel={isFirstSection}>
+                        {title.split("").map((letter, idx) => (
+                            <span key={idx} style={{ "--idx": idx }}>
+                                {letter}
+                            </span>
+                        ))}
+                    </S.Title>
 
-      </S.TitleGroup>
+                    {/* SOUS-TITRE */}
+                    <S.Subtitle textColor={textColor}>
+                        <ScrambledText
+                            targetText={subtitle}
+                            isLoaded={isLoaded && isFirstSection}
+                        />
+                    </S.Subtitle>
+                </S.TitleGroup>
 
-      {/* TEXTE */}
-      <S.Body dangerouslySetInnerHTML={{ __html: body }} />
+                {/* TEXTE */}
+                <S.Body dangerouslySetInnerHTML={{ __html: body }} />
 
-      {/* CTA */}
-      {cta && (
-        <S.CTA href={cta.link}>
-          <span>{cta.label}</span>
-        </S.CTA>
-      )}
-    </S.Section>
-  );
+                {/* CTA */}
+                {cta && (
+                    <S.CTA href={cta.link}>
+                        <span>{cta.label}</span>
+                    </S.CTA>
+                )}
+            </S.TextContentWrapper>
+        </S.Section>
+    );
 }
