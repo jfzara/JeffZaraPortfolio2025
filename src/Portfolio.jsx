@@ -2,92 +2,119 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "./theme/ThemeContext";
 
-/* --- 0. DATA --- */
+// --- IMPORT DES VIDÉOS ---
+import livanoVideo from "./assets/projects/major/livano/Livano_video.mp4"; 
+import youchefVideo from "./assets/projects/major/youchef/Youchef_video.mp4"; 
+
+/* --- 0. DATA (AVEC NOUVEAU PITCH FINAL) --- */
 const CONTENT = {
     fr: {
         nav: { projects: "Projets", expertise: "Expertise", contact: "Contact" },
         hero: {
-            role: "Développeur React & UX — Montréal",
-            desc: "La technique ne doit pas être froide. Je traduis vos besoins business en applications web performantes qui ont du caractère.",
+            role: "Développeur Full-Stack — Montréal", 
+            // NOUVEAU PITCH FINAL
+            desc: "J’unis la rigueur du développement à une véritable sensibilité esthétique pour saisir vos besoins et ceux de vos utilisateurs, puis les traduire en interfaces harmonieuses, actuelles et profondément fidèles à votre image. Je crée des solutions Full-Stack (MERN/MVC) robustes et durables, pensées pour offrir des expériences raffinées, claires et accueillantes.",
             ctaPrimary: "Voir mes réalisations",
-            ctaSecondary: "Me contacter"
+            ctaSecondary: "Me contacter",
+            
+            // NOUVEAUX TITRES POUR L'INTERACTIVITÉ (Effet Devise)
+            title: "Rendre le complexe limpide",
+            subtitle_start: "et le numérique",
+            subtitle_highlight: "vivant."
         },
         projects: {
             title: "Projets Sélectionnés",
             items: [
                 { 
-                    title: "Livano Immobilier", 
-                    category: "Plateforme Web", 
-                    desc: "Expérience de recherche fluide. Suppression de la friction technique pour laisser place à l'émotion.",
-                    stack: ["React", "Next.js"]
+                    title: "Livano", 
+                    category: "Projet de Stage", 
+                    desc: "Projet de stage : refonte complète du site vitrine avec un focus sur la performance. J'ai obtenu des scores significatifs : Accessibilité 95% et SEO 100% (Lighthouse). Stack: Astro, React, Tailwind CSS.",
+                    stack: ["Astro", "React", "Tailwind CSS"], 
+                    video: livanoVideo,
+                    links: {
+                        github: "https://github.com/jfzara/LivanoWebsite",
+                        live: "https://livanoagency.com/fr"
+                    }
                 },
                 { 
                     title: "YouChef App", 
-                    category: "SaaS B2B", 
-                    desc: "Tableau de bord culinaire. Une interface dense rendue digeste pour une utilisation intensive.",
-                    stack: ["TypeScript", "Mongo"]
+                    category: "Projet Personnel CRUD", 
+                    desc: "Plateforme CRUD (MERN) pour une banque de recettes collaborative. Le défi majeur fut la fluidité : j'ai implémenté des UI Skeletons et utilisé Framer Motion pour un design 'quirky' et moderne.",
+                    stack: ["MERN Stack", "Mongoose", "Framer Motion"], 
+                    video: youchefVideo,
+                    links: {
+                        github: "https://github.com/jfzara/YouChef",
+                        live: "https://youchefjfzara.vercel.app/"
+                    }
                 },
-                { 
-                    title: "Archi.Tech", 
-                    category: "Design System", 
-                    desc: "Bibliothèque de composants pour une agence d'architecture. Rigueur et flexibilité.",
-                    stack: ["Storybook", "Figma"]
-                }
             ],
             link: "Voir le projet"
         },
         contact: {
-            title: "Parlons de votre projet",
-            desc: "Un besoin spécifique ? Je suis toujours partant pour une discussion détendue.",
+            title: "Construisons quelque chose de nouveau!", 
+            desc: "Je cherche un rôle où ma proactivité et ma volonté d'apprendre peuvent rapidement faire la différence. Mon engagement est total, ma curiosité, permanente.",
             cta: "Envoyer un email",
-            sub: "Disponible pour freelance"
+            sub: "Disponible pour freelance & contrats",
+            linkedinText: "Voir mon profil LinkedIn",
+            linkedinURL: "https://www.linkedin.com/in/jeffzara-developpeur-react-node-montreal/"
         },
         footer: "Montréal — 2025"
     },
     en: {
         nav: { projects: "Projects", expertise: "Expertise", contact: "Contact" },
         hero: {
-            role: "React Developer & UX — Montreal",
-            desc: "Tech shouldn't feel cold. I translate business needs into high-performance web apps with character.",
+            role: "Full-Stack Developer — Montreal",
+            // NOUVEAU PITCH FINAL
+            desc: "I unite development rigor with a genuine aesthetic sensitivity to capture your needs and those of your users, then translate them into harmonious, modern interfaces that are deeply faithful to your image. I create robust and durable Full-Stack (MERN/MVC) solutions, designed to offer refined, clear, and welcoming experiences.",
             ctaPrimary: "View Work",
-            ctaSecondary: "Get in Touch"
+            ctaSecondary: "Get in Touch",
+            
+            // NOUVEAUX TITRES POUR L'INTERACTIVITÉ
+            title: "Making the complex clear",
+            subtitle_start: "and the digital",
+            subtitle_highlight: "alive."
         },
         projects: {
             title: "Selected Works",
             items: [
                 { 
-                    title: "Livano Real Estate", 
-                    category: "Web Platform", 
-                    desc: "Fluid search experience. Removing friction to make room for emotion.",
-                    stack: ["React", "Next.js"]
+                    title: "Livano", 
+                    category: "Internship Project", 
+                    desc: "Internship project: full redesign with a focus on performance. Achieved strong Lighthouse scores: Accessibility 95% and SEO 100%. Stack: Astro, React, Tailwind CSS.",
+                    stack: ["Astro", "React", "Tailwind CSS"], 
+                    video: livanoVideo,
+                    links: {
+                        github: "https://github.com/jfzara/LivanoWebsite",
+                        live: "https://livanoagency.com/fr"
+                    }
                 },
                 { 
                     title: "YouChef App", 
-                    category: "B2B SaaS", 
-                    desc: "Culinary dashboard. Making data-dense interfaces feel digestible.",
-                    stack: ["TypeScript", "Mongo"]
+                    category: "Personal CRUD Project", 
+                    desc: "MERN CRUD platform for a collaborative recipe bank. Key challenge was fluidity: implemented UI Skeletons and used Framer Motion for a 'quirky' and modern design.",
+                    stack: ["MERN Stack", "Mongoose", "Framer Motion"], 
+                    video: youchefVideo,
+                    links: {
+                        github: "https://github.com/jfzara/YouChef",
+                        live: "https://youchefjfzara.vercel.app/"
+                    }
                 },
-                { 
-                    title: "Archi.Tech", 
-                    category: "Design System", 
-                    desc: "Component library for an architecture firm. Rigor meets flexibility.",
-                    stack: ["Storybook", "Figma"]
-                }
             ],
             link: "View Case Study"
         },
         contact: {
-            title: "Let's discuss",
-            desc: "Have a specific need? I'm always up for a relaxed chat.",
+            title: "Let's build something new!", 
+            desc: "I seek a role where my proactivity and hunger for learning can quickly make a difference. My commitment is absolute, and my curiosity, permanent.",
             cta: "Send an Email",
-            sub: "Available for freelance"
+            sub: "Available for freelance & contracts",
+            linkedinText: "View my LinkedIn profile",
+            linkedinURL: "https://www.linkedin.com/in/jeffzara-developpeur-react-node-montreal/"
         },
         footer: "Montreal — 2025"
     }
 };
 
-/* --- 1. CSS & ANIMATIONS --- */
-
+/* --- 1. CSS & ANIMATIONS (INCHANGÉ) --- */
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
@@ -131,10 +158,10 @@ const TYPO = {
 };
 
 
-/* --- 2. COMPOSANTS INTERACTIFS --- */
+/* --- 2. COMPOSANTS INTERACTIFS (INCHANGÉ) --- */
 
-// 2.1 CURSEUR REACTIF
 const ReactiveCursor = () => {
+    // ... (unchanged cursor logic)
     const cursorRef = useRef(null);
     const pos = useRef({ x: 0, y: 0 }); 
     const target = useRef({ x: 0, y: 0 }); 
@@ -184,12 +211,14 @@ const ReactiveCursor = () => {
     );
 };
 
-// 2.2 BOUTON OUVERT
 const OpenButton = ({ children, href, className = "" }) => {
     return (
         <a 
             href={href}
-            className={`relative group inline-block px-8 py-4 font-sans font-bold text-sm tracking-widest uppercase transition-all duration-500 ${className}`}
+            target="_blank" 
+            rel="noopener noreferrer"
+            // AUGMENTATION DE LA TAILLE POUR LES BOUTONS DESKTOP
+            className={`relative group inline-block px-8 py-4 text-sm md:px-10 md:py-5 md:text-base font-sans font-bold tracking-widest uppercase transition-all duration-500 ${className}`}
         >
             <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-current transition-all duration-300 group-hover:w-full group-hover:h-full opacity-60 group-hover:opacity-100 group-hover:border-orange-500" />
             <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-current transition-all duration-300 group-hover:w-full group-hover:h-full opacity-60 group-hover:opacity-100 group-hover:border-orange-500" />
@@ -200,7 +229,6 @@ const OpenButton = ({ children, href, className = "" }) => {
     );
 };
 
-// 2.3 FADE IN
 const FadeIn = ({ children, delay = 0 }) => {
     const [visible, setVisible] = useState(false);
     useEffect(() => {
@@ -210,44 +238,33 @@ const FadeIn = ({ children, delay = 0 }) => {
     return <div className={`${visible ? 'animate-appear' : 'opacity-0'}`}>{children}</div>;
 };
 
-// 2.4 LETTRE VIVANTE AVEC "INTRO WAVE"
 const AliveLetter = ({ char, delay = 0 }) => {
-    // État pour gérer la "Vague de bienvenue"
     const [isWaveActive, setWaveActive] = useState(false);
 
-    // Palette "Bijou"
     const colors = [
-        'text-[#db2777]', // Pink
-        'text-[#06b6d4]', // Cyan
-        'text-[#84cc16]', // Lime
-        'text-[#8b5cf6]', // Violet
-        'text-[#f59e0b]', // Amber
+        'text-[#db2777]', 
+        'text-[#06b6d4]', 
+        'text-[#84cc16]', 
+        'text-[#8b5cf6]', 
+        'text-[#f59e0b]', 
     ];
     
-    // Couleur aléatoire stable
     const randomColorClass = useRef(colors[Math.floor(Math.random() * colors.length)]).current;
 
     useEffect(() => {
-        // La vague se déclenche après un délai initial + le délai de la lettre
         const startTimer = setTimeout(() => {
             setWaveActive(true);
-            // La lettre reste "activée" pendant 400ms puis redevient normale
             const endTimer = setTimeout(() => setWaveActive(false), 400);
             return () => clearTimeout(endTimer);
-        }, 800 + delay * 50); // 800ms de délai global + 50ms par lettre
+        }, 800 + delay * 50); 
 
         return () => clearTimeout(startTimer);
     }, [delay]);
 
-    // Classe conditionnelle : Active si survolée (group-hover) OU si dans la vague (isWaveActive)
-    // Note: On utilise 'hover:' pour l'interaction utilisateur et une classe directe pour la vague
-    
     return (
         <span 
             className={`
                 inline-block cursor-default transition-all duration-300 ease-out origin-center relative
-                
-                /* ETAT DE BASE */
                 
                 /* ETAT ACTIF (Hover ou Vague) */
                 ${isWaveActive ? `
@@ -263,26 +280,16 @@ const AliveLetter = ({ char, delay = 0 }) => {
                 hover:font-mono 
                 hover:rotate-1 
                 hover:font-bold
-                hover:${randomColorClass.replace('text-', 'text-')} /* Hack Tailwind pour appliquer la couleur */
-                /* On doit utiliser hover:text-[color] mais comme c'est dynamique, on triche un peu */
+                hover:${randomColorClass.replace('text-', 'text-')}
             `}
-            // Pour que le hover fonctionne avec la couleur dynamique en Tailwind, on peut utiliser le style inline si besoin,
-            // ou s'assurer que les classes complètes (ex: hover:text-[#...]) sont dans la safelist.
-            // Ici, pour simplifier et garantir que ça marche, on applique la couleur via style au hover/active
             style={isWaveActive ? {} : {}}
         >
-            {/* On applique la couleur via une classe spécifique au survol */}
-            <span className={`transition-colors duration-300 ${isWaveActive ? randomColorClass : `hover:${randomColorClass}`}`}>
-                {char}
-            </span>
+            {char}
         </span>
     );
 };
 
-// 2.5 TEXTE INTERACTIF
-// On passe l'index global pour calculer le délai de la vague
 const InteractiveText = ({ text }) => {
-    // On doit aplatir le texte pour avoir un index continu pour la vague
     let charGlobalIndex = 0;
 
     const words = text.split(" ");
@@ -301,7 +308,6 @@ const InteractiveText = ({ text }) => {
     );
 };
 
-// 2.6 FOND ATMOSPHÉRIQUE
 const Background = ({ themeMode }) => {
     const bgClass = themeMode === 'dark' ? 'bg-[#050505]' : 'bg-[#F0EEE6]'; 
     return (
@@ -314,12 +320,12 @@ const Background = ({ themeMode }) => {
 };
 
 
-/* --- 3. LAYOUT & SECTIONS --- */
+/* --- 3. SECTIONS VUE PRINCIPALE --- */
 
 const Navbar = ({ toggleTheme, lang, setLang, t }) => (
     <nav className="fixed top-0 w-full px-6 py-8 flex justify-between items-start z-40 mix-blend-difference text-[#999]">
         <a href="#" className="font-serif text-2xl italic font-bold text-white/90 hover:opacity-70 transition-opacity">
-            J.Zara
+            Jeff Zara {/* NOM MIS À JOUR */}
         </a>
         <div className="flex flex-col items-end gap-2">
             <button onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')} className="text-xs font-mono font-bold hover:text-white transition-colors">
@@ -332,18 +338,12 @@ const Navbar = ({ toggleTheme, lang, setLang, t }) => (
     </nav>
 );
 
-const Hero = ({ t, lang }) => {
-    const titleFr = "Je conçois des interfaces numériques";
-    const subStartFr = "fiables, rapides et";
-    const subHighFr = "vivantes.";
+const HeroSection = ({ t, lang }) => {
     
-    const titleEn = "Crafting digital interfaces that are";
-    const subStartEn = "reliable, fast, and";
-    const subHighEn = "alive.";
-
-    const displayTitle = lang === 'fr' ? titleFr : titleEn;
-    const displaySubStart = lang === 'fr' ? subStartFr : subStartEn;
-    const displaySubHigh = lang === 'fr' ? subHighFr : subHighEn;
+    // NOUVELLE STRUCTURE UTILISANT LES NOUVELLES CLÉS
+    const displayTitle = t.hero.title;
+    const displaySubStart = t.hero.subtitle_start;
+    const displaySubHighlight = t.hero.subtitle_highlight;
 
     return (
         <section className="min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto pt-20">
@@ -356,16 +356,20 @@ const Hero = ({ t, lang }) => {
                     <span className="opacity-60 italic font-light block mt-4">
                          {displaySubStart} {" "}
                          <span className="not-italic opacity-100">
-                             <InteractiveText text={displaySubHigh} />
+                             <InteractiveText text={displaySubHighlight} />
                          </span>
                     </span>
                 </h1>
             </FadeIn>
             
             <FadeIn delay={300}>
-                <div className="flex flex-wrap gap-8 items-center mt-12">
+                <p className={`${TYPO.Body} mb-8 max-w-2xl`}>
+                    {t.hero.desc}
+                </p>
+                <div className="flex flex-wrap gap-8 items-center mt-8">
+                    {/* BOUTON AVEC LE TEXTE CORRECT ET L'HREF VERS #projets */}
                     <OpenButton href="#projets">{t.hero.ctaPrimary}</OpenButton>
-                    <a href="#contact" className="text-sm font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1">
+                    <a href="#contact" className="text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1">
                         {t.hero.ctaSecondary}
                     </a>
                 </div>
@@ -374,21 +378,43 @@ const Hero = ({ t, lang }) => {
     );
 };
 
-const ProjectCard = ({ project, index, t }) => {
+const ProjectCard = ({ project, index, t, onSelectProject }) => { 
     const offsetClass = index % 2 === 0 ? 'md:translate-y-12' : 'md:-translate-y-12';
     
+    const handleClick = () => {
+        onSelectProject(project);
+    };
+
     return (
-        <div className={`
-            min-w-[85vw] md:min-w-0 flex-shrink-0 md:flex-shrink 
-            group relative p-6 md:p-0 
-            transition-all duration-700 ${offsetClass}
-        `}>
-            <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden bg-gray-200 dark:bg-[#111] mb-6 rounded-sm">
-                <div className="absolute inset-0 bg-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay z-10" />
-                <div className="w-full h-full flex items-center justify-center font-serif text-9xl opacity-[0.05] italic group-hover:scale-110 group-hover:rotate-2 transition-transform duration-700 ease-out">
-                    {index + 1}
-                </div>
-                <span className="absolute top-4 left-4 text-[10px] font-mono border border-current/20 px-2 py-1 rounded-full backdrop-blur-sm">
+        <div 
+            className={`
+                min-w-[85vw] md:min-w-0 flex-shrink-0 md:flex-shrink 
+                group relative p-6 md:p-0 cursor-pointer
+                transition-all duration-700 ${offsetClass}
+            `}
+            onClick={handleClick}
+        >
+            <div className="relative aspect-[4/5] md:aspect-[3/4] overflow-hidden bg-gray-200 dark:bg-[#111] mb-6 rounded-sm shadow-md">
+                
+                {project.video ? (
+                    <>
+                        <video 
+                            src={project.video}
+                            autoPlay 
+                            muted 
+                            loop 
+                            playsInline 
+                            className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
+                        />
+                        <div className="absolute inset-0 bg-orange-900/10 mix-blend-overlay pointer-events-none" />
+                    </>
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center font-serif text-9xl opacity-[0.05] italic group-hover:scale-110 group-hover:rotate-2 transition-transform duration-700 ease-out">
+                        {index + 1}
+                    </div>
+                )}
+
+                <span className="absolute top-4 left-4 text-[10px] font-mono font-bold bg-white/90 dark:bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-current/10 z-20 shadow-sm">
                     {project.category}
                 </span>
             </div>
@@ -404,12 +430,13 @@ const ProjectCard = ({ project, index, t }) => {
                 <div className="flex gap-2 text-[10px] font-mono uppercase opacity-40">
                     {project.stack.map(s => <span key={s}>{s}</span>)}
                 </div>
+
             </div>
         </div>
     );
 };
 
-const Projects = ({ t }) => (
+const ProjectsSection = ({ t, onSelectProject }) => ( 
     <section id="projets" className="py-32 w-full overflow-hidden">
         <div className="px-6 md:px-12 mb-20 flex items-end justify-between max-w-7xl mx-auto">
             <h2 className={TYPO.SubHeading}>
@@ -420,24 +447,40 @@ const Projects = ({ t }) => (
 
         <div className="
             flex gap-6 overflow-x-auto snap-x px-6 pb-12 no-scrollbar
-            md:grid md:grid-cols-3 md:gap-12 md:overflow-visible md:px-12 md:max-w-7xl md:mx-auto
+            md:grid md:grid-cols-2 md:gap-12 md:overflow-visible md:px-12 md:max-w-7xl md:mx-auto
         ">
             {t.projects.items.map((p, i) => (
-                <ProjectCard key={i} index={i} project={p} t={t} />
+                <ProjectCard key={i} index={i} project={p} t={t} onSelectProject={onSelectProject} />
             ))}
         </div>
     </section>
 );
 
-const Contact = ({ t }) => (
+const ContactSection = ({ t }) => (
     <section id="contact" className="py-40 px-6 md:px-12 max-w-4xl mx-auto text-center">
         <div className="inline-block w-px h-24 bg-gradient-to-b from-transparent via-orange-500 to-transparent mb-8"></div>
         <h2 className={`${TYPO.Heading} mb-12`}>
             <InteractiveText text={t.contact.title} />
         </h2>
+        
         <OpenButton href="mailto:zarajeanfabrice@gmail.com">
             {t.contact.cta}
         </OpenButton>
+
+        {t.contact.linkedinURL && (
+            <a 
+                href={t.contact.linkedinURL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block mt-6 text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1 mx-auto w-fit"
+            >
+                {t.contact.linkedinText}
+            </a>
+        )}
+        
+        <p className={`${TYPO.Meta} mt-10 opacity-50`}>
+            {t.contact.sub}
+        </p>
     </section>
 );
 
@@ -447,11 +490,143 @@ const Footer = ({ t }) => (
     </footer>
 );
 
+
+/* --- 4. COMPOSANT VUE DÉTAILLÉE (Case Study Minimaliste) --- */
+
+const CaseStudy = ({ project, onBack, t }) => {
+    
+    const getTechHighlights = (title) => {
+        if (title.includes('Livano')) {
+            return [
+                "Accessibilité (95% Lighthouse) et SEO (100%) : Maîtrise des standards",
+                "Stack moderne : Astro (performance) et Tailwind CSS (rapidité/flexibilité)",
+                "Intégration de services tiers (Sentry, Resend)",
+                "Collaboration Agile (Kanban) en environnement de stage."
+            ];
+        }
+        if (title.includes('YouChef')) {
+            return [
+                "Full Stack MERN : Maîtrise complète du cycle CRUD avec Mongoose",
+                "Performance perçue : Implémentation des Skeletons UI pour l'UX",
+                "Design 'quirky' : Utilisation de Framer Motion pour un UX vivant",
+                "Sécurité : API REST sécurisée par JWT et hébergement sur Render."
+            ];
+        }
+        return ["Défis non listés."];
+    };
+
+    return (
+        <section className="min-h-screen px-6 md:px-12 max-w-6xl mx-auto py-24">
+            <button onClick={onBack} className="flex items-center gap-2 mb-16 text-sm opacity-60 hover:opacity-100 transition-opacity">
+                ← {t.projects.title}
+            </button>
+            
+            {/* --- SECTION 1: TITRE & VISUEL --- */}
+            <div className="mb-16">
+                <p className={`${TYPO.Meta} text-orange-600 mb-2`}>{project.category}</p>
+                <h2 className={`${TYPO.Heading} text-5xl`}>{project.title}</h2>
+            </div>
+
+            {/* Visual (vidéo si disponible, sinon placeholder stylisé) */}
+            <div className="relative aspect-video w-full mb-16 rounded-md shadow-2xl overflow-hidden">
+                {project.video ? (
+                    <video 
+                        src={project.video}
+                        autoPlay 
+                        muted 
+                        loop 
+                        playsInline 
+                        className="w-full h-full object-cover opacity-90"
+                    />
+                ) : (
+                    <div className="w-full h-full bg-gray-200 dark:bg-[#111] flex items-center justify-center text-4xl opacity-10 font-serif italic">
+                        {project.title}
+                    </div>
+                )}
+            </div>
+
+            {/* --- SECTION 2: RÉSUMÉ & CHIFFRES (Quick Scan) --- */}
+            <div className="md:grid md:grid-cols-2 md:gap-12 mb-20">
+                <div>
+                    <h3 className="font-serif text-2xl mb-4">Contexte & Mission</h3>
+                    <p className={`${TYPO.Body} text-base`}>{project.desc}</p>
+                </div>
+
+                <div className="mt-8 md:mt-0 border-l border-current/10 md:pl-8">
+                    <h3 className="font-serif text-2xl mb-4">Résultats Clés</h3>
+                    <ul className={`${TYPO.Body} text-sm space-y-2`}>
+                        {project.title.includes('Livano') && (
+                            <>
+                                <li className="font-bold text-orange-600">Accessibilité : 95% (Lighthouse)</li>
+                                <li className="font-bold text-orange-600">SEO : 100% (Lighthouse)</li>
+                                <li>Stack : Astro, React, Tailwind CSS.</li>
+                            </>
+                        )}
+                        {project.title.includes('YouChef') && (
+                            <>
+                                <li className="font-bold">Défis Résolus : Lenteur perçue des images</li>
+                                <li>Solution : Implémentation de Skeletons UI et Framer Motion</li>
+                                <li>Stack : Full MERN (Mongoose, Express, React, Node).</li>
+                            </>
+                        )}
+                    </ul>
+                </div>
+            </div>
+
+            {/* --- SECTION 3: DÉFIS TECHNIQUES (L'Essentiel) --- */}
+            <div className="mb-20">
+                <h3 className="font-serif text-2xl mb-6">Défis Techniques & Compétences</h3>
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-disc list-inside">
+                    {getTechHighlights(project.title).map((item, i) => (
+                        <li key={i} className={`${TYPO.Body} text-base opacity-90 font-mono text-sm border-b border-current/5 pb-2`}>
+                            {item}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+
+            {/* --- SECTION 4: ACTIONS / LIENS EXTERNES --- */}
+            <div className="flex flex-wrap gap-6 justify-center md:justify-start">
+                <OpenButton href={project.links.live}>
+                    Voir le site →
+                </OpenButton>
+                <OpenButton href={project.links.github}>
+                    Code source (GitHub)
+                </OpenButton>
+            </div>
+            
+            <p className="mt-16 text-center opacity-40 text-sm">{project.stack.join(' · ')}</p>
+
+        </section>
+    );
+};
+
+
+/* --- 5. ASSEMBLAGE FINAL AVEC SWITCH DE VUE --- */
 export default function Portfolio() {
     const { themeMode, toggleTheme } = useTheme();
     const [lang, setLang] = useState('fr');
+    const [selectedProject, setSelectedProject] = useState(null); 
+    
     const t = CONTENT[lang];
     const textColor = themeMode === 'dark' ? 'text-[#e5e5e5]' : 'text-[#1a1a1a]';
+
+    // Rendu conditionnel
+    const renderContent = () => {
+        if (selectedProject) {
+            return <CaseStudy project={selectedProject} onBack={() => setSelectedProject(null)} t={t} />;
+        }
+
+        return (
+            <>
+                <HeroSection t={t} lang={lang} />
+                <ProjectsSection t={t} onSelectProject={setSelectedProject} /> 
+                <ContactSection t={t} />
+                <Footer t={t} />
+            </>
+        );
+    };
 
     return (
         <div className={`relative min-h-screen font-sans selection:bg-orange-500 selection:text-white ${textColor}`}>
@@ -462,12 +637,9 @@ export default function Portfolio() {
             <Navbar toggleTheme={toggleTheme} lang={lang} setLang={setLang} t={t} />
             
             <main>
-                <Hero t={t} lang={lang} />
-                <Projects t={t} />
-                <Contact t={t} />
+                {renderContent()}
             </main>
             
-            <Footer t={t} />
         </div>
     );
 }
