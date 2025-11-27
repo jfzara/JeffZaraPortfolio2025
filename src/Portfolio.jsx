@@ -6,18 +6,15 @@ import { useTheme } from "./theme/ThemeContext";
 import livanoVideo from "./assets/projects/major/livano/Livano_video.mp4"; 
 import youchefVideo from "./assets/projects/major/youchef/Youchef_video.mp4"; 
 
-/* --- 0. DATA (AVEC NOUVEAU PITCH FINAL) --- */
+/* --- 0. DATA (INCHANGÉ) --- */
 const CONTENT = {
     fr: {
         nav: { projects: "Projets", expertise: "Expertise", contact: "Contact" },
         hero: {
             role: "Développeur Full-Stack — Montréal", 
-            // NOUVEAU PITCH FINAL
             desc: "J’unis la rigueur du développement à une véritable sensibilité esthétique pour saisir vos besoins et ceux de vos utilisateurs, puis les traduire en interfaces harmonieuses, actuelles et profondément fidèles à votre image. Je crée des solutions Full-Stack (MERN/MVC) robustes et durables, pensées pour offrir des expériences raffinées, claires et accueillantes.",
             ctaPrimary: "Voir mes réalisations",
             ctaSecondary: "Me contacter",
-            
-            // NOUVEAUX TITRES POUR L'INTERACTIVITÉ (Effet Devise)
             title: "Rendre le complexe limpide",
             subtitle_start: "et le numérique",
             subtitle_highlight: "vivant."
@@ -64,15 +61,12 @@ const CONTENT = {
         nav: { projects: "Projects", expertise: "Expertise", contact: "Contact" },
         hero: {
             role: "Full-Stack Developer — Montreal",
-            // NOUVEAU PITCH FINAL
             desc: "I unite development rigor with a genuine aesthetic sensitivity to capture your needs and those of your users, then translate them into harmonious, modern interfaces that are deeply faithful to your image. I create robust and durable Full-Stack (MERN/MVC) solutions, designed to offer refined, clear, and welcoming experiences.",
             ctaPrimary: "View Work",
             ctaSecondary: "Get in Touch",
-            
-            // NOUVEAUX TITRES POUR L'INTERACTIVITÉ
-            title: "Making the complex clear",
-            subtitle_start: "and the digital",
-            subtitle_highlight: "alive."
+            title: "I build interfaces that solve real problems",
+            subtitle_start: "reliable, secure, and",
+            subtitle_highlight: "engaging."
         },
         projects: {
             title: "Selected Works",
@@ -151,9 +145,11 @@ const styles = `
 `;
 
 const TYPO = {
-    Heading: "font-serif text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.1]", 
+    // AJUSTEMENT DES TAILLES MOBILES (DE text-4xl À text-3xl)
+    Heading: "font-serif text-3xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.1]", 
     SubHeading: "font-serif text-2xl md:text-3xl font-normal leading-tight",
-    Body: "font-sans text-lg md:text-xl leading-[1.6] opacity-80 font-light",
+    // AJUSTEMENT TAILLE MOBILE (DE text-lg À text-base)
+    Body: "font-sans text-base md:text-xl leading-[1.6] opacity-80 font-light", 
     Meta: "font-sans text-[10px] md:text-xs uppercase tracking-[0.2em] opacity-50 font-bold",
 };
 
@@ -217,7 +213,6 @@ const OpenButton = ({ children, href, className = "" }) => {
             href={href}
             target="_blank" 
             rel="noopener noreferrer"
-            // AUGMENTATION DE LA TAILLE POUR LES BOUTONS DESKTOP
             className={`relative group inline-block px-8 py-4 text-sm md:px-10 md:py-5 md:text-base font-sans font-bold tracking-widest uppercase transition-all duration-500 ${className}`}
         >
             <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-current transition-all duration-300 group-hover:w-full group-hover:h-full opacity-60 group-hover:opacity-100 group-hover:border-orange-500" />
@@ -325,7 +320,7 @@ const Background = ({ themeMode }) => {
 const Navbar = ({ toggleTheme, lang, setLang, t }) => (
     <nav className="fixed top-0 w-full px-6 py-8 flex justify-between items-start z-40 mix-blend-difference text-[#999]">
         <a href="#" className="font-serif text-2xl italic font-bold text-white/90 hover:opacity-70 transition-opacity">
-            Jeff Zara {/* NOM MIS À JOUR */}
+            Jeff Zara
         </a>
         <div className="flex flex-col items-end gap-2">
             <button onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')} className="text-xs font-mono font-bold hover:text-white transition-colors">
@@ -367,7 +362,6 @@ const HeroSection = ({ t, lang }) => {
                     {t.hero.desc}
                 </p>
                 <div className="flex flex-wrap gap-8 items-center mt-8">
-                    {/* BOUTON AVEC LE TEXTE CORRECT ET L'HREF VERS #projets */}
                     <OpenButton href="#projets">{t.hero.ctaPrimary}</OpenButton>
                     <a href="#contact" className="text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1">
                         {t.hero.ctaSecondary}
@@ -409,7 +403,7 @@ const ProjectCard = ({ project, index, t, onSelectProject }) => {
                         <div className="absolute inset-0 bg-orange-900/10 mix-blend-overlay pointer-events-none" />
                     </>
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center font-serif text-9xl opacity-[0.05] italic group-hover:scale-110 group-hover:rotate-2 transition-transform duration-700 ease-out">
+                    <div className="w-full h-full bg-gray-200 dark:bg-[#111] flex items-center justify-center font-serif text-9xl opacity-[0.05] italic group-hover:scale-110 group-hover:rotate-2 transition-transform duration-700 ease-out">
                         {index + 1}
                     </div>
                 )}
