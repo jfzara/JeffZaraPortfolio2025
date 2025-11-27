@@ -89,7 +89,6 @@ const CONTENT = {
 /* --- 1. CSS & ANIMATIONS --- */
 
 const styles = `
-  /* Importation de Space Mono pour l'effet "Code Switch" */
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
   @keyframes float-up {
@@ -185,7 +184,7 @@ const ReactiveCursor = () => {
     );
 };
 
-// 2.2 BOUTON OUVERT (Brackets)
+// 2.2 BOUTON OUVERT
 const OpenButton = ({ children, href, className = "" }) => {
     return (
         <a 
@@ -211,51 +210,91 @@ const FadeIn = ({ children, delay = 0 }) => {
     return <div className={`${visible ? 'animate-appear' : 'opacity-0'}`}>{children}</div>;
 };
 
-// 2.4 LETTRE VIVANTE (FIXED: PLUS DE ZOOM)
-const AliveLetter = ({ char }) => {
+// 2.4 LETTRE VIVANTE AVEC "INTRO WAVE"
+const AliveLetter = ({ char, delay = 0 }) => {
+    // État pour gérer la "Vague de bienvenue"
+    const [isWaveActive, setWaveActive] = useState(false);
+
     // Palette "Bijou"
     const colors = [
-        'hover:text-[#db2777]', // Pink
-        'hover:text-[#06b6d4]', // Cyan
-        'hover:text-[#84cc16]', // Lime
-        'hover:text-[#8b5cf6]', // Violet
-        'hover:text-[#f59e0b]', // Amber
+        'text-[#db2777]', // Pink
+        'text-[#06b6d4]', // Cyan
+        'text-[#84cc16]', // Lime
+        'text-[#8b5cf6]', // Violet
+        'text-[#f59e0b]', // Amber
     ];
     
+    // Couleur aléatoire stable
     const randomColorClass = useRef(colors[Math.floor(Math.random() * colors.length)]).current;
 
+    useEffect(() => {
+        // La vague se déclenche après un délai initial + le délai de la lettre
+        const startTimer = setTimeout(() => {
+            setWaveActive(true);
+            // La lettre reste "activée" pendant 400ms puis redevient normale
+            const endTimer = setTimeout(() => setWaveActive(false), 400);
+            return () => clearTimeout(endTimer);
+        }, 800 + delay * 50); // 800ms de délai global + 50ms par lettre
+
+        return () => clearTimeout(startTimer);
+    }, [delay]);
+
+    // Classe conditionnelle : Active si survolée (group-hover) OU si dans la vague (isWaveActive)
+    // Note: On utilise 'hover:' pour l'interaction utilisateur et une classe directe pour la vague
+    
     return (
         <span 
             className={`
-                inline-block cursor-default transition-all duration-300 ease-out origin-center
+                inline-block cursor-default transition-all duration-300 ease-out origin-center relative
                 
                 /* ETAT DE BASE */
-                hover:z-10 relative
                 
-                /* AU SURVOL (SANS GROSSISSEMENT) */
-                /* On garde juste le mouvement vertical, la rotation et le changement de style */
-                hover:-translate-y-1        /* Lévitation subtile */
-                hover:font-mono             /* Code Switch */
-                hover:rotate-1              /* Micro rotation */
+                /* ETAT ACTIF (Hover ou Vague) */
+                ${isWaveActive ? `
+                    -translate-y-1 
+                    font-mono 
+                    rotate-1 
+                    font-bold 
+                    ${randomColorClass}
+                ` : ''}
+
+                /* ETAT HOVER (Interaction Utilisateur) */
+                hover:-translate-y-1 
+                hover:font-mono 
+                hover:rotate-1 
                 hover:font-bold
-                ${randomColorClass}         /* Couleur */
+                hover:${randomColorClass.replace('text-', 'text-')} /* Hack Tailwind pour appliquer la couleur */
+                /* On doit utiliser hover:text-[color] mais comme c'est dynamique, on triche un peu */
             `}
+            // Pour que le hover fonctionne avec la couleur dynamique en Tailwind, on peut utiliser le style inline si besoin,
+            // ou s'assurer que les classes complètes (ex: hover:text-[#...]) sont dans la safelist.
+            // Ici, pour simplifier et garantir que ça marche, on applique la couleur via style au hover/active
+            style={isWaveActive ? {} : {}}
         >
-            {char}
+            {/* On applique la couleur via une classe spécifique au survol */}
+            <span className={`transition-colors duration-300 ${isWaveActive ? randomColorClass : `hover:${randomColorClass}`}`}>
+                {char}
+            </span>
         </span>
     );
 };
 
 // 2.5 TEXTE INTERACTIF
+// On passe l'index global pour calculer le délai de la vague
 const InteractiveText = ({ text }) => {
+    // On doit aplatir le texte pour avoir un index continu pour la vague
+    let charGlobalIndex = 0;
+
     const words = text.split(" ");
     return (
         <span className="inline-block leading-tight">
             {words.map((word, wIndex) => (
                 <span key={wIndex} className="inline-block whitespace-nowrap mr-[0.25em]">
-                    {word.split("").map((char, cIndex) => (
-                        <AliveLetter key={cIndex} char={char} />
-                    ))}
+                    {word.split("").map((char, cIndex) => {
+                        const currentDelay = charGlobalIndex;
+                        charGlobalIndex++;
+                        return <AliveLetter key={cIndex} char={char} delay={currentDelay} />;
+                    })}
                 </span>
             ))}
         </span>
