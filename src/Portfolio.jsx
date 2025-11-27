@@ -1,326 +1,338 @@
 // C:\Users\Jeff\Desktop\PROJETS VS CODE\JAVASCRIPT\REACT\mon_portfolio\src\Portfolio.jsx
-import React, { useState, useEffect, useRef } from "react";
-import ScrambledText from "./components/ScrambledText"; 
-import QuadToggle from "./components/QuadToggle";
-import NeoSkeuoNav from "./components/NeoSkeuoNav";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "./theme/ThemeContext";
 
-// 🚨 IMPORTATION DE VOTRE VIDÉO LOCALE
-import AbstractTexture from './assets/texture_color_drops.mp4'; 
-
-
-/* --- 0. Data de Sections (inchangé) --- */
-const dynamicSections = [
-    {
-        id: "about",
-        title: "À PROPOS",
-        subtitle: "Développeur React — Freelance Montréal",
-        body: "<p>Création d’expériences web performantes, maintenables et orientées conversion. Mon portfolio met l'accent sur le design expérientiel, l'accessibilité et la performance. Le but est de créer des interfaces utilisateur mémorables et optimisées.</p>",
-        ctaText: "Discutons du projet",
-        ctaHref: "#contact",
+/* --- 0. DICTIONNAIRE DE CONTENU (FR / EN) --- */
+const CONTENT = {
+    fr: {
+        nav: { projects: "Projets", expertise: "Expertise", contact: "Contact", mode: "Mode" },
+        hero: {
+            role: "Développeur React & UX — Montréal",
+            title: "Je conçois des interfaces numériques",
+            subtitle: "fiables, rapides et vivantes.",
+            desc: "La technique ne doit pas être froide. Je traduis vos besoins business en applications web performantes qui ont du caractère et que vos utilisateurs aimeront utiliser.",
+            ctaPrimary: "Voir mes réalisations",
+            ctaSecondary: "Me contacter"
+        },
+        projects: {
+            title: "Projets Sélectionnés",
+            items: [
+                { 
+                    title: "Livano Immobilier", 
+                    category: "Plateforme Web", 
+                    desc: "Une expérience de recherche fluide. L'objectif : supprimer la friction technique pour laisser place à l'émotion de la découverte immobilière.",
+                    stack: ["React", "Next.js", "Tailwind"]
+                },
+                { 
+                    title: "YouChef App", 
+                    category: "SaaS B2B", 
+                    desc: "Tableau de bord culinaire. Une interface dense rendue digeste et apaisante pour une utilisation intensive en cuisine.",
+                    stack: ["TypeScript", "Node.js", "Mongo"]
+                }
+            ],
+            link: "Voir le projet"
+        },
+        contact: {
+            title: "Parlons de votre projet",
+            desc: "Un besoin spécifique ou une question technique ? Je suis toujours partant pour une discussion détendue et constructive.",
+            cta: "Envoyer un email",
+            sub: "Disponible pour freelance & contrats"
+        },
+        footer: "Fait à Montréal avec React & Tailwind."
     },
-    {
-        id: "competences",
-        title: "COMPÉTENCES",
-        subtitle: "Stack & expertise",
-        body: "<p>Expertise complète en React, Next.js, TypeScript. Forte expérience en Styled-Components (remplacé par Tailwind ici) et intégration CI/CD. Je me concentre sur l'Accessibilité (WCAG) et l'optimisation des performances (Lighthouse).</p>",
-        ctaText: "Contact pro",
-        ctaHref: "#contact",
-    },
-    {
-        id: "contact",
-        title: "CONTACT",
-        subtitle: "Disponible pour missions",
-        body: "<p>Mail : zarajeanfabrice@gmail.com — Disponible à Montréal et à distance.</p>",
-        ctaText: "Envoyer un email",
-        ctaHref: "mailto:zarajeanfabrice@gmail.aom",
-    },
-];
+    en: {
+        nav: { projects: "Projects", expertise: "Expertise", contact: "Contact", mode: "Mode" },
+        hero: {
+            role: "React Developer & UX — Montreal",
+            title: "Crafting digital interfaces that are",
+            subtitle: "reliable, fast, and alive.",
+            desc: "Tech shouldn't feel cold. I translate your business needs into high-performance web apps that have character and that your users will genuinely enjoy.",
+            ctaPrimary: "View Selected Work",
+            ctaSecondary: "Get in Touch"
+        },
+        projects: {
+            title: "Selected Works",
+            items: [
+                { 
+                    title: "Livano Real Estate", 
+                    category: "Web Platform", 
+                    desc: "A fluid search experience. The goal: remove technical friction to make room for the emotion of finding a home.",
+                    stack: ["React", "Next.js", "Tailwind"]
+                },
+                { 
+                    title: "YouChef App", 
+                    category: "B2B SaaS", 
+                    desc: "Culinary dashboard. Making a data-dense interface feel digestible and calming for high-stress kitchen environments.",
+                    stack: ["TypeScript", "Node.js", "Mongo"]
+                }
+            ],
+            link: "View Case Study"
+        },
+        contact: {
+            title: "Let's discuss your project",
+            desc: "Have a specific need or a technical question? I'm always up for a relaxed and constructive chat.",
+            cta: "Send an Email",
+            sub: "Available for freelance & contracts"
+        },
+        footer: "Made in Montreal with React & Tailwind."
+    }
+};
 
-/* --- Composant VideoBackground (NOUVELLE LOGIQUE D'ANIMATION) --- */
-const VideoBackground = ({ src, themeMode }) => {
-    const [isVisible, setIsVisible] = useState(true);
-    const videoRef = useRef(null);
+/* --- 1. SYSTÈME DE DESIGN & ANIMATIONS --- */
 
-    // Contrôle le fondu et la durée
+// Import de FRAUNCES (Soft Serif) et DM SANS (Friendly Sans)
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;700&family=Fraunces:opsz,wght@9..144,300;400;500;600&display=swap');
+
+  @keyframes crystallize {
+    0% { opacity: 0; transform: translateY(20px); filter: blur(6px); border-radius: 30px; }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0px); border-radius: 12px; }
+  }
+
+  .animate-focus {
+    animation: crystallize 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+`;
+
+// Raccourcis Typographiques (ADAPTÉS À FRAUNCES)
+const TYPO = {
+    // Fraunces est très expressive. On réduit un peu le letter-spacing (tracking-tight) pour faire bloc.
+    Heading: "font-serif text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05]", 
+    
+    // Pour les sous-titres, Fraunces en "Light" ou "Regular" est magnifique
+    SubHeading: "font-serif text-2xl md:text-3xl font-normal leading-snug",
+    
+    // DM Sans est très lisible.
+    Body: "font-sans text-lg md:text-xl leading-[1.6] opacity-80 font-normal",
+    
+    // Meta data un peu plus discret
+    Meta: "font-sans text-xs md:text-sm uppercase tracking-widest opacity-60 font-bold",
+    
+    Action: "font-sans text-sm md:text-base font-bold border-b-2 border-current hover:text-blue-600 hover:border-blue-600 transition-colors pb-1"
+};
+
+
+/* --- 2. COMPOSANTS UTILITAIRES --- */
+
+const FocusContainer = ({ children, delay = 0, className = "" }) => {
+    const [start, setStart] = useState(false);
     useEffect(() => {
-        // 1. Déclenche le fondu à 0 après 1.5 secondes
-        const fadeTimer = setTimeout(() => {
-            setIsVisible(false);
-        }, 1500); // Fondu démarré après 1.5s
-
-        // 2. Assure que la vidéo s'arrête complètement après 4 secondes max
-        const stopTimer = setTimeout(() => {
-            if (videoRef.current) {
-                videoRef.current.pause();
-                videoRef.current.style.display = 'none'; // Cache l'élément après l'arrêt
-            }
-        }, 4000); // Durée maximale de 4 secondes
-
-        return () => {
-            clearTimeout(fadeTimer);
-            clearTimeout(stopTimer);
-        };
+        const timer = setTimeout(() => setStart(true), 100); 
+        return () => clearTimeout(timer);
     }, []);
-
-    // Définition des filtres et modes de fusion basés sur le thème
-    const experimentalStyles = {
-        playbackRate: 0.6, // Ralentissement de la vitesse de lecture
-        // Filtres et mode de fusion audacieux
-        filter: 'grayscale(50%) brightness(1.2)', 
-        mixBlendMode: themeMode === 'dark' ? 'lighten' : 'multiply', 
-        transition: 'opacity 1s ease-in-out', // 1 seconde de transition de fondu
-    };
 
     return (
         <div 
-            className={`fixed inset-0 overflow-hidden -z-20 w-full h-full`}
-            style={{ opacity: isVisible ? 1 : 0, transition: experimentalStyles.transition }}
+            className={`${start ? 'animate-focus' : 'opacity-0'} ${className}`}
+            style={{ animationDelay: `${delay}ms` }}
         >
-            <video 
-                ref={videoRef}
-                className="w-full h-full"
-                style={{ ...experimentalStyles, objectFit: 'cover' }}
-                autoPlay 
-                loop={false} // 🚨 JOUE SEULEMENT UNE FOIS
-                muted 
-                playsInline 
-                onLoadedMetadata={(e) => { 
-                    e.target.playbackRate = experimentalStyles.playbackRate; 
-                }}
-                src={src} 
+            {children}
+        </div>
+    );
+};
+
+const CleanBackground = ({ themeMode }) => {
+    // Fond : Dark Mode profond / Light Mode "Warm Paper" (plus chaud que le blanc pur)
+    const bgClass = themeMode === 'dark' ? 'bg-[#121212]' : 'bg-[#FDFCF8]'; 
+    return (
+        <div className={`fixed inset-0 -z-50 transition-colors duration-700 ${bgClass}`}>
+            <div className="absolute inset-0 opacity-[0.03] mix-blend-multiply pointer-events-none" 
+                 style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E")` }} 
             />
         </div>
     );
 };
 
-/* --- Composants de base (SimpleNavbar, SimpleFooter - inchangés) --- */
-const SimpleNavbar = () => {
-    const { themeMode, toggleTheme, currentTheme } = useTheme();
-    const [prefOpen, setPrefOpen] = useState(false);
-    const buttonRef = useRef();
 
-    const brandColor = currentTheme.accentClass;
-    const navBg = themeMode === 'dark' ? 'bg-[#0A0A0A]/90 border-gray-800' : 'bg-white/80 border-gray-200';
-    const linkColor = themeMode === 'dark' ? 'hover:text-gray-50' : 'hover:text-gray-900';
-    
-    return (
-        <nav className={`sticky top-0 w-full h-16 z-50 transition-colors duration-500 ${navBg} backdrop-blur-sm border-b`}>
-            <div className="flex items-center h-full max-w-7xl mx-auto px-4 md:px-8">
-                {/* Brand */}
-                <a href="#home" className={`text-xl font-extrabold uppercase tracking-widest ${brandColor} transition-colors duration-500`}>
-                    JEFF ZARA
-                </a>
-                
-                <div className="ml-auto flex items-center gap-4">
-                    {/* Navigation principale */}
-                    <a href="#projects" className={`hidden sm:block text-sm font-semibold uppercase transition-colors duration-300 ${linkColor} ${currentTheme.subtleTextClass}`}>
-                        Projets
-                    </a>
-                    <a href="#competences" className={`hidden sm:block text-sm font-semibold uppercase transition-colors duration-300 ${linkColor} ${currentTheme.subtleTextClass}`}>
-                        Compétences
-                    </a>
-                    <a href="#contact" className={`hidden sm:block text-sm font-semibold uppercase transition-colors duration-300 ${linkColor} ${currentTheme.subtleTextClass}`}>
-                        Contact
-                    </a>
-                    
-                    {/* Toggle Préférences */}
-                    <div className="relative">
-                        <button
-                            ref={buttonRef}
-                            onClick={() => setPrefOpen(p => !p)}
-                            className={`text-sm font-semibold uppercase transition-colors duration-300 ${linkColor} ${currentTheme.subtleTextClass} focus:outline-none`}
-                        >
-                            Préférences
-                        </button>
-                        <QuadToggle 
-                            isOpen={prefOpen} 
-                            onClose={() => setPrefOpen(false)} 
-                            parentRef={buttonRef} 
-                            themeMode={themeMode}
-                            toggleTheme={toggleTheme}
-                        />
-                    </div>
-                </div>
-            </div>
-        </nav>
-    );
-};
+/* --- 3. COMPOSANTS D'INTERFACE --- */
 
-const SimpleFooter = () => (
-    <footer className="py-4 text-center text-xs text-gray-500 border-t border-current/20">
-        © 2025 Jean Fabrice ZARA — Montréal — Disponible pour projets —
-        <a 
-            href="https://github.com/zarajeanfabrice" 
-            target="_blank" 
-            rel="noreferrer" 
-            className="ml-1 font-semibold underline hover:text-current transition-colors duration-300"
-        >
-            GitHub
+const Navbar = ({ toggleTheme, lang, setLang, t }) => (
+    <nav className="fixed top-0 w-full px-6 py-6 md:px-12 flex justify-between items-center z-50 bg-opacity-90 backdrop-blur-sm border-b border-current/5">
+        {/* Logo Fraunces Italic : Donne une signature très personnelle */}
+        <a href="#" className="font-serif text-2xl font-semibold italic tracking-tight hover:opacity-70 transition-opacity">
+            Jeff Zara.
         </a>
-    </footer>
+
+        <div className="hidden md:flex gap-10 items-center">
+            {/* Navigation sans-serif pour la clarté */}
+            <a href="#projets" className={`${TYPO.Meta} hover:opacity-100 hover:text-blue-600 transition-colors`}>{t.nav.projects}</a>
+            <a href="#expertise" className={`${TYPO.Meta} hover:opacity-100 hover:text-blue-600 transition-colors`}>{t.nav.expertise}</a>
+            <a href="#contact" className={`${TYPO.Meta} hover:opacity-100 hover:text-blue-600 transition-colors`}>{t.nav.contact}</a>
+        </div>
+
+        <div className="flex items-center gap-3">
+            <button 
+                onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')}
+                className="font-sans text-xs font-bold border border-current/20 px-4 py-2 rounded-full hover:bg-current hover:text-white dark:hover:text-black transition-all min-w-[3rem]"
+            >
+                {lang === 'fr' ? 'EN' : 'FR'}
+            </button>
+
+            <button 
+                onClick={toggleTheme}
+                className="w-10 h-10 flex items-center justify-center rounded-full border border-current/20 hover:bg-current hover:text-white dark:hover:text-black transition-all"
+                aria-label="Toggle Theme"
+            >
+                ☀
+            </button>
+        </div>
+    </nav>
 );
 
-
-/* --- Composant Section générique --- */
-const PortfolioSection = ({ data, isHero, isLoaded }) => {
-    
-    const { currentTheme } = useTheme();
-    const neonAccent = currentTheme.accentClass.replace('text', 'border');
-    
-    const AnimatedTitle = () => (
-        <h1 className={`text-6xl md:text-8xl font-black mb-6 text-current/90 tracking-tighter transition-colors duration-500`}>
-            {data.title.split("").map((letter, idx) => (
-                <span 
-                    key={idx} 
-                    className="inline-block transition-transform duration-200 hover:text-current hover:-translate-y-2 animate-fade-in-up"
-                    style={{ 
-                        animationDelay: `${idx * 0.05}s`
-                    }}
-                >
-                    {letter === ' ' ? '\u00A0' : letter}
-                </span>
-            ))}
-        </h1>
-    );
-    
-    const ctaClasses = `
-        border-2 
-        bg-transparent 
-        ${currentTheme.accentClass} 
-        hover:${currentTheme.hoverBgClass} 
-        hover:${currentTheme.hoverTextClass} 
-        hover:shadow-xl
-        transition-all duration-200 ease-out 
-        hover:shadow-neomorph-inset-dark 
-        hover:scale-[0.98]
-    `; 
-
+const HeroSection = ({ t }) => {
     return (
-        <section 
-            id={data.id} 
-            className={`min-h-[60vh] flex flex-col justify-center items-start px-4 md:px-8 max-w-7xl mx-auto py-16 md:py-24 w-full relative z-10`}
-        >
+        <section className="min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-6xl mx-auto pt-20">
+            <FocusContainer delay={100}>
+                <span className={`${TYPO.Meta} text-blue-600 dark:text-blue-400 mb-6 block`}>
+                    {t.hero.role}
+                </span>
+                
+                <h1 className={`${TYPO.Heading} mb-8`}>
+                    {t.hero.title}<br/> 
+                    {/* L'italique de Fraunces est magnifique et moins rigide */}
+                    <span className="opacity-70 italic font-light">{t.hero.subtitle}</span>
+                </h1>
+            </FocusContainer>
             
-            {/* Conteneur pour le contenu textuel (assure qu'il reste au-dessus) */}
-            <div className="relative z-10 w-full">
-                {/* Titre avec animation des caractères */}
-                <div className={`mb-8 ${isHero ? 'mt-16 md:mt-24' : ''}`}>
-                    <AnimatedTitle data={data} />
-                    
-                    {/* H2 AVEC SCRAMBLED TEXT STABLE */}
-                    <h2 
-                        className={`text-2xl md:text-3xl font-mono mt-4 mb-6 border-b-2 ${neonAccent} pb-2 transition-colors duration-500 ${currentTheme.textClass} !font-normal`}
-                    > 
-                        {isHero && isLoaded ? ( 
-                            <ScrambledText 
-                                targetText={data.subtitle} 
-                                isLoaded={isLoaded} 
-                                scrambleDuration={800} 
-                            />
-                        ) : (
-                            data.subtitle
-                        )}
-                    </h2>
-                </div>
+            <FocusContainer delay={300} className="max-w-2xl">
+                <p className={`${TYPO.Body} mb-12`}>
+                    {t.hero.desc}
+                </p>
                 
-                {/* Corps du texte */}
-                <div 
-                    className={`text-lg leading-relaxed space-y-4 max-w-3xl ${currentTheme.subtleTextClass}`} 
-                    dangerouslySetInnerHTML={{ __html: data.body }} 
-                />
-                
-                {/* CTA */}
-                {data.ctaText && (
+                <div className="flex flex-wrap gap-6">
                     <a 
-                        href={data.ctaHref} 
-                        className={`mt-10 px-6 py-3 font-bold text-lg transition-all duration-300 ${ctaClasses}`}
+                        href="#projets" 
+                        className="bg-gray-900 text-white dark:bg-white dark:text-gray-900 px-8 py-4 rounded-xl font-sans font-bold text-base hover:scale-[1.02] transition-transform shadow-xl hover:shadow-2xl"
                     >
-                        {data.ctaText}
+                        {t.hero.ctaPrimary}
                     </a>
-                )}
-            </div>
+                    
+                    <a 
+                        href="#contact" 
+                        className="px-8 py-4 rounded-xl font-sans font-bold text-base border border-current/20 hover:border-current hover:bg-current/5 transition-all"
+                    >
+                        {t.hero.ctaSecondary}
+                    </a>
+                </div>
+            </FocusContainer>
         </section>
     );
 };
 
-/* --- Composant ProjectsSection (Ajouté pour résoudre l'erreur) --- */
-const ProjectsSection = () => {
-    const { currentTheme } = useTheme();
+const ProjectCard = ({ project, index, themeMode, t }) => {
+    const cardBg = themeMode === 'dark' ? 'bg-[#1a1a1a]' : 'bg-white';
     
-    const majorProjects = [
-        { id: 1, title: "Livano – Appli immobilière", techStack: ["React", "Node.js", "GraphQL", "TypeScript"], desc: "Plateforme web complète avec CRUD et recherche avancée. Conception UX/UI." },
-        { id: 2, title: "YouChef – Gestion de recettes", techStack: ["React", "Express", "MongoDB", "TailwindCSS"], desc: "Application complète de gestion de recettes par utilisateur. Filtrage et recherche par catégorie." },
-    ];
-
-    const cardBg = currentTheme.cardBgClass;
-    const shadowClass = currentTheme.shadowClass; 
-    const tagBg = currentTheme.themeModeClass === 'dark' ? 'bg-gray-700/50' : 'bg-gray-300/50';
-    const demoColor = currentTheme.accentClass;
-
     return (
-        <section id="projects" className="min-h-[60vh] px-4 md:px-8 max-w-7xl mx-auto py-16 md:py-24 w-full">
-             <h1 className="text-6xl md:text-8xl font-black mb-16 text-current/90 tracking-tighter">
-                PROJETS
-            </h1>
-            <div className="grid md:grid-cols-2 gap-8">
-                {majorProjects.map(p => (
-                    <div 
-                        key={p.id} 
-                        className={`p-6 rounded-xl ${cardBg} ${shadowClass} transition-all duration-300 border border-current/10`}
-                    >
-                        {/* Titre et corps utilisent des classes de texte stables */}
-                        <h3 className={`text-3xl font-extrabold mb-3 ${currentTheme.textClass}/90`}>{p.title}</h3>
-                        <p className={`text-current/70 mb-4 ${currentTheme.subtleTextClass}`}>{p.desc}</p>
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            {p.techStack.map(tech => (
-                                <span key={tech} className={`text-xs font-semibold px-3 py-1 rounded-full ${tagBg} ${currentTheme.subtleTextClass}`}>
-                                    {tech}
-                                </span>
-                            ))}
-                        </div>
-                        <div className="flex mt-6 gap-4">
-                            <button className={`text-sm font-semibold ${demoColor} hover:underline transition-colors`}>
-                                Voir Démo
-                            </button>
-                            {/* Le bouton de droite utilise subtleTextClass pour être discret */}
-                            <button className={`text-sm font-semibold ${currentTheme.subtleTextClass} hover:${currentTheme.textClass} transition-colors`}>
-                                Étude de cas
-                            </button>
-                        </div>
-                    </div>
+        <FocusContainer delay={index * 150} className={`group flex flex-col md:flex-row rounded-2xl overflow-hidden border border-current/5 shadow-sm hover:shadow-xl transition-all duration-500 ${cardBg}`}>
+            
+            <div className="w-full md:w-5/12 min-h-[280px] bg-gray-100 dark:bg-gray-800 flex items-center justify-center relative overflow-hidden">
+                {/* On utilise le chiffre en gros et en Fraunces Italic pour le style */}
+                <div className="font-serif text-8xl opacity-10 italic font-black group-hover:scale-110 transition-transform duration-700">
+                    {index + 1}
+                </div>
+                <span className="absolute top-6 left-6 bg-white dark:bg-black/80 backdrop-blur px-3 py-1.5 text-xs font-sans font-bold uppercase tracking-widest border border-current/10 rounded-full">
+                    {project.category}
+                </span>
+            </div>
+
+            <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col items-start justify-center">
+                <h3 className={`${TYPO.SubHeading} mb-4 group-hover:text-blue-600 transition-colors`}>
+                    {project.title}
+                </h3>
+                
+                <p className={`${TYPO.Body} text-base mb-8`}>
+                    {project.desc}
+                </p>
+
+                <div className="flex flex-wrap gap-3 mb-10">
+                    {project.stack.map(tech => (
+                        <span key={tech} className="text-xs font-sans font-medium opacity-60 border border-current/20 px-3 py-1.5 rounded-full">
+                            {tech}
+                        </span>
+                    ))}
+                </div>
+
+                <a href="#" className={TYPO.Action}>
+                    {t.projects.link} &rarr;
+                </a>
+            </div>
+        </FocusContainer>
+    );
+};
+
+const ProjectsSection = ({ themeMode, t }) => {
+    return (
+        <section id="projets" className="px-6 md:px-12 max-w-6xl mx-auto py-32">
+            <div className="mb-16 border-b border-current/10 pb-6 flex justify-between items-end">
+                <h2 className={TYPO.SubHeading}>{t.projects.title}</h2>
+                {/* Petite touche : Date en serif italic */}
+                <span className="font-serif italic text-lg opacity-60">2023 — 2025</span>
+            </div>
+            
+            <div className="flex flex-col gap-16"> {/* Plus d'espace entre les cartes */}
+                {t.projects.items.map((p, i) => (
+                    <ProjectCard key={i} index={i} project={p} themeMode={themeMode} t={t} />
                 ))}
             </div>
         </section>
     );
 };
 
-
-/* --- Composant Principal du Portfolio --- */
-export default function Portfolio() {
-    const { themeMode, toggleTheme, currentTheme } = useTheme();
-    const [isLoaded, setIsLoaded] = useState(false); 
-
-    useEffect(() => {
-        setIsLoaded(true);
-    }, []);
-    
+const ContactSection = ({ t }) => {
     return (
-        <div className={`relative min-h-screen`}>
-            
-            {/* 🚨 INTÉGRATION DU NOUVEAU COMPOSANT DE FOND */}
-            <VideoBackground src={AbstractTexture} themeMode={themeMode} /> 
+        <section id="contact" className="px-6 md:px-12 max-w-4xl mx-auto py-32 text-center bg-current/5 rounded-[2rem] mb-12 mx-6">
+            <h2 className={`${TYPO.Heading} mb-8 text-4xl`}>{t.contact.title}</h2>
+            <p className={`${TYPO.Body} mb-10 max-w-xl mx-auto`}>
+                {t.contact.desc}
+            </p>
+            <a 
+                href="mailto:zarajeanfabrice@gmail.com"
+                className="inline-block bg-blue-600 text-white px-10 py-5 rounded-xl font-bold font-sans text-lg hover:bg-blue-700 transition-colors shadow-xl hover:shadow-2xl hover:-translate-y-1 transform duration-300"
+            >
+                {t.contact.cta}
+            </a>
+            <p className={`${TYPO.Meta} mt-10 opacity-50`}>
+                {t.contact.sub}
+            </p>
+        </section>
+    );
+};
 
-            <SimpleNavbar />
+const Footer = ({ t }) => (
+    <footer className="py-10 text-center border-t border-current/5">
+        <p className={TYPO.Meta}>
+            © 2025 Jeff Zara — {t.footer}
+        </p>
+    </footer>
+);
+
+/* --- 4. ASSEMBLAGE FINAL --- */
+export default function Portfolio() {
+    const { themeMode, toggleTheme } = useTheme();
+    const [lang, setLang] = useState('fr'); 
+
+    const t = CONTENT[lang];
+    
+    const textColor = themeMode === 'dark' ? 'text-[#ededed]' : 'text-[#2a2a2a]';
+
+    return (
+        <div className={`relative min-h-screen font-['DM_Sans',sans-serif] selection:bg-blue-200 selection:text-blue-900 ${textColor}`}>
             
-            <main className="relative z-10">
-                <PortfolioSection data={dynamicSections[0]} isHero={true} isLoaded={isLoaded} />
-                <ProjectsSection /> 
-                <PortfolioSection data={dynamicSections[1]} isLoaded={isLoaded} />
-                <PortfolioSection data={dynamicSections[2]} isLoaded={isLoaded} />
+            <style>{styles}</style>
+            
+            {/* On force Fraunces pour les classes serif */}
+            <style>{`.font-serif { font-family: 'Fraunces', serif; }`}</style>
+            
+            <CleanBackground themeMode={themeMode} />
+            <Navbar toggleTheme={toggleTheme} lang={lang} setLang={setLang} t={t} />
+            
+            <main>
+                <HeroSection t={t} />
+                <ProjectsSection themeMode={themeMode} t={t} />
+                <ContactSection t={t} />
             </main>
             
-            <SimpleFooter />
+            <Footer t={t} />
         </div>
     );
 }
