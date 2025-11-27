@@ -1,125 +1,80 @@
-// src/components/ScrambledText.jsx
+// src/components/ScrambledText.jsx (NOUVELLE VERSION STABLE)
 import React, { useState, useEffect, useRef } from "react";
+import { useTheme } from "../theme/ThemeContext";
 
-// Caractères pour le brouillage
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-const SCRAMBLE_DURATION = 350;
 
-export default function ScrambledText({ targetText, isLoaded, className = "" }) {
-    const initialText = targetText.split("").map((c) => (c === " " ? " " : " "));
-    const [scrambledText, setScrambledText] = useState(initialText);
-    const [hasScrambled, setHasScrambled] = useState(false);
+export default function ScrambledText({ targetText, isLoaded, scrambleDuration = 1000 }) {
+    const { currentTheme } = useTheme();
+    const accentColorClass = currentTheme.accentClass;
 
-    const indexRef = useRef(0);
-    const settledIndicesRef = useRef(new Set());
-    const iterationCountRef = useRef(0);
-    const timeoutRef = useRef();
+    const [displayText, setDisplayText] = useState(targetText.split("").map(c => c === " " ? " " : ""));
+    const [isFinished, setIsFinished] = useState(false);
     
-    // Logique complexe de brouillage (conservée pour l'effet unique)
+    const animationFrameRef = useRef(0);
+    const startTimeRef = useRef(0);
+
+    const animationComplete = isFinished || !isLoaded;
+
     useEffect(() => {
-        if (!isLoaded || hasScrambled) return;
+        if (!isLoaded || isFinished) return;
 
+        startTimeRef.current = performance.now();
         const targetChars = targetText.split("");
-        const finalState = [...initialText];
-        const settled = settledIndicesRef.current;
-        settled.clear(); // Réinitialiser pour un nouveau cycle
 
-        // Cartographie des caractères à brouiller
-        const shouldScrambleMap = targetChars.map(
-            (char) => char !== " " && Math.random() < 0.4
-        );
-        
-        let localIndex = 0;
+        const animate = (time) => {
+            const elapsed = time - startTimeRef.current;
+            const progress = Math.min(elapsed / scrambleDuration, 1);
+            
+            let newText = [...targetChars];
+            let settledCount = 0;
 
-        const scrambleLoop = () => {
-            localIndex = indexRef.current;
-            iterationCountRef.current++;
-            let shouldUpdate = false;
+            for (let i = 0; i < targetChars.length; i++) {
+                if (targetChars[i] === ' ') continue;
 
-            // 1. Fixation instantanée des lettres non brouillées (au début)
-            while (
-                localIndex < targetChars.length &&
-                !shouldScrambleMap[localIndex] &&
-                !settled.has(localIndex)
-            ) {
-                finalState[localIndex] = targetChars[localIndex];
-                settled.add(localIndex);
-                localIndex++;
-                shouldUpdate = true;
-            }
+                // Chaque caractère a un point de fixation séquentiel
+                const fixTime = (i / targetChars.length) * 0.8 + 0.2;
 
-            // Fin de l’animation
-            if (localIndex >= targetChars.length && settled.size === targetChars.length) {
-                clearTimeout(timeoutRef.current);
-                setHasScrambled(true);
-                setScrambledText([...finalState]);
-                return;
-            }
-
-            // 2. Brouillage et fixation progressive
-            if (localIndex < targetChars.length && shouldScrambleMap[localIndex]) {
-                // Tentative de fixer le caractère
-                if (Math.random() < 0.25) { // Chance de se fixer
-                    finalState[localIndex] = targetChars[localIndex];
-                    settled.add(localIndex);
-                    localIndex++;
-                    shouldUpdate = true;
+                if (progress >= fixTime) {
+                    newText[i] = targetChars[i];
+                    settledCount++;
                 } else {
-                    // Brouillage
-                    finalState[localIndex] = CHARS[Math.floor(Math.random() * CHARS.length)];
-                    shouldUpdate = true;
+                    // Brouillage aléatoire
+                    newText[i] = CHARS[Math.floor(Math.random() * CHARS.length)];
                 }
-            } else if (localIndex < targetChars.length) {
-                // Avancer si l'index actuel est un espace ou une lettre déjà fixée
-                localIndex++;
             }
+            
+            setDisplayText(newText);
 
-            indexRef.current = localIndex;
-
-            if (shouldUpdate || iterationCountRef.current % 4 === 0) {
-                setScrambledText([...finalState]);
-                iterationCountRef.current = 0;
+            if (progress < 1) {
+                animationFrameRef.current = requestAnimationFrame(animate);
+            } else {
+                setIsFinished(true);
             }
-
-            timeoutRef.current = setTimeout(scrambleLoop, 20 + Math.random() * 40);
         };
 
-        timeoutRef.current = setTimeout(scrambleLoop, 50);
+        animationFrameRef.current = requestAnimationFrame(animate);
 
-        return () => clearTimeout(timeoutRef.current);
-    }, [targetText, isLoaded, hasScrambled, initialText]);
-    
-    // Nettoyage au démontage
-    useEffect(() => {
-        return () => clearTimeout(timeoutRef.current);
-    }, []);
+        return () => cancelAnimationFrame(animationFrameRef.current);
+    }, [targetText, isLoaded, scrambleDuration, isFinished]);
 
+    // Rendu simple : l'état final est géré par le composant H2 parent
     return (
-        <span className={className}>
-            {scrambledText.map((char, index) => {
-                const isSettled = settledIndicesRef.current.has(index);
-                const isScrambling = !isSettled && !hasScrambled;
-                const displayChar = char === " " ? "\u00A0" : char;
+        <span className="font-mono">
+            {displayText.map((char, index) => {
+                const isSettled = isFinished || (char === targetText[index] && char !== ' ');
                 
-                // Styles Tailwind pour les états d'animation
-                const charClasses = `
-                    inline-block relative transition-all duration-150 ease-out
-                    ${isSettled 
-                        ? 'font-extrabold opacity-100 scale-100' // isSettled
-                        : isScrambling 
-                            ? 'font-light opacity-60 scale-90 text-sm' // isScrambling
-                            : 'opacity-0 scale-90' // Initial
-                    }
-                `;
-
+                // Si l'animation est terminée, ou si le caractère est fixé (visible), il utilise la couleur du parent (le H2)
+                // Sinon, il utilise la couleur néon pour le brouillage
+                const colorClass = isSettled ? '' : accentColorClass; 
+                
                 return (
                     <span 
                         key={index} 
-                        className={charClasses}
-                        // Réutilisation de l'index pour la séquence d'animation
-                        style={{'--idx': index}}
+                        className={`inline-block ${colorClass} ${animationComplete ? 'opacity-100' : 'opacity-100'}`}
+                        // Le texte est toujours là, seule la couleur change pendant l'animation
                     >
-                        {displayChar}
+                        {char === ' ' ? '\u00A0' : char}
                     </span>
                 );
             })}

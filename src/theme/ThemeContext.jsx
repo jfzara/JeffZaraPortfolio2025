@@ -1,61 +1,73 @@
-// C:\Users\Jeff\Desktop\PROJETS VS CODE\JAVASCRIPT\REACT\mon_portfolio\src\theme\ThemeContext.jsx
+// C:\Users\Jeff\Desktop\PROJETS VS CODE\JAVASCRIPT\REACT\mon_portfolio\src\theme\ThemeContext.jsx (Correction)
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const ThemeContext = createContext();
 
 const themes = {
-  light: {
-    bg: 'bg-white',
-    text: 'text-gray-900',
-    themeClass: 'light', 
-  },
-  dark: {
-    bg: 'bg-[#0A0A0A]',
-    text: 'text-gray-100',
-    themeClass: 'dark', 
-  },
+    light: {
+        bgClass: 'bg-white',
+        textClass: 'text-gray-900',
+        accentClass: 'text-[#6458FF]', 
+        shadowClass: 'shadow-neomorph-light', 
+        cardBgClass: 'bg-gray-100', 
+        subtleTextClass: 'text-gray-600',
+        
+        hoverBgClass: 'bg-gray-900', 
+        hoverTextClass: 'text-white', 
+        
+        themeModeClass: 'light', 
+    },
+    dark: {
+        bgClass: 'bg-[#05171A]',
+        // 🚨 CORRECTION : Utiliser la couleur personnalisée pour le texte principal
+        textClass: 'text-neon-text-custom', 
+        
+        // La couleur d'accent (Vert Néon) reste l'ancienne valeur pour la cohérence
+        accentClass: 'text-[#39FF14]', 
+        shadowClass: 'shadow-neomorph-dark', 
+        cardBgClass: 'bg-gray-900', 
+        subtleTextClass: 'text-gray-400',
+        
+        hoverBgClass: 'bg-white',
+        hoverTextClass: '!text-[#0A0A0A]', 
+        
+        themeModeClass: 'dark', 
+    },
 };
 
 export const useTheme = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({ children }) => {
-  const [themeMode, setThemeMode] = useState('dark');
-
-  const toggleTheme = () => {
-    setThemeMode(prevMode => (prevMode === 'light' ? 'dark' : 'light'));
-  };
-
-  const currentTheme = themes[themeMode];
-  
-  // 💡 LOGIQUE DE STYLE CRITIQUE : Applique les classes au BODY
-  useEffect(() => {
-    const body = document.body;
+    const [themeMode, setThemeMode] = useState('dark');
+    const currentTheme = themes[themeMode];
     
-    // Définir la liste complète des classes de thème à gérer
-    const themeClassesToManage = Object.values(themes).flatMap(t => [t.themeClass, t.bg, t.text]);
-    
-    // 1. Retirer TOUTES les classes de thème possibles du body
-    themeClassesToManage.forEach(cls => body.classList.remove(cls));
+    const toggleTheme = () => {
+        setThemeMode(prevMode => (prevMode === 'light' ? 'dark' : 'light'));
+    };
 
-    // 2. Définir les classes de base qui doivent toujours être présentes
-    const baseClasses = ['min-h-screen', 'transition-colors', 'duration-500'];
-    
-    // 3. Ajouter les classes de base + les classes du thème actuel
-    const newClasses = [
-        ...baseClasses, 
-        currentTheme.themeClass, 
-        currentTheme.bg, 
-        currentTheme.text
-    ];
+    useEffect(() => {
+        const body = document.body;
+        
+        const allThemeClasses = Object.values(themes).flatMap(t => [t.bgClass, t.textClass, t.themeModeClass]);
+        allThemeClasses.forEach(cls => body.classList.remove(cls));
 
-    body.classList.add(...newClasses);
-    
-    // Dépendance simplifiée : seulement themeMode est nécessaire
-  }, [themeMode]);
+        const newBodyClasses = [
+            'min-h-screen', 
+            'transition-colors', 
+            'duration-500', 
+            'font-space-grotesk',
+            currentTheme.bgClass, 
+            currentTheme.textClass,
+            currentTheme.themeModeClass, 
+        ];
 
-  return (
-    <ThemeContext.Provider value={{ themeMode, toggleTheme, currentTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+        body.classList.add(...newBodyClasses);
+        
+    }, [themeMode, currentTheme]);
+
+    return (
+        <ThemeContext.Provider value={{ themeMode, toggleTheme, currentTheme }}>
+            {children}
+        </ThemeContext.Provider>
+    );
 };
