@@ -145,12 +145,13 @@ const styles = `
 `;
 
 const TYPO = {
-    // AJUSTEMENT DES TAILLES MOBILES (DE text-4xl À text-3xl)
-    Heading: "font-serif text-3xl md:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.1]", 
+    // text-3xl (mobile) / font-normal (mobile)
+    Heading: "font-serif text-3xl md:text-5xl lg:text-6xl font-normal md:font-medium tracking-tight leading-[1.1]", 
     SubHeading: "font-serif text-2xl md:text-3xl font-normal leading-tight",
-    // AJUSTEMENT TAILLE MOBILE (DE text-lg À text-base)
+    // text-base (mobile)
     Body: "font-sans text-base md:text-xl leading-[1.6] opacity-80 font-light", 
-    Meta: "font-sans text-[10px] md:text-xs uppercase tracking-[0.2em] opacity-50 font-bold",
+    // text-xs (desktop) et md:text-sm (desktop)
+    Meta: "font-sans text-[10px] md:text-sm uppercase tracking-[0.2em] opacity-50 font-bold", 
 };
 
 
@@ -213,7 +214,8 @@ const OpenButton = ({ children, href, className = "" }) => {
             href={href}
             target="_blank" 
             rel="noopener noreferrer"
-            className={`relative group inline-block px-8 py-4 text-sm md:px-10 md:py-5 md:text-base font-sans font-bold tracking-widest uppercase transition-all duration-500 ${className}`}
+            // active:scale-[0.98] pour feedback tactile mobile
+            className={`relative group inline-block px-8 py-4 text-sm md:px-10 md:py-5 md:text-base font-sans font-bold tracking-widest uppercase transition-all duration-300 active:scale-[0.98] ${className}`}
         >
             <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-current transition-all duration-300 group-hover:w-full group-hover:h-full opacity-60 group-hover:opacity-100 group-hover:border-orange-500" />
             <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-current transition-all duration-300 group-hover:w-full group-hover:h-full opacity-60 group-hover:opacity-100 group-hover:border-orange-500" />
@@ -280,7 +282,7 @@ const AliveLetter = ({ char, delay = 0 }) => {
             style={isWaveActive ? {} : {}}
         >
             {char}
-        </span>
+        </span >
     );
 };
 
@@ -318,15 +320,24 @@ const Background = ({ themeMode }) => {
 /* --- 3. SECTIONS VUE PRINCIPALE --- */
 
 const Navbar = ({ toggleTheme, lang, setLang, t }) => (
-    <nav className="fixed top-0 w-full px-6 py-8 flex justify-between items-start z-40 mix-blend-difference text-[#999]">
+    // Backdrop pour éviter le mélange au scroll sur mobile
+    <nav className="fixed top-0 w-full px-6 py-8 flex justify-between items-start z-40 text-[#999] backdrop-blur-sm bg-black/5 dark:bg-white/5 md:bg-transparent"> 
         <a href="#" className="font-serif text-2xl italic font-bold text-white/90 hover:opacity-70 transition-opacity">
             Jeff Zara
         </a>
         <div className="flex flex-col items-end gap-2">
-            <button onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')} className="text-xs font-mono font-bold hover:text-white transition-colors">
+            <button 
+                onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')} 
+                // Bouton plus grand pour touch et md:w-10 md:h-10 pour desktop
+                className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-xs md:text-sm font-mono font-bold hover:text-white transition-colors"
+            >
                 {lang === 'fr' ? 'EN' : 'FR'}
             </button>
-            <button onClick={toggleTheme} className="text-xs font-mono font-bold hover:text-white transition-colors">
+            <button 
+                onClick={toggleTheme} 
+                 // Bouton plus grand pour touch et md:w-10 md:h-10 pour desktop
+                className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-xs md:text-sm font-mono font-bold hover:text-white transition-colors"
+            >
                 ●
             </button>
         </div>
@@ -335,7 +346,6 @@ const Navbar = ({ toggleTheme, lang, setLang, t }) => (
 
 const HeroSection = ({ t, lang }) => {
     
-    // NOUVELLE STRUCTURE UTILISANT LES NOUVELLES CLÉS
     const displayTitle = t.hero.title;
     const displaySubStart = t.hero.subtitle_start;
     const displaySubHighlight = t.hero.subtitle_highlight;
@@ -343,6 +353,7 @@ const HeroSection = ({ t, lang }) => {
     return (
         <section className="min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto pt-20">
             <FadeIn delay={100}>
+                {/* Utilisation de TYPO.Meta mis à jour */}
                 <span className={`${TYPO.Meta} text-orange-600 block mb-8`}>{t.hero.role}</span>
                 
                 <h1 className={`${TYPO.Heading} mb-12 max-w-4xl`}>
@@ -362,6 +373,7 @@ const HeroSection = ({ t, lang }) => {
                     {t.hero.desc}
                 </p>
                 <div className="flex flex-wrap gap-8 items-center mt-8">
+                    {/* Le href="#projets" corrige le bouton vide */}
                     <OpenButton href="#projets">{t.hero.ctaPrimary}</OpenButton>
                     <a href="#contact" className="text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1">
                         {t.hero.ctaSecondary}
@@ -408,6 +420,7 @@ const ProjectCard = ({ project, index, t, onSelectProject }) => {
                     </div>
                 )}
 
+                {/* Utilisation de TYPO.Meta mis à jour */}
                 <span className="absolute top-4 left-4 text-[10px] font-mono font-bold bg-white/90 dark:bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-current/10 z-20 shadow-sm">
                     {project.category}
                 </span>
@@ -436,7 +449,11 @@ const ProjectsSection = ({ t, onSelectProject }) => (
             <h2 className={TYPO.SubHeading}>
                 {t.projects.title}
             </h2>
-            <span className="hidden md:inline-block text-xs font-mono opacity-40">Scroll →</span>
+            {/* Instruction conditionnelle SWIPE vs SCROLL */}
+            <span className="text-xs font-mono opacity-60 font-bold">
+                <span className="md:hidden">Swipe →</span>
+                <span className="hidden md:inline-block">Scroll →</span>
+            </span>
         </div>
 
         <div className="
@@ -451,7 +468,8 @@ const ProjectsSection = ({ t, onSelectProject }) => (
 );
 
 const ContactSection = ({ t }) => (
-    <section id="contact" className="py-40 px-6 md:px-12 max-w-4xl mx-auto text-center">
+    // pt-12 (mobile) et pt-32 (desktop) pour réduire l'espace vide
+    <section id="contact" className="pt-12 pb-24 md:pt-32 md:pb-40 px-6 md:px-12 max-w-4xl mx-auto text-center"> 
         <div className="inline-block w-px h-24 bg-gradient-to-b from-transparent via-orange-500 to-transparent mb-8"></div>
         <h2 className={`${TYPO.Heading} mb-12`}>
             <InteractiveText text={t.contact.title} />
@@ -479,13 +497,14 @@ const ContactSection = ({ t }) => (
 );
 
 const Footer = ({ t }) => (
-    <footer className="py-8 text-center opacity-30 text-[10px] font-mono uppercase tracking-widest border-t border-current/5">
+    // text-xs pour améliorer la lisibilité
+    <footer className="py-8 text-center opacity-30 text-xs font-mono uppercase tracking-widest border-t border-current/5"> 
         {t.footer}
     </footer>
 );
 
 
-/* --- 4. COMPOSANT VUE DÉTAILLÉE (Case Study Minimaliste) --- */
+/* --- 4. COMPOSANT VUE DÉTAILLÉE (INCHANGÉ) --- */
 
 const CaseStudy = ({ project, onBack, t }) => {
     
