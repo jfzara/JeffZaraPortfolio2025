@@ -232,8 +232,9 @@ const FadeIn = ({ children, delay = 0 }) => {
     return <div className={`${visible ? 'animate-appear' : 'opacity-0'}`}>{children}</div>;
 };
 
-const AliveLetter = ({ char, delay = 0 }) => {
+ const AliveLetter = ({ char, delay = 0 }) => {
     const [isWaveActive, setWaveActive] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const colors = [
         'text-[#db2777]', 
@@ -255,33 +256,53 @@ const AliveLetter = ({ char, delay = 0 }) => {
         return () => clearTimeout(startTimer);
     }, [delay]);
 
+    const isActive = isWaveActive || isHovered;
+
     return (
         <span 
-            className={`
-                inline-block cursor-default transition-all duration-300 ease-out origin-center relative
-                
-                /* ETAT ACTIF (Hover ou Vague) */
-                ${isWaveActive ? `
-                    -translate-y-1 
-                    font-mono 
-                    rotate-1 
-                    font-bold 
-                    ${randomColorClass}
-                ` : ''}
-
-                /* ETAT HOVER (Interaction Utilisateur) */
-                hover:-translate-y-1 
-                hover:font-mono 
-                hover:rotate-1 
-                hover:font-bold
-                hover:${randomColorClass.replace('text-', 'text-')}
-            `}
-            style={isWaveActive ? {} : {}}
+            className="relative inline-block"
+            // Petit padding pour tolérance souris, mais sans casser l'alignement vertical
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
-            {char}
-        </span >
+            {/* 1. LE FANTÔME (STRUCTURE)
+               J'ai retiré 'font-bold' et 'font-mono'.
+               Il prend maintenant exactement la place de la lettre normale.
+               L'espacement redevient donc parfait.
+            */}
+            <span className="opacity-0 pointer-events-none block">
+                {char === " " ? "\u00A0" : char}
+            </span>
+
+            {/* 2. L'ANIMATION (VISUEL)
+               Elle est centrée par dessus le fantôme.
+               Si elle devient plus grosse (mono/bold), elle débordera visuellement
+               sur les côtés sans pousser les voisins.
+            */}
+            <span 
+                className={`
+                    absolute inset-0 flex items-center justify-center
+                    transition-all duration-300 ease-out 
+                    pointer-events-none 
+                    whitespace-nowrap /* Empêche les retours à la ligne imprévus */
+                    
+                    ${isActive ? `
+                        -translate-y-2 
+                        font-mono 
+                        rotate-3 
+                        font-bold 
+                        scale-110
+                        ${randomColorClass}
+                        z-10 /* Passe devant les voisines si elle grossit */
+                    ` : ''}
+                `}
+            >
+                {char === " " ? "\u00A0" : char}
+            </span>
+        </span>
     );
 };
+
 
 const InteractiveText = ({ text }) => {
     let charGlobalIndex = 0;
