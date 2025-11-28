@@ -6,7 +6,7 @@ import { useTheme } from "./theme/ThemeContext";
 import livanoVideo from "./assets/projects/major/livano/Livano_video.mp4"; 
 import youchefVideo from "./assets/projects/major/youchef/Youchef_video.mp4"; 
 
-/* --- 0. DATA (INCHANGÉ) --- */
+/* --- 0. DATA (TRADUCTION ANGLAISE MISE À JOUR) --- */
 const CONTENT = {
     fr: {
         nav: { projects: "Projets", expertise: "Expertise", contact: "Contact" },
@@ -60,13 +60,14 @@ const CONTENT = {
     en: {
         nav: { projects: "Projects", expertise: "Expertise", contact: "Contact" },
         hero: {
+            // TRADUCTION EXACTE DU FRANÇAIS
             role: "Full-Stack Developer — Montreal",
-            desc: "I unite development rigor with a genuine aesthetic sensitivity to capture your needs and those of your users, then translate them into harmonious, modern interfaces that are deeply faithful to your image. I create robust and durable Full-Stack (MERN/MVC) solutions, designed to offer refined, clear, and welcoming experiences.",
-            ctaPrimary: "View Work",
-            ctaSecondary: "Get in Touch",
-            title: "I build interfaces that solve real problems",
-            subtitle_start: "reliable, secure, and",
-            subtitle_highlight: "engaging."
+            desc: "I unite development rigor with a true aesthetic sensibility to grasp your needs and those of your users, then translate them into harmonious, current interfaces that are deeply faithful to your image. I create robust and durable Full-Stack (MERN/MVC) solutions, designed to offer refined, clear, and welcoming experiences.",
+            ctaPrimary: "View My Projects",
+            ctaSecondary: "Contact Me",
+            title: "Making the complex clear",
+            subtitle_start: "and the digital",
+            subtitle_highlight: "alive."
         },
         projects: {
             title: "Selected Works",
@@ -145,12 +146,9 @@ const styles = `
 `;
 
 const TYPO = {
-    // text-3xl (mobile) / font-normal (mobile)
     Heading: "font-serif text-3xl md:text-5xl lg:text-6xl font-normal md:font-medium tracking-tight leading-[1.1]", 
     SubHeading: "font-serif text-2xl md:text-3xl font-normal leading-tight",
-    // text-base (mobile)
     Body: "font-sans text-base md:text-xl leading-[1.6] opacity-80 font-light", 
-    // text-xs (desktop) et md:text-sm (desktop)
     Meta: "font-sans text-[10px] md:text-sm uppercase tracking-[0.2em] opacity-50 font-bold", 
 };
 
@@ -214,7 +212,6 @@ const OpenButton = ({ children, href, className = "" }) => {
             href={href}
             target="_blank" 
             rel="noopener noreferrer"
-            // active:scale-[0.98] pour feedback tactile mobile
             className={`relative group inline-block px-8 py-4 text-sm md:px-10 md:py-5 md:text-base font-sans font-bold tracking-widest uppercase transition-all duration-300 active:scale-[0.98] ${className}`}
         >
             <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-current transition-all duration-300 group-hover:w-full group-hover:h-full opacity-60 group-hover:opacity-100 group-hover:border-orange-500" />
@@ -251,7 +248,7 @@ const AliveLetter = ({ char, delay = 0 }) => {
     useEffect(() => {
         const startTimer = setTimeout(() => {
             setWaveActive(true);
-            const endTimer = setTimeout(() => setWaveActive(false), 400);
+            const endTimer = setTimeout(() => setWaveActive(false), 400); 
             return () => clearTimeout(endTimer);
         }, 800 + delay * 50); 
 
@@ -317,32 +314,39 @@ const Background = ({ themeMode }) => {
 };
 
 
-/* --- 3. SECTIONS VUE PRINCIPALE --- */
+/* --- 3. SECTIONS VUE PRINCIPALE (INCHANGÉE) --- */
 
-const Navbar = ({ toggleTheme, lang, setLang, t }) => (
-    // Backdrop pour éviter le mélange au scroll sur mobile
-    <nav className="fixed top-0 w-full px-6 py-8 flex justify-between items-start z-40 text-[#999] backdrop-blur-sm bg-black/5 dark:bg-white/5 md:bg-transparent"> 
-        <a href="#" className="font-serif text-2xl italic font-bold text-white/90 hover:opacity-70 transition-opacity">
-            Jeff Zara
-        </a>
-        <div className="flex flex-col items-end gap-2">
-            <button 
-                onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')} 
-                // Bouton plus grand pour touch et md:w-10 md:h-10 pour desktop
-                className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-xs md:text-sm font-mono font-bold hover:text-white transition-colors"
-            >
-                {lang === 'fr' ? 'EN' : 'FR'}
-            </button>
-            <button 
-                onClick={toggleTheme} 
-                 // Bouton plus grand pour touch et md:w-10 md:h-10 pour desktop
-                className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center text-xs md:text-sm font-mono font-bold hover:text-white transition-colors"
-            >
-                ●
-            </button>
-        </div>
-    </nav>
-);
+const Navbar = ({ toggleTheme, lang, setLang, t, themeMode }) => { 
+    // Couleur du texte par défaut (sombre en mode clair, gris clair en mode sombre)
+    const defaultColorClass = themeMode === 'dark' ? 'text-[#999]' : 'text-[#333]';
+    
+    // Couleur du texte au survol (orange en mode clair, blanc en mode sombre)
+    const hoverColorClass = themeMode === 'light' ? 'hover:text-orange-600' : 'hover:text-white';
+
+    return (
+        <nav className={`fixed top-0 w-full px-6 py-8 flex justify-between items-start z-40 ${defaultColorClass} backdrop-blur-sm bg-black/5 dark:bg-white/5 md:bg-transparent`}> 
+            <a href="#" className="font-serif text-2xl italic font-bold hover:opacity-70 transition-opacity relative z-20"> 
+                Jeff Zara
+            </a>
+            <div className="flex flex-col items-end gap-2 relative z-20"> 
+                <button 
+                    onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')} 
+                    // TAILLE BOUTON AUGMENTÉE
+                    className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xs md:text-sm font-mono font-bold ${hoverColorClass} transition-colors`}
+                >
+                    {lang === 'fr' ? 'EN' : 'FR'}
+                </button>
+                <button 
+                    onClick={toggleTheme} 
+                    // TAILLE BOUTON AUGMENTÉE
+                    className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xs md:text-sm font-mono font-bold ${hoverColorClass} transition-colors`}
+                >
+                    ●
+                </button>
+            </div>
+        </nav>
+    );
+};
 
 const HeroSection = ({ t, lang }) => {
     
@@ -351,9 +355,9 @@ const HeroSection = ({ t, lang }) => {
     const displaySubHighlight = t.hero.subtitle_highlight;
 
     return (
-        <section className="min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto pt-20">
+        // Padding augmenté pour dégager l'espace sous la navbar
+        <section className="min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto pt-32 md:pt-48"> 
             <FadeIn delay={100}>
-                {/* Utilisation de TYPO.Meta mis à jour */}
                 <span className={`${TYPO.Meta} text-orange-600 block mb-8`}>{t.hero.role}</span>
                 
                 <h1 className={`${TYPO.Heading} mb-12 max-w-4xl`}>
@@ -373,7 +377,6 @@ const HeroSection = ({ t, lang }) => {
                     {t.hero.desc}
                 </p>
                 <div className="flex flex-wrap gap-8 items-center mt-8">
-                    {/* Le href="#projets" corrige le bouton vide */}
                     <OpenButton href="#projets">{t.hero.ctaPrimary}</OpenButton>
                     <a href="#contact" className="text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1">
                         {t.hero.ctaSecondary}
@@ -420,8 +423,7 @@ const ProjectCard = ({ project, index, t, onSelectProject }) => {
                     </div>
                 )}
 
-                {/* Utilisation de TYPO.Meta mis à jour */}
-                <span className="absolute top-4 left-4 text-[10px] font-mono font-bold bg-white/90 dark:bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-current/10 z-20 shadow-sm">
+                <span className="absolute top-4 left-4 text-[10px] md:text-xs font-mono font-bold bg-white/90 dark:bg-black/80 backdrop-blur-md px-3 py-1 rounded-full border border-current/10 z-20 shadow-sm">
                     {project.category}
                 </span>
             </div>
@@ -449,7 +451,6 @@ const ProjectsSection = ({ t, onSelectProject }) => (
             <h2 className={TYPO.SubHeading}>
                 {t.projects.title}
             </h2>
-            {/* Instruction conditionnelle SWIPE vs SCROLL */}
             <span className="text-xs font-mono opacity-60 font-bold">
                 <span className="md:hidden">Swipe →</span>
                 <span className="hidden md:inline-block">Scroll →</span>
@@ -468,8 +469,8 @@ const ProjectsSection = ({ t, onSelectProject }) => (
 );
 
 const ContactSection = ({ t }) => (
-    // pt-12 (mobile) et pt-32 (desktop) pour réduire l'espace vide
-    <section id="contact" className="pt-12 pb-24 md:pt-32 md:pb-40 px-6 md:px-12 max-w-4xl mx-auto text-center"> 
+    // pt-8 (mobile) et pt-24 (desktop) pour réduire l'espace avant le titre
+    <section id="contact" className="pt-8 pb-24 md:pt-24 md:pb-40 px-6 md:px-12 max-w-4xl mx-auto text-center"> 
         <div className="inline-block w-px h-24 bg-gradient-to-b from-transparent via-orange-500 to-transparent mb-8"></div>
         <h2 className={`${TYPO.Heading} mb-12`}>
             <InteractiveText text={t.contact.title} />
@@ -497,7 +498,6 @@ const ContactSection = ({ t }) => (
 );
 
 const Footer = ({ t }) => (
-    // text-xs pour améliorer la lisibilité
     <footer className="py-8 text-center opacity-30 text-xs font-mono uppercase tracking-widest border-t border-current/5"> 
         {t.footer}
     </footer>
@@ -647,7 +647,7 @@ export default function Portfolio() {
             
             <ReactiveCursor />
             <Background themeMode={themeMode} />
-            <Navbar toggleTheme={toggleTheme} lang={lang} setLang={setLang} t={t} />
+            <Navbar toggleTheme={toggleTheme} lang={lang} setLang={setLang} t={t} themeMode={themeMode} />
             
             <main>
                 {renderContent()}
