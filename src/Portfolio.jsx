@@ -6,18 +6,20 @@ import { useTheme } from "./theme/ThemeContext";
 import livanoVideo from "./assets/projects/major/livano/Livano_video.mp4"; 
 import youchefVideo from "./assets/projects/major/youchef/Youchef_video.mp4"; 
 
-/* --- 0. DATA (TRADUCTION ANGLAISE MISE À JOUR) --- */
+/* --- 0. DATA (VERSION FINALE - CODE LIMPIDE) --- */
 const CONTENT = {
     fr: {
         nav: { projects: "Projets", expertise: "Expertise", contact: "Contact" },
         hero: {
             role: "Développeur Full-Stack — Montréal", 
-            desc: "J’unis la rigueur du développement à une véritable sensibilité esthétique pour saisir vos besoins et ceux de vos utilisateurs, puis les traduire en interfaces harmonieuses, actuelles et profondément fidèles à votre image. Je crée des solutions Full-Stack (MERN/MVC) robustes et durables, pensées pour offrir des expériences raffinées, claires et accueillantes.",
+            desc: "J’unis la rigueur du développement à une véritable sensibilité esthétique pour saisir vos besoins et ceux de vos utilisateurs, puis les traduire en interfaces harmonieuses, actuelles et profondément fidèles à votre image. Je crée des solutions Full-Stack (MERN/MVC) robustes et durables.",
             ctaPrimary: "Voir mes réalisations",
             ctaSecondary: "Me contacter",
-            title: "Rendre le complexe limpide",
-            subtitle_start: "et le numérique",
-            subtitle_highlight: "vivant."
+            
+            // 👇 TITRE VALIDÉ
+            title: "Code Limpide.", 
+            subtitle_start: "Conçu pour",
+            subtitle_highlight: "l'impact."
         },
         projects: {
             title: "Projets Sélectionnés",
@@ -60,14 +62,15 @@ const CONTENT = {
     en: {
         nav: { projects: "Projects", expertise: "Expertise", contact: "Contact" },
         hero: {
-            // TRADUCTION EXACTE DU FRANÇAIS
             role: "Full-Stack Developer — Montreal",
-            desc: "I unite development rigor with a true aesthetic sensibility to grasp your needs and those of your users, then translate them into harmonious, current interfaces that are deeply faithful to your image. I create robust and durable Full-Stack (MERN/MVC) solutions, designed to offer refined, clear, and welcoming experiences.",
+            desc: "I unite development rigor with a true aesthetic sensibility to grasp your needs and those of your users, then translate them into harmonious, current interfaces. I create robust and durable Full-Stack (MERN/MVC) solutions, designed to offer refined, clear, and welcoming experiences.",
             ctaPrimary: "View My Projects",
             ctaSecondary: "Contact Me",
-            title: "Making the complex clear",
-            subtitle_start: "and the digital",
-            subtitle_highlight: "alive."
+            
+            // VERSION ANGLAISE
+            title: "Clean Code.",
+            subtitle_start: "Designed for",
+            subtitle_highlight: "Impact."
         },
         projects: {
             title: "Selected Works",
@@ -156,7 +159,6 @@ const TYPO = {
 /* --- 2. COMPOSANTS INTERACTIFS (INCHANGÉ) --- */
 
 const ReactiveCursor = () => {
-    // ... (unchanged cursor logic)
     const cursorRef = useRef(null);
     const pos = useRef({ x: 0, y: 0 }); 
     const target = useRef({ x: 0, y: 0 }); 
@@ -261,30 +263,19 @@ const FadeIn = ({ children, delay = 0 }) => {
     return (
         <span 
             className="relative inline-block"
-            // Petit padding pour tolérance souris, mais sans casser l'alignement vertical
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {/* 1. LE FANTÔME (STRUCTURE)
-               J'ai retiré 'font-bold' et 'font-mono'.
-               Il prend maintenant exactement la place de la lettre normale.
-               L'espacement redevient donc parfait.
-            */}
             <span className="opacity-0 pointer-events-none block">
                 {char === " " ? "\u00A0" : char}
             </span>
 
-            {/* 2. L'ANIMATION (VISUEL)
-               Elle est centrée par dessus le fantôme.
-               Si elle devient plus grosse (mono/bold), elle débordera visuellement
-               sur les côtés sans pousser les voisins.
-            */}
             <span 
                 className={`
                     absolute inset-0 flex items-center justify-center
                     transition-all duration-300 ease-out 
                     pointer-events-none 
-                    whitespace-nowrap /* Empêche les retours à la ligne imprévus */
+                    whitespace-nowrap
                     
                     ${isActive ? `
                         -translate-y-2 
@@ -293,7 +284,7 @@ const FadeIn = ({ children, delay = 0 }) => {
                         font-bold 
                         scale-110
                         ${randomColorClass}
-                        z-10 /* Passe devant les voisines si elle grossit */
+                        z-10
                     ` : ''}
                 `}
             >
@@ -338,10 +329,7 @@ const Background = ({ themeMode }) => {
 /* --- 3. SECTIONS VUE PRINCIPALE (INCHANGÉE) --- */
 
 const Navbar = ({ toggleTheme, lang, setLang, t, themeMode }) => { 
-    // Couleur du texte par défaut (sombre en mode clair, gris clair en mode sombre)
     const defaultColorClass = themeMode === 'dark' ? 'text-[#999]' : 'text-[#333]';
-    
-    // Couleur du texte au survol (orange en mode clair, blanc en mode sombre)
     const hoverColorClass = themeMode === 'light' ? 'hover:text-orange-600' : 'hover:text-white';
 
     return (
@@ -352,14 +340,12 @@ const Navbar = ({ toggleTheme, lang, setLang, t, themeMode }) => {
             <div className="flex flex-col items-end gap-2 relative z-20"> 
                 <button 
                     onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')} 
-                    // TAILLE BOUTON AUGMENTÉE
                     className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xs md:text-sm font-mono font-bold ${hoverColorClass} transition-colors`}
                 >
                     {lang === 'fr' ? 'EN' : 'FR'}
                 </button>
                 <button 
                     onClick={toggleTheme} 
-                    // TAILLE BOUTON AUGMENTÉE
                     className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xs md:text-sm font-mono font-bold ${hoverColorClass} transition-colors`}
                 >
                     ●
@@ -376,7 +362,6 @@ const HeroSection = ({ t, lang }) => {
     const displaySubHighlight = t.hero.subtitle_highlight;
 
     return (
-        // Padding augmenté pour dégager l'espace sous la navbar
         <section className="min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto pt-32 md:pt-48"> 
             <FadeIn delay={100}>
                 <span className={`${TYPO.Meta} text-orange-600 block mb-8`}>{t.hero.role}</span>
@@ -385,10 +370,10 @@ const HeroSection = ({ t, lang }) => {
                     <InteractiveText text={displayTitle} /> <br/>
                     
                     <span className="opacity-60 italic font-light block mt-4">
-                         {displaySubStart} {" "}
-                         <span className="not-italic opacity-100">
+                          {displaySubStart} {" "}
+                          <span className="not-italic opacity-100 text-neon-text-custom">
                              <InteractiveText text={displaySubHighlight} />
-                         </span>
+                          </span>
                     </span>
                 </h1>
             </FadeIn>
@@ -490,7 +475,6 @@ const ProjectsSection = ({ t, onSelectProject }) => (
 );
 
 const ContactSection = ({ t }) => (
-    // pt-8 (mobile) et pt-24 (desktop) pour réduire l'espace avant le titre
     <section id="contact" className="pt-8 pb-24 md:pt-24 md:pb-40 px-6 md:px-12 max-w-4xl mx-auto text-center"> 
         <div className="inline-block w-px h-24 bg-gradient-to-b from-transparent via-orange-500 to-transparent mb-8"></div>
         <h2 className={`${TYPO.Heading} mb-12`}>
