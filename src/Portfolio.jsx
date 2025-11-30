@@ -1,6 +1,7 @@
-// C:\Users\Jeff\Desktop\PROJETS VS CODE\JAVASCRIPT\REACT\mon_portfolio\src\Portfolio.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "./theme/ThemeContext";
+// 👇 IMPORT POUR LE SEO
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 // --- IMPORT DES VIDÉOS ---
 import livanoVideo from "./assets/projects/major/livano/Livano_video.mp4"; 
@@ -15,8 +16,6 @@ const CONTENT = {
             desc: "J’unis la rigueur du développement à une véritable sensibilité esthétique pour saisir vos besoins et ceux de vos utilisateurs, puis les traduire en interfaces harmonieuses, actuelles et profondément fidèles à votre image. Je crée des solutions Full-Stack (MERN/MVC) robustes et durables.",
             ctaPrimary: "Voir mes réalisations",
             ctaSecondary: "Me contacter",
-            
-            // 👇 TITRE VALIDÉ
             title: "Code Limpide.", 
             subtitle_start: "Conçu pour",
             subtitle_highlight: "l'impact."
@@ -66,8 +65,6 @@ const CONTENT = {
             desc: "I unite development rigor with a true aesthetic sensibility to grasp your needs and those of your users, then translate them into harmonious, current interfaces. I create robust and durable Full-Stack (MERN/MVC) solutions, designed to offer refined, clear, and welcoming experiences.",
             ctaPrimary: "View My Projects",
             ctaSecondary: "Contact Me",
-            
-            // VERSION ANGLAISE
             title: "Clean Code.",
             subtitle_start: "Designed for",
             subtitle_highlight: "Impact."
@@ -156,7 +153,7 @@ const TYPO = {
 };
 
 
-/* --- 2. COMPOSANTS INTERACTIFS (INCHANGÉ) --- */
+/* --- 2. COMPOSANTS INTERACTIFS ACCESSIBLES --- */
 
 const ReactiveCursor = () => {
     const cursorRef = useRef(null);
@@ -165,6 +162,10 @@ const ReactiveCursor = () => {
     const velocity = useRef(0); 
 
     useEffect(() => {
+        // A11Y: Désactiver si l'utilisateur demande "Mouvements Réduits"
+        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        if (mediaQuery.matches) return;
+
         const handleMove = (e) => {
             target.current = { x: e.clientX, y: e.clientY };
         };
@@ -199,10 +200,12 @@ const ReactiveCursor = () => {
         };
     }, []);
 
+    // A11Y: aria-hidden="true" car c'est purement décoratif
     return (
         <div 
             ref={cursorRef}
-            className="fixed top-0 left-0 w-6 h-6 -ml-3 -mt-3 rounded-full bg-orange-500 blur-xl pointer-events-none z-50 mix-blend-screen transition-opacity duration-100"
+            aria-hidden="true"
+            className="fixed top-0 left-0 w-6 h-6 -ml-3 -mt-3 rounded-full bg-orange-500 blur-xl pointer-events-none z-50 mix-blend-screen transition-opacity duration-100 hidden md:block"
             style={{ opacity: 0.15 }} 
         />
     );
@@ -214,7 +217,7 @@ const OpenButton = ({ children, href, className = "" }) => {
             href={href}
             target="_blank" 
             rel="noopener noreferrer"
-            className={`relative group inline-block px-8 py-4 text-sm md:px-10 md:py-5 md:text-base font-sans font-bold tracking-widest uppercase transition-all duration-300 active:scale-[0.98] ${className}`}
+            className={`relative group inline-block px-8 py-4 text-sm md:px-10 md:py-5 md:text-base font-sans font-bold tracking-widest uppercase transition-all duration-300 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-orange-500 outline-none ${className}`}
         >
             <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-current transition-all duration-300 group-hover:w-full group-hover:h-full opacity-60 group-hover:opacity-100 group-hover:border-orange-500" />
             <span className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-current transition-all duration-300 group-hover:w-full group-hover:h-full opacity-60 group-hover:opacity-100 group-hover:border-orange-500" />
@@ -234,21 +237,25 @@ const FadeIn = ({ children, delay = 0 }) => {
     return <div className={`${visible ? 'animate-appear' : 'opacity-0'}`}>{children}</div>;
 };
 
- const AliveLetter = ({ char, delay = 0 }) => {
+// Composant Helper pour les lettres animées
+const AliveLetter = ({ char, delay = 0 }) => {
     const [isWaveActive, setWaveActive] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    
+    // Pour A11Y: réduire animations si demandé
+    const [reduceMotion, setReduceMotion] = useState(false);
 
     const colors = [
-        'text-[#db2777]', 
-        'text-[#06b6d4]', 
-        'text-[#84cc16]', 
-        'text-[#8b5cf6]', 
-        'text-[#f59e0b]', 
+        'text-[#db2777]', 'text-[#06b6d4]', 'text-[#84cc16]', 'text-[#8b5cf6]', 'text-[#f59e0b]', 
     ];
-    
     const randomColorClass = useRef(colors[Math.floor(Math.random() * colors.length)]).current;
 
     useEffect(() => {
+        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+        setReduceMotion(mediaQuery.matches);
+
+        if (mediaQuery.matches) return;
+
         const startTimer = setTimeout(() => {
             setWaveActive(true);
             const endTimer = setTimeout(() => setWaveActive(false), 400); 
@@ -258,34 +265,24 @@ const FadeIn = ({ children, delay = 0 }) => {
         return () => clearTimeout(startTimer);
     }, [delay]);
 
-    const isActive = isWaveActive || isHovered;
+    const isActive = (isWaveActive || isHovered) && !reduceMotion;
 
     return (
         <span 
             className="relative inline-block"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            aria-hidden="true" // A11Y: Caché aux lecteurs d'écran (géré par le parent)
         >
             <span className="opacity-0 pointer-events-none block">
                 {char === " " ? "\u00A0" : char}
             </span>
-
             <span 
                 className={`
                     absolute inset-0 flex items-center justify-center
                     transition-all duration-300 ease-out 
-                    pointer-events-none 
-                    whitespace-nowrap
-                    
-                    ${isActive ? `
-                        -translate-y-2 
-                        font-mono 
-                        rotate-3 
-                        font-bold 
-                        scale-110
-                        ${randomColorClass}
-                        z-10
-                    ` : ''}
+                    pointer-events-none whitespace-nowrap
+                    ${isActive ? `-translate-y-2 font-mono rotate-3 font-bold scale-110 ${randomColorClass} z-10` : ''}
                 `}
             >
                 {char === " " ? "\u00A0" : char}
@@ -295,12 +292,14 @@ const FadeIn = ({ children, delay = 0 }) => {
 };
 
 
+// A11Y FIX: Le texte interactif est maintenant accessible aux lecteurs d'écran
 const InteractiveText = ({ text }) => {
     let charGlobalIndex = 0;
-
     const words = text.split(" ");
+    
     return (
-        <span className="inline-block leading-tight">
+        // A11Y: Le label lit tout le texte d'un coup
+        <span className="inline-block leading-tight" aria-label={text} role="text">
             {words.map((word, wIndex) => (
                 <span key={wIndex} className="inline-block whitespace-nowrap mr-[0.25em]">
                     {word.split("").map((char, cIndex) => {
@@ -317,7 +316,7 @@ const InteractiveText = ({ text }) => {
 const Background = ({ themeMode }) => {
     const bgClass = themeMode === 'dark' ? 'bg-[#050505]' : 'bg-[#F0EEE6]'; 
     return (
-        <div className={`fixed inset-0 -z-50 transition-colors duration-700 ${bgClass}`}>
+        <div className={`fixed inset-0 -z-50 transition-colors duration-700 ${bgClass}`} aria-hidden="true">
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply" 
                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E")` }} 
             />
@@ -326,7 +325,7 @@ const Background = ({ themeMode }) => {
 };
 
 
-/* --- 3. SECTIONS VUE PRINCIPALE (INCHANGÉE) --- */
+/* --- 3. SECTIONS VUE PRINCIPALE --- */
 
 const Navbar = ({ toggleTheme, lang, setLang, t, themeMode }) => { 
     const defaultColorClass = themeMode === 'dark' ? 'text-[#999]' : 'text-[#333]';
@@ -334,19 +333,21 @@ const Navbar = ({ toggleTheme, lang, setLang, t, themeMode }) => {
 
     return (
         <nav className={`fixed top-0 w-full px-6 py-8 flex justify-between items-start z-40 ${defaultColorClass} backdrop-blur-sm bg-black/5 dark:bg-white/5 md:bg-transparent`}> 
-            <a href="#" className="font-serif text-2xl italic font-bold hover:opacity-70 transition-opacity relative z-20"> 
+            <a href="#" className="font-serif text-2xl italic font-bold hover:opacity-70 transition-opacity relative z-20 focus-visible:ring-2 focus-visible:ring-orange-500 outline-none rounded-sm"> 
                 Jeff Zara
             </a>
             <div className="flex flex-col items-end gap-2 relative z-20"> 
                 <button 
                     onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')} 
-                    className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xs md:text-sm font-mono font-bold ${hoverColorClass} transition-colors`}
+                    aria-label={lang === 'fr' ? "Switch to English" : "Passer en Français"}
+                    className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xs md:text-sm font-mono font-bold ${hoverColorClass} transition-colors focus-visible:ring-2 focus-visible:ring-orange-500 outline-none rounded-full`}
                 >
                     {lang === 'fr' ? 'EN' : 'FR'}
                 </button>
                 <button 
                     onClick={toggleTheme} 
-                    className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xs md:text-sm font-mono font-bold ${hoverColorClass} transition-colors`}
+                    aria-label={themeMode === 'light' ? "Activer le mode sombre" : "Activer le mode clair"}
+                    className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xs md:text-sm font-mono font-bold ${hoverColorClass} transition-colors focus-visible:ring-2 focus-visible:ring-orange-500 outline-none rounded-full`}
                 >
                     ●
                 </button>
@@ -356,7 +357,6 @@ const Navbar = ({ toggleTheme, lang, setLang, t, themeMode }) => {
 };
 
 const HeroSection = ({ t, lang }) => {
-    
     const displayTitle = t.hero.title;
     const displaySubStart = t.hero.subtitle_start;
     const displaySubHighlight = t.hero.subtitle_highlight;
@@ -368,7 +368,6 @@ const HeroSection = ({ t, lang }) => {
                 
                 <h1 className={`${TYPO.Heading} mb-12 max-w-4xl`}>
                     <InteractiveText text={displayTitle} /> <br/>
-                    
                     <span className="opacity-60 italic font-light block mt-4">
                           {displaySubStart} {" "}
                           <span className="not-italic opacity-100 text-neon-text-custom">
@@ -384,7 +383,7 @@ const HeroSection = ({ t, lang }) => {
                 </p>
                 <div className="flex flex-wrap gap-8 items-center mt-8">
                     <OpenButton href="#projets">{t.hero.ctaPrimary}</OpenButton>
-                    <a href="#contact" className="text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1">
+                    <a href="#contact" className="text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1 focus-visible:ring-2 focus-visible:ring-orange-500 outline-none">
                         {t.hero.ctaSecondary}
                     </a>
                 </div>
@@ -393,6 +392,7 @@ const HeroSection = ({ t, lang }) => {
     );
 };
 
+// A11Y FIX: ProjectCard est maintenant focusable et activable au clavier
 const ProjectCard = ({ project, index, t, onSelectProject }) => { 
     const offsetClass = index % 2 === 0 ? 'md:translate-y-12' : 'md:-translate-y-12';
     
@@ -400,12 +400,25 @@ const ProjectCard = ({ project, index, t, onSelectProject }) => {
         onSelectProject(project);
     };
 
+    // Gestion du clavier (Entrée ou Espace)
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+        }
+    };
+
     return (
         <div 
+            role="button"
+            tabIndex={0} // Rend l'élément focusable
+            onKeyDown={handleKeyDown}
+            aria-label={`Voir les détails du projet ${project.title}`}
             className={`
                 min-w-[85vw] md:min-w-0 flex-shrink-0 md:flex-shrink 
                 group relative p-6 md:p-0 cursor-pointer
                 transition-all duration-700 ${offsetClass}
+                focus-visible:ring-4 focus-visible:ring-orange-500 focus-visible:ring-offset-4 outline-none rounded-md
             `}
             onClick={handleClick}
         >
@@ -415,6 +428,8 @@ const ProjectCard = ({ project, index, t, onSelectProject }) => {
                     <>
                         <video 
                             src={project.video}
+                            title={`Aperçu vidéo du projet ${project.title}`}
+                            aria-label={`Aperçu vidéo du projet ${project.title}`}
                             autoPlay 
                             muted 
                             loop 
@@ -457,7 +472,7 @@ const ProjectsSection = ({ t, onSelectProject }) => (
             <h2 className={TYPO.SubHeading}>
                 {t.projects.title}
             </h2>
-            <span className="text-xs font-mono opacity-60 font-bold">
+            <span className="text-xs font-mono opacity-60 font-bold" aria-hidden="true">
                 <span className="md:hidden">Swipe →</span>
                 <span className="hidden md:inline-block">Scroll →</span>
             </span>
@@ -476,7 +491,7 @@ const ProjectsSection = ({ t, onSelectProject }) => (
 
 const ContactSection = ({ t }) => (
     <section id="contact" className="pt-8 pb-24 md:pt-24 md:pb-40 px-6 md:px-12 max-w-4xl mx-auto text-center"> 
-        <div className="inline-block w-px h-24 bg-gradient-to-b from-transparent via-orange-500 to-transparent mb-8"></div>
+        <div className="inline-block w-px h-24 bg-gradient-to-b from-transparent via-orange-500 to-transparent mb-8" aria-hidden="true"></div>
         <h2 className={`${TYPO.Heading} mb-12`}>
             <InteractiveText text={t.contact.title} />
         </h2>
@@ -490,7 +505,7 @@ const ContactSection = ({ t }) => (
                 href={t.contact.linkedinURL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block mt-6 text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1 mx-auto w-fit"
+                className="block mt-6 text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1 mx-auto w-fit focus-visible:ring-2 focus-visible:ring-orange-500 outline-none"
             >
                 {t.contact.linkedinText}
             </a>
@@ -509,10 +524,18 @@ const Footer = ({ t }) => (
 );
 
 
-/* --- 4. COMPOSANT VUE DÉTAILLÉE (INCHANGÉ) --- */
+/* --- 4. COMPOSANT VUE DÉTAILLÉE --- */
 
 const CaseStudy = ({ project, onBack, t }) => {
     
+    // Auto-focus sur le bouton retour quand la vue s'ouvre pour l'accessibilité
+    const backButtonRef = useRef(null);
+    useEffect(() => {
+        if (backButtonRef.current) {
+            backButtonRef.current.focus();
+        }
+    }, []);
+
     const getTechHighlights = (title) => {
         if (title.includes('Livano')) {
             return [
@@ -535,7 +558,12 @@ const CaseStudy = ({ project, onBack, t }) => {
 
     return (
         <section className="min-h-screen px-6 md:px-12 max-w-6xl mx-auto py-24">
-            <button onClick={onBack} className="flex items-center gap-2 mb-16 text-sm opacity-60 hover:opacity-100 transition-opacity">
+            <button 
+                ref={backButtonRef}
+                onClick={onBack} 
+                className="flex items-center gap-2 mb-16 text-sm opacity-60 hover:opacity-100 transition-opacity focus-visible:ring-2 focus-visible:ring-orange-500 outline-none rounded-sm p-2"
+                aria-label="Retour à la liste des projets"
+            >
                 ← {t.projects.title}
             </button>
             
@@ -545,11 +573,13 @@ const CaseStudy = ({ project, onBack, t }) => {
                 <h2 className={`${TYPO.Heading} text-5xl`}>{project.title}</h2>
             </div>
 
-            {/* Visual (vidéo si disponible, sinon placeholder stylisé) */}
+            {/* Visual */}
             <div className="relative aspect-video w-full mb-16 rounded-md shadow-2xl overflow-hidden">
                 {project.video ? (
                     <video 
                         src={project.video}
+                        title={`Démonstration détaillée du projet ${project.title}`}
+                        aria-label={`Démonstration détaillée du projet ${project.title}`}
                         autoPlay 
                         muted 
                         loop 
@@ -563,7 +593,7 @@ const CaseStudy = ({ project, onBack, t }) => {
                 )}
             </div>
 
-            {/* --- SECTION 2: RÉSUMÉ & CHIFFRES (Quick Scan) --- */}
+            {/* --- SECTION 2: RÉSUMÉ & CHIFFRES --- */}
             <div className="md:grid md:grid-cols-2 md:gap-12 mb-20">
                 <div>
                     <h3 className="font-serif text-2xl mb-4">Contexte & Mission</h3>
@@ -591,7 +621,7 @@ const CaseStudy = ({ project, onBack, t }) => {
                 </div>
             </div>
 
-            {/* --- SECTION 3: DÉFIS TECHNIQUES (L'Essentiel) --- */}
+            {/* --- SECTION 3: DÉFIS TECHNIQUES --- */}
             <div className="mb-20">
                 <h3 className="font-serif text-2xl mb-6">Défis Techniques & Compétences</h3>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-disc list-inside">
@@ -604,7 +634,7 @@ const CaseStudy = ({ project, onBack, t }) => {
             </div>
 
 
-            {/* --- SECTION 4: ACTIONS / LIENS EXTERNES --- */}
+            {/* --- SECTION 4: ACTIONS --- */}
             <div className="flex flex-wrap gap-6 justify-center md:justify-start">
                 <OpenButton href={project.links.live}>
                     Voir le site →
@@ -621,7 +651,7 @@ const CaseStudy = ({ project, onBack, t }) => {
 };
 
 
-/* --- 5. ASSEMBLAGE FINAL AVEC SWITCH DE VUE --- */
+/* --- 5. ASSEMBLAGE FINAL --- */
 export default function Portfolio() {
     const { themeMode, toggleTheme } = useTheme();
     const [lang, setLang] = useState('fr');
@@ -630,7 +660,27 @@ export default function Portfolio() {
     const t = CONTENT[lang];
     const textColor = themeMode === 'dark' ? 'text-[#e5e5e5]' : 'text-[#1a1a1a]';
 
-    // Rendu conditionnel
+    const getSeoMetadata = () => {
+        if (selectedProject) {
+            return {
+                title: `${selectedProject.title} | Jeff Zara`,
+                desc: lang === 'fr' 
+                    ? `Étude de cas du projet ${selectedProject.title}. Technologies: ${selectedProject.stack.join(', ')}.` 
+                    : `Case study of project ${selectedProject.title}. Tech Stack: ${selectedProject.stack.join(', ')}.`
+            };
+        }
+        return {
+            title: lang === 'fr' 
+                ? "Jeff Zara | Développeur React & Node.js Montréal" 
+                : "Jeff Zara | React & Node.js Developer Montreal",
+            desc: lang === 'fr'
+                ? "Portfolio de Jeff Zara, développeur Web Full-Stack (MERN) basé à Montréal. Expert en interfaces React, UI/UX et code propre."
+                : "Portfolio of Jeff Zara, Full-Stack Web Developer (MERN) based in Montreal. Expert in React interfaces, UI/UX and clean code."
+        };
+    };
+
+    const seo = getSeoMetadata();
+
     const renderContent = () => {
         if (selectedProject) {
             return <CaseStudy project={selectedProject} onBack={() => setSelectedProject(null)} t={t} />;
@@ -647,17 +697,37 @@ export default function Portfolio() {
     };
 
     return (
-        <div className={`relative min-h-screen font-sans selection:bg-orange-500 selection:text-white ${textColor}`}>
-            <style>{styles}</style>
-            
-            <ReactiveCursor />
-            <Background themeMode={themeMode} />
-            <Navbar toggleTheme={toggleTheme} lang={lang} setLang={setLang} t={t} themeMode={themeMode} />
-            
-            <main>
-                {renderContent()}
-            </main>
-            
-        </div>
+        <HelmetProvider>
+            <div className={`relative min-h-screen font-sans selection:bg-orange-500 selection:text-white ${textColor}`}>
+                
+                <Helmet>
+                    <html lang={lang} />
+                    <title>{seo.title}</title>
+                    <meta name="description" content={seo.desc} />
+                    
+                    <meta property="og:title" content={seo.title} />
+                    <meta property="og:description" content={seo.desc} />
+                    <meta property="og:type" content="website" />
+                    <meta property="og:url" content="https://jeff-zara-portfolio2025.vercel.app/" />
+                    <meta property="og:image" content="https://jeff-zara-portfolio2025.vercel.app/og-image.jpg" />
+
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta name="twitter:image" content="https://jeff-zara-portfolio2025.vercel.app/og-image.jpg" />
+
+                    <meta name="keywords" content="Développeur React Montréal, Junior Developer, MERN Stack, JavaScript, Jeff Zara, Front-end" />
+                </Helmet>
+
+                <style>{styles}</style>
+                
+                <ReactiveCursor />
+                <Background themeMode={themeMode} />
+                <Navbar toggleTheme={toggleTheme} lang={lang} setLang={setLang} t={t} themeMode={themeMode} />
+                
+                <main>
+                    {renderContent()}
+                </main>
+                
+            </div>
+        </HelmetProvider>
     );
 }

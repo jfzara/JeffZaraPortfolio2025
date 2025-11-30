@@ -9,14 +9,15 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.19",  
+    "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.4",    
-    "vite": "^5.2.12"           
+    "tailwindcss": "^3.4.4",
+    "vite": "^5.2.12"
   },
   "dependencies": {
     "@react-three/fiber": "^9.4.0",
     "framer-motion": "^12.23.24",
+    "react-helmet-async": "^2.0.5",
     "styled-components": "^6.1.19",
     "three": "^0.181.0"
   }
