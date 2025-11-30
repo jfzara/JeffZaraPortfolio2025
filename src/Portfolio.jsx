@@ -696,53 +696,54 @@ export default function Portfolio() {
         );
     };
 
-  return (
-    <HelmetProvider>
-        
-        {/*
-            1. BALISES HEAD (Inclus le script GTM pour le chargement principal)
-        */}
-        <Helmet>
-            <html lang={lang} />
-            
-            {/* GTM FRAGMENT HEAD (Script GTM principal) */}
-            <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','VOTRE_ID_GTM');`}} />
-            
-            {/* METADATA SEO/A11Y */}
-            <title>{seo.title}</title>
-            <meta name="description" content={seo.desc} />
-            <meta property="og:title" content={seo.title} />
-            <meta property="og:description" content={seo.desc} />
-            <meta property="og:type" content="website" />
-            <meta property="og:url" content="https://jeff-zara-portfolio2025.vercel.app/" />
-            <meta property="og:image" content="https://jeff-zara-portfolio2025.vercel.app/og-image.jpg" />
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://jeff-zara-portfolio2025.vercel.app/og-image.jpg" />
-            <meta name="keywords" content="Développeur React Montréal, Junior Developer, MERN Stack, JavaScript, Jeff Zara, Front-end" />
-        </Helmet>
-        
-        {/*
-            2. FRAGMENT BODY NO-SCRIPT (Doit être le premier élément dans le <body>)
-        */}
-        <noscript>
-            <iframe src="https://www.googletagmanager.com/ns.html?id=VOTRE_ID_GTM" height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} />
-        </noscript>
-        
-        {/*
-            3. LE DIV PRINCIPAL (Contenu visible)
-        */}
-        <div className={`relative min-h-screen font-sans selection:bg-orange-500 selection:text-white ${textColor}`}>
-            
-            <style>{styles}</style>
-            <ReactiveCursor />
-            <Background themeMode={themeMode} />
-            <Navbar toggleTheme={toggleTheme} lang={lang} setLang={setLang} t={t} themeMode={themeMode} />
-            
-            <main>
-                {renderContent()}
-            </main>
-            
-        </div>
-    </HelmetProvider>
+return (
+  <HelmetProvider>
+        
+        {/*
+            1. BALISES HEAD (Inclus le script GTM pour le chargement principal)
+        */}
+        <Helmet>
+            <html lang={lang} />
+            
+            {/* GTM FRAGMENT HEAD - ESPACE CORRIGÉ */}
+            <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-M8R4TLLF');`}} />
+            
+            {/* METADATA SEO/A11Y */}
+            <title>{seo.title}</title>
+            <meta name="description" content={seo.desc} />
+            <meta property="og:title" content={seo.title} />
+            <meta property="og:description" content={seo.desc} />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content="https://jeff-zara-portfolio2025.vercel.app/" />
+            <meta property="og:image" content="https://jeff-zara-portfolio2025.vercel.app/og-image.jpg" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:image" content="https://jeff-zara-portfolio2025.vercel.app/og-image.jpg" />
+            <meta name="keywords" content="Développeur React Montréal, Junior Developer, MERN Stack, JavaScript, Jeff Zara, Front-end" />
+        </Helmet>
+        
+        {/*
+            2. FRAGMENT BODY NO-SCRIPT (Doit être le premier élément dans le <body>)
+        */}
+        <noscript>
+            {/* GTM FRAGMENT BODY - ESPACE CORRIGÉ */}
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M8R4TLLF" height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} />
+        </noscript>
+        
+        {/*
+            3. LE DIV PRINCIPAL (Contenu visible)
+        */}
+        <div className={`relative min-h-screen font-sans selection:bg-orange-500 selection:text-white ${textColor}`}>
+            
+            <style>{styles}</style>
+            <ReactiveCursor />
+            <Background themeMode={themeMode} />
+            <Navbar toggleTheme={toggleTheme} lang={lang} setLang={setLang} t={t} themeMode={themeMode} />
+            
+            <main>
+                {renderContent()}
+            </main>
+            
+        </div>
+  </HelmetProvider>
 );
 }
