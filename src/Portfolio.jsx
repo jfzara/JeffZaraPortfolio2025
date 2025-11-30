@@ -702,6 +702,7 @@ export default function Portfolio() {
                 
                 <Helmet>
                     <html lang={lang} />
+                 <meta name="google-site-verification" content="463HqFpDKF3WrGloIcdq0to_3UT-Ajlz16c9trFpZsw" />
                     <title>{seo.title}</title>
                     <meta name="description" content={seo.desc} />
                     
