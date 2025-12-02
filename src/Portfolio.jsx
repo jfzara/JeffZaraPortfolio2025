@@ -362,7 +362,7 @@ const HeroSection = ({ t, lang }) => {
     const displaySubHighlight = t.hero.subtitle_highlight;
 
     return (
-        <section className="min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto pt-32 md:pt-48"> 
+        <section className="min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-7xl mx-auto pt-40 md:pt-48"> 
             <FadeIn delay={100}>
                 <span className={`${TYPO.Meta} text-orange-600 block mb-8`}>{t.hero.role}</span>
                 
