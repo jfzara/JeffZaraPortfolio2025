@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "./theme/ThemeContext";
-// 👇 IMPORT POUR LE SEO
+ 
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-// --- IMPORT DES VIDÉOS ---
+ 
 import livanoVideo from "./assets/projects/major/livano/Livano_video.mp4"; 
 import youchefVideo from "./assets/projects/major/youchef/Youchef_video.mp4"; 
-
-/* --- 0. DATA (VERSION FINALE - CODE LIMPIDE) --- */
+//
+ 
 const CONTENT = {
     fr: {
         nav: { projects: "Projets", expertise: "Expertise", contact: "Contact" },
@@ -109,7 +109,7 @@ const CONTENT = {
     }
 };
 
-/* --- 1. CSS & ANIMATIONS (INCHANGÉ) --- */
+ 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
@@ -153,7 +153,7 @@ const TYPO = {
 };
 
 
-/* --- 2. COMPOSANTS INTERACTIFS ACCESSIBLES --- */
+ 
 
 const ReactiveCursor = () => {
     const cursorRef = useRef(null);
@@ -162,7 +162,7 @@ const ReactiveCursor = () => {
     const velocity = useRef(0); 
 
     useEffect(() => {
-        // A11Y: Désactiver si l'utilisateur demande "Mouvements Réduits"
+     
         const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
         if (mediaQuery.matches) return;
 
@@ -200,7 +200,7 @@ const ReactiveCursor = () => {
         };
     }, []);
 
-    // A11Y: aria-hidden="true" car c'est purement décoratif
+ 
     return (
         <div 
             ref={cursorRef}
@@ -237,12 +237,12 @@ const FadeIn = ({ children, delay = 0 }) => {
     return <div className={`${visible ? 'animate-appear' : 'opacity-0'}`}>{children}</div>;
 };
 
-// Composant Helper pour les lettres animées
+ 
 const AliveLetter = ({ char, delay = 0 }) => {
     const [isWaveActive, setWaveActive] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     
-    // Pour A11Y: réduire animations si demandé
+    
     const [reduceMotion, setReduceMotion] = useState(false);
 
     const colors = [
@@ -272,7 +272,7 @@ const AliveLetter = ({ char, delay = 0 }) => {
             className="relative inline-block"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            aria-hidden="true" // A11Y: Caché aux lecteurs d'écran (géré par le parent)
+            aria-hidden="true"  
         >
             <span className="opacity-0 pointer-events-none block">
                 {char === " " ? "\u00A0" : char}
@@ -292,13 +292,13 @@ const AliveLetter = ({ char, delay = 0 }) => {
 };
 
 
-// A11Y FIX: Le texte interactif est maintenant accessible aux lecteurs d'écran
+ 
 const InteractiveText = ({ text }) => {
     let charGlobalIndex = 0;
     const words = text.split(" ");
     
     return (
-        // A11Y: Le label lit tout le texte d'un coup
+     
         <span className="inline-block leading-tight" aria-label={text} role="text">
             {words.map((word, wIndex) => (
                 <span key={wIndex} className="inline-block whitespace-nowrap mr-[0.25em]">
@@ -325,7 +325,7 @@ const Background = ({ themeMode }) => {
 };
 
 
-/* --- 3. SECTIONS VUE PRINCIPALE --- */
+ 
 
 const Navbar = ({ toggleTheme, lang, setLang, t, themeMode }) => { 
     const defaultColorClass = themeMode === 'dark' ? 'text-[#999]' : 'text-[#333]';
@@ -392,15 +392,14 @@ const HeroSection = ({ t, lang }) => {
     );
 };
 
-// A11Y FIX: ProjectCard est maintenant focusable et activable au clavier
+ 
 const ProjectCard = ({ project, index, t, onSelectProject }) => { 
     const offsetClass = index % 2 === 0 ? 'md:translate-y-12' : 'md:-translate-y-12';
     
     const handleClick = () => {
         onSelectProject(project);
     };
-
-    // Gestion du clavier (Entrée ou Espace)
+ 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -411,7 +410,7 @@ const ProjectCard = ({ project, index, t, onSelectProject }) => {
     return (
         <div 
             role="button"
-            tabIndex={0} // Rend l'élément focusable
+            tabIndex={0}  
             onKeyDown={handleKeyDown}
             aria-label={`Voir les détails du projet ${project.title}`}
             className={`
@@ -523,12 +522,11 @@ const Footer = ({ t }) => (
     </footer>
 );
 
-
-/* --- 4. COMPOSANT VUE DÉTAILLÉE --- */
+ 
 
 const CaseStudy = ({ project, onBack, t }) => {
     
-    // Auto-focus sur le bouton retour quand la vue s'ouvre pour l'accessibilité
+ 
     const backButtonRef = useRef(null);
     useEffect(() => {
         if (backButtonRef.current) {
@@ -567,13 +565,13 @@ const CaseStudy = ({ project, onBack, t }) => {
                 ← {t.projects.title}
             </button>
             
-            {/* --- SECTION 1: TITRE & VISUEL --- */}
+          
             <div className="mb-16">
                 <p className={`${TYPO.Meta} text-orange-600 mb-2`}>{project.category}</p>
                 <h2 className={`${TYPO.Heading} text-5xl`}>{project.title}</h2>
             </div>
 
-            {/* Visual */}
+         
             <div className="relative aspect-video w-full mb-16 rounded-md shadow-2xl overflow-hidden">
                 {project.video ? (
                     <video 
@@ -593,7 +591,7 @@ const CaseStudy = ({ project, onBack, t }) => {
                 )}
             </div>
 
-            {/* --- SECTION 2: RÉSUMÉ & CHIFFRES --- */}
+           
             <div className="md:grid md:grid-cols-2 md:gap-12 mb-20">
                 <div>
                     <h3 className="font-serif text-2xl mb-4">Contexte & Mission</h3>
@@ -621,7 +619,7 @@ const CaseStudy = ({ project, onBack, t }) => {
                 </div>
             </div>
 
-            {/* --- SECTION 3: DÉFIS TECHNIQUES --- */}
+        
             <div className="mb-20">
                 <h3 className="font-serif text-2xl mb-6">Défis Techniques & Compétences</h3>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 list-disc list-inside">
@@ -633,8 +631,7 @@ const CaseStudy = ({ project, onBack, t }) => {
                 </ul>
             </div>
 
-
-            {/* --- SECTION 4: ACTIONS --- */}
+ 
             <div className="flex flex-wrap gap-6 justify-center md:justify-start">
                 <OpenButton href={project.links.live}>
                     Voir le site →
@@ -651,7 +648,7 @@ const CaseStudy = ({ project, onBack, t }) => {
 };
 
 
-/* --- 5. ASSEMBLAGE FINAL --- */
+ 
 export default function Portfolio() {
     const { themeMode, toggleTheme } = useTheme();
     const [lang, setLang] = useState('fr');
@@ -699,18 +696,18 @@ export default function Portfolio() {
 return (
 <HelmetProvider>
 
-  {/* 1. BALISES HEAD (Inclus le script GTM pour le chargement principal) */}
+ 
   <Helmet>
     <html lang={lang} />
 
-    {/* GTM FRAGMENT HEAD */}
+   
     <script
       dangerouslySetInnerHTML={{
         __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-M8R4TLLF');`,
       }}
     />
 
-    {/* METADATA SEO/A11Y */}
+    
     <title>{seo.title}</title>
     <meta name="description" content={seo.desc} />
     <meta property="og:title" content={seo.title} />
@@ -725,8 +722,7 @@ return (
       content="Développeur React Montréal, Junior Developer, MERN Stack, JavaScript, Jeff Zara, Front-end"
     />
   </Helmet>
-
-  {/* 2. FRAGMENT BODY NO-SCRIPT */}
+ 
   <noscript>
     <iframe
       src="https://www.googletagmanager.com/ns.html?id=GTM-M8R4TLLF"
@@ -736,7 +732,7 @@ return (
     />
   </noscript>
 
-  {/* 3. DIV PRINCIPAL */}
+ 
   <div
     className={`relative min-h-screen font-sans selection:bg-orange-500 selection:text-white ${textColor}`}
   >

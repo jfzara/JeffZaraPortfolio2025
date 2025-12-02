@@ -1,4 +1,4 @@
-// C:\Users\Jeff\Desktop\PROJETS VS CODE\JAVASCRIPT\REACT\mon_portfolio\src\theme\ThemeContext.jsx (Correction)
+ 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const ThemeContext = createContext();
@@ -19,10 +19,10 @@ const themes = {
     },
     dark: {
         bgClass: 'bg-[#05171A]',
-        // 🚨 CORRECTION : Utiliser la couleur personnalisée pour le texte principal
+       
         textClass: 'text-neon-text-custom', 
         
-        // La couleur d'accent (Vert Néon) reste l'ancienne valeur pour la cohérence
+        
         accentClass: 'text-[#39FF14]', 
         shadowClass: 'shadow-neomorph-dark', 
         cardBgClass: 'bg-gray-900', 

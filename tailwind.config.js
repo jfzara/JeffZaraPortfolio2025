@@ -1,4 +1,4 @@
-// tailwind.config.js (Correction)
+ 
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -9,16 +9,16 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      // 🚨 AJOUT DE LA COULEUR PERSONNALISÉE
+  
       colors: {
         'neon-text-custom': '#45CB80',
       },
-      // Définition de la police pour un usage global
+     
       fontFamily: {
         'space-grotesk': ['"Space Grotesk"', 'sans-serif'],
       },
       boxShadow: {
-        // ... (Ombres inchangées)
+      
         'neomorph-light': [
           '9px 9px 16px rgba(163, 177, 198, 0.6)',
           '-9px -9px 16px rgba(255, 255, 255, 0.5)',
