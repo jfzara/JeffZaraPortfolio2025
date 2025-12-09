@@ -3,7 +3,7 @@ import { useTheme } from "./theme/ThemeContext";
  
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-import logoLight from "./assets/projects/logo/Logo JZ light.jpg";
+import logoLight from "./assets/projects/logo/Logo JZ light.png";
 import logoDark from "./assets/projects/logo/Logo JZ dark.png";
  
 import livanoVideo from "./assets/projects/major/livano/Livano_video.mp4"; 
