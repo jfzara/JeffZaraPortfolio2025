@@ -3,6 +3,8 @@ import { useTheme } from "./theme/ThemeContext";
  
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
+import logoLight from "./assets/projects/logo/Logo JZ light.jpg";
+import logoDark from "./assets/projects/logo/Logo JZ dark.png";
  
 import livanoVideo from "./assets/projects/major/livano/Livano_video.mp4"; 
 import youchefVideo from "./assets/projects/major/youchef/Youchef_video.mp4"; 
@@ -314,7 +316,7 @@ const InteractiveText = ({ text }) => {
 };
 
 const Background = ({ themeMode }) => {
-    const bgClass = themeMode === 'dark' ? 'bg-[#050505]' : 'bg-[#F0EEE6]'; 
+   const bgClass = themeMode === 'dark' ? 'bg-[#18181B]' : 'bg-[#F4F4F5]';
     return (
         <div className={`fixed inset-0 -z-50 transition-colors duration-700 ${bgClass}`} aria-hidden="true">
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply" 
@@ -333,8 +335,12 @@ const Navbar = ({ toggleTheme, lang, setLang, t, themeMode }) => {
 
     return (
         <nav className={`fixed top-0 w-full px-6 py-8 flex justify-between items-start z-40 ${defaultColorClass} backdrop-blur-sm bg-black/5 dark:bg-white/5 md:bg-transparent`}> 
-            <a href="#" className="font-serif text-2xl italic font-bold hover:opacity-70 transition-opacity relative z-20 focus-visible:ring-2 focus-visible:ring-orange-500 outline-none rounded-sm"> 
-                Jeff Zara
+           <a href="#" className="relative z-20 focus-visible:ring-2 focus-visible:ring-orange-500 outline-none rounded-sm block"> 
+                <img 
+                    src={themeMode === 'dark' ? logoDark : logoLight} 
+                    alt="Jeff Zara Logo" 
+                    className="h-16 w-auto md:h-24 object-contain transition-opacity duration-300"
+                />
             </a>
             <div className="flex flex-col items-end gap-2 relative z-20"> 
                 <button 
