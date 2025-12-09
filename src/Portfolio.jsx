@@ -14,8 +14,8 @@ const CONTENT = {
     fr: {
         nav: { projects: "Projets", expertise: "Expertise", contact: "Contact" },
         hero: {
-            role: "Développeur Full-Stack — Montréal", 
-            desc: "J’unis la rigueur du développement à une véritable sensibilité esthétique pour saisir vos besoins et ceux de vos utilisateurs, puis les traduire en interfaces harmonieuses, actuelles et profondément fidèles à votre image. Je crée des solutions Full-Stack (MERN/MVC) robustes et durables.",
+            role: "Développeur Full-Stack & Shopify — Montréal", 
+            desc: "J’unis la rigueur du code à une sensibilité esthétique pour créer des interfaces web performantes. Spécialisé en React, Node.js et Shopify, je conçois des solutions numériques robustes, pensées pour l'impact et la conversion.",
             ctaPrimary: "Voir mes réalisations",
             ctaSecondary: "Me contacter",
             title: "Code Limpide.", 
@@ -28,7 +28,7 @@ const CONTENT = {
                 { 
                     title: "Livano", 
                     category: "Projet de Stage", 
-                    desc: "Projet de stage : refonte complète du site vitrine avec un focus sur la performance. J'ai obtenu des scores significatifs : Accessibilité 95% et SEO 100% (Lighthouse). Stack: Astro, React, Tailwind CSS.",
+                    desc: "Refonte de site en agence. Résultats : Scores Lighthouse parfaits (100% SEO, 95% Accessibilité) et chargement instantané grâce à l'architecture statique.",
                     stack: ["Astro", "React", "Tailwind CSS"], 
                     video: livanoVideo,
                     links: {
@@ -38,8 +38,8 @@ const CONTENT = {
                 },
                 { 
                     title: "YouChef App", 
-                    category: "Projet Personnel CRUD", 
-                    desc: "Plateforme CRUD (MERN) pour une banque de recettes collaborative. Le défi majeur fut la fluidité : j'ai implémenté des UI Skeletons et utilisé Framer Motion pour un design 'quirky' et moderne.",
+                    category: "Full-Stack MERN", 
+                    desc: "Plateforme collaborative sécurisée (JWT). Focus UX majeur : animations Framer Motion fluides et Skeletons screens pour une perception de vitesse accrue.",
                     stack: ["MERN Stack", "Mongoose", "Framer Motion"], 
                     video: youchefVideo,
                     links: {
@@ -48,11 +48,11 @@ const CONTENT = {
                     }
                 },
             ],
-            link: "Voir le projet"
+            link: "Voir l'étude de cas"
         },
         contact: {
-            title: "Construisons quelque chose de nouveau!", 
-            desc: "Je cherche un rôle où ma proactivité et ma volonté d'apprendre peuvent rapidement faire la différence. Mon engagement est total, ma curiosité, permanente.",
+            title: "Un projet React ou Shopify ?", 
+            desc: "Je cherche un rôle où ma proactivité et ma soif d'apprendre feront la différence. Disponible pour des mandats de développement front-end, full-stack ou e-commerce.",
             cta: "Envoyer un email",
             sub: "Disponible pour freelance & contrats",
             linkedinText: "Voir mon profil LinkedIn",
@@ -63,8 +63,8 @@ const CONTENT = {
     en: {
         nav: { projects: "Projects", expertise: "Expertise", contact: "Contact" },
         hero: {
-            role: "Full-Stack Developer — Montreal",
-            desc: "I unite development rigor with a true aesthetic sensibility to grasp your needs and those of your users, then translate them into harmonious, current interfaces. I create robust and durable Full-Stack (MERN/MVC) solutions, designed to offer refined, clear, and welcoming experiences.",
+            role: "Full-Stack & Shopify Developer — Montreal",
+            desc: "I unite development rigor with aesthetic sensibility to build high-performance web interfaces. Specialized in React, Node.js, and Shopify, I create robust digital solutions designed for impact and conversion.",
             ctaPrimary: "View My Projects",
             ctaSecondary: "Contact Me",
             title: "Clean Code.",
@@ -77,7 +77,7 @@ const CONTENT = {
                 { 
                     title: "Livano", 
                     category: "Internship Project", 
-                    desc: "Internship project: full redesign with a focus on performance. Achieved strong Lighthouse scores: Accessibility 95% and SEO 100%. Stack: Astro, React, Tailwind CSS.",
+                    desc: "Agency site redesign. Results: Perfect Lighthouse scores (100% SEO, 95% Accessibility) and instant loading speeds via static architecture.",
                     stack: ["Astro", "React", "Tailwind CSS"], 
                     video: livanoVideo,
                     links: {
@@ -87,8 +87,8 @@ const CONTENT = {
                 },
                 { 
                     title: "YouChef App", 
-                    category: "Personal CRUD Project", 
-                    desc: "MERN CRUD platform for a collaborative recipe bank. Key challenge was fluidity: implemented UI Skeletons and used Framer Motion for a 'quirky' and modern design.",
+                    category: "Full-Stack MERN", 
+                    desc: "Secure collaborative platform (JWT). Major UX focus: smooth Framer Motion animations and Skeleton screens for enhanced perceived performance.",
                     stack: ["MERN Stack", "Mongoose", "Framer Motion"], 
                     video: youchefVideo,
                     links: {
@@ -100,8 +100,8 @@ const CONTENT = {
             link: "View Case Study"
         },
         contact: {
-            title: "Let's build something new!", 
-            desc: "I seek a role where my proactivity and hunger for learning can quickly make a difference. My commitment is absolute, and my curiosity, permanent.",
+            title: "A React or Shopify project?", 
+            desc: "I seek a role where my proactivity and hunger for learning will make a difference. Available for Front-End, Full-Stack, or E-commerce mandates.",
             cta: "Send an Email",
             sub: "Available for freelance & contracts",
             linkedinText: "View my LinkedIn profile",
