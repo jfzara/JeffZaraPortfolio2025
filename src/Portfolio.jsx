@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "./theme/ThemeContext";
- 
+
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import logoLight from "./assets/projects/logo/Logo JZ light.png";
 import logoDark from "./assets/projects/logo/Logo JZ dark.png";
- 
+
 import livanoVideo from "./assets/projects/major/livano/Livano_video.mp4"; 
 import youchefVideo from "./assets/projects/major/youchef/Youchef_video.mp4"; 
-//
- 
+
 const CONTENT = {
     fr: {
         nav: { projects: "Projets", expertise: "Expertise", contact: "Contact" },
@@ -27,7 +26,7 @@ const CONTENT = {
             items: [
                 { 
                     title: "Livano", 
-                    category: "Projet de Stage", 
+                    category: "Mission en Contrat Longue Durée", 
                     desc: "Refonte de site en agence. Résultats : Scores Lighthouse parfaits (100% SEO, 95% Accessibilité) et chargement instantané grâce à l'architecture statique.",
                     stack: ["Astro", "React", "Tailwind CSS"], 
                     video: livanoVideo,
@@ -76,7 +75,7 @@ const CONTENT = {
             items: [
                 { 
                     title: "Livano", 
-                    category: "Internship Project", 
+                    category: "Long-Term Contract Mission", 
                     desc: "Agency site redesign. Results: Perfect Lighthouse scores (100% SEO, 95% Accessibility) and instant loading speeds via static architecture.",
                     stack: ["Astro", "React", "Tailwind CSS"], 
                     video: livanoVideo,
@@ -111,7 +110,6 @@ const CONTENT = {
     }
 };
 
- 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
@@ -155,8 +153,6 @@ const TYPO = {
 };
 
 
- 
-
 const ReactiveCursor = () => {
     const cursorRef = useRef(null);
     const pos = useRef({ x: 0, y: 0 }); 
@@ -164,7 +160,6 @@ const ReactiveCursor = () => {
     const velocity = useRef(0); 
 
     useEffect(() => {
-     
         const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
         if (mediaQuery.matches) return;
 
@@ -213,13 +208,12 @@ const ReactiveCursor = () => {
     );
 };
 
-// MODIFICATION ICI : Ajout de la propriété isExternal
 const OpenButton = ({ children, href, className = "", isExternal = true }) => {
     return (
         <a 
             href={href}
-            target={isExternal ? "_blank" : undefined} // Conditionnel
-            rel={isExternal ? "noopener noreferrer" : undefined} // Conditionnel
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
             className={`relative group inline-block px-8 py-4 text-sm md:px-10 md:py-5 md:text-base font-sans font-bold tracking-widest uppercase transition-all duration-300 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-orange-500 outline-none ${className}`}
         >
             <span className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-current transition-all duration-300 group-hover:w-full group-hover:h-full opacity-60 group-hover:opacity-100 group-hover:border-orange-500" />
@@ -240,7 +234,6 @@ const FadeIn = ({ children, delay = 0 }) => {
     return <div className={`${visible ? 'animate-appear' : 'opacity-0'}`}>{children}</div>;
 };
 
- 
 const AliveLetter = ({ char, delay = 0 }) => {
     const [isWaveActive, setWaveActive] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -295,13 +288,11 @@ const AliveLetter = ({ char, delay = 0 }) => {
 };
 
 
- 
 const InteractiveText = ({ text }) => {
     let charGlobalIndex = 0;
     const words = text.split(" ");
     
     return (
-     
         <span className="inline-block leading-tight" aria-label={text} role="text">
             {words.map((word, wIndex) => (
                 <span key={wIndex} className="inline-block whitespace-nowrap mr-[0.25em]">
@@ -327,8 +318,6 @@ const Background = ({ themeMode }) => {
     );
 };
 
-
- 
 
 const Navbar = ({ toggleTheme, lang, setLang, t, themeMode }) => { 
     const defaultColorClass = themeMode === 'dark' ? 'text-[#999]' : 'text-[#333]';
@@ -389,7 +378,6 @@ const HeroSection = ({ t, lang }) => {
                     {t.hero.desc}
                 </p>
                 <div className="flex flex-wrap gap-8 items-center mt-8">
-                    {/* MODIFICATION ICI : Ajout de isExternal={false} pour le lien d'ancre interne */}
                     <OpenButton href="#projets" isExternal={false}>{t.hero.ctaPrimary}</OpenButton>
                     <a href="#contact" className="text-sm md:text-base font-bold border-b border-current/20 hover:border-orange-500 hover:text-orange-600 transition-colors pb-1 focus-visible:ring-2 focus-visible:ring-orange-500 outline-none">
                         {t.hero.ctaSecondary}
@@ -422,7 +410,6 @@ const ProjectCard = ({ project, index, t, onSelectProject }) => {
             onKeyDown={handleKeyDown}
             aria-label={`Voir les détails du projet ${project.title}`}
             className={`
-                min-w-[85vw] md:min-w-0 flex-shrink-0 md:flex-shrink 
                 group relative p-6 md:p-0 cursor-pointer
                 transition-all duration-700 ${offsetClass}
                 focus-visible:ring-4 focus-visible:ring-orange-500 focus-visible:ring-offset-4 outline-none rounded-md
@@ -480,13 +467,12 @@ const ProjectsSection = ({ t, onSelectProject }) => (
                 {t.projects.title}
             </h2>
             <span className="text-xs font-mono opacity-60 font-bold" aria-hidden="true">
-                <span className="md:hidden">Swipe →</span>
-                <span className="hidden md:inline-block">Scroll →</span>
+               
             </span>
         </div>
 
         <div className="
-            flex gap-6 overflow-x-auto snap-x px-6 pb-12 no-scrollbar
+            flex flex-col gap-12 overflow-x-visible px-6 pb-12 
             md:grid md:grid-cols-2 md:gap-12 md:overflow-visible md:px-12 md:max-w-7xl md:mx-auto
         ">
             {t.projects.items.map((p, i) => (
@@ -530,8 +516,6 @@ const Footer = ({ t }) => (
     </footer>
 );
 
- 
-
 const CaseStudy = ({ project, onBack, t }) => {
     
  
@@ -548,7 +532,7 @@ const CaseStudy = ({ project, onBack, t }) => {
                 "Accessibilité (95% Lighthouse) et SEO (100%) : Maîtrise des standards",
                 "Stack moderne : Astro (performance) et Tailwind CSS (rapidité/flexibilité)",
                 "Intégration de services tiers (Sentry, Resend)",
-                "Collaboration Agile (Kanban) en environnement de stage."
+                "Collaboration Agile (Kanban) en environnement de mission."
             ];
         }
         if (title.includes('YouChef')) {
@@ -659,11 +643,20 @@ const CaseStudy = ({ project, onBack, t }) => {
  
 export default function Portfolio() {
     const { themeMode, toggleTheme } = useTheme();
-    const [lang, setLang] = useState('fr');
+    
+    const [lang, setLang] = useState('fr'); 
+    
     const [selectedProject, setSelectedProject] = useState(null); 
     
     const t = CONTENT[lang];
     const textColor = themeMode === 'dark' ? 'text-[#e5e5e5]' : 'text-[#1a1a1a]';
+    
+    const [translationKey, setTranslationKey] = useState(0); 
+
+    useEffect(() => {
+        setTranslationKey(prev => prev + 1);
+    }, [lang]);
+
 
     const getSeoMetadata = () => {
         if (selectedProject) {
@@ -692,12 +685,12 @@ export default function Portfolio() {
         }
 
         return (
-            <>
+            <div key={translationKey}>
                 <HeroSection t={t} lang={lang} />
                 <ProjectsSection t={t} onSelectProject={setSelectedProject} /> 
                 <ContactSection t={t} />
                 <Footer t={t} />
-            </>
+            </div>
         );
     };
 
