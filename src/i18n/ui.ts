@@ -44,7 +44,7 @@ export const ui = {
     'cases.key': 'Décision clé',
     'about.title': 'À propos',
     'about.body':
-      "J'ai appris à programmer seul à partir de 2020, puis consolidé ces bases par une AEC en programmation terminée en 2024. Je viens des lettres et de la philosophie : j'aborde le code comme une argumentation — chaque choix doit pouvoir se justifier, et ce qu'on refuse compte autant que ce qu'on retient.",
+      "J'ai appris à programmer seul à partir de 2020, puis consolidé ces bases par une AEC en programmation terminée en 2024. Chaque choix technique doit pouvoir se justifier, et ce qu'on refuse compte autant que ce qu'on retient.",
     'foot.q': 'Un poste, un contrat,\nune question technique ?',
     'foot.updated': 'Montréal · mis à jour',
     'case.back': '← Études de cas',
@@ -98,7 +98,7 @@ export const ui = {
     'cases.key': 'Key decision',
     'about.title': 'About',
     'about.body':
-      'I taught myself to code from 2020, then consolidated the foundations with a programming AEC completed in 2024. I come from literature and philosophy: I treat code as an argument — every choice should be justifiable, and what you reject matters as much as what you keep.',
+      'I taught myself to code from 2020, then consolidated the foundations with a programming AEC completed in 2024. Every technical choice should be justifiable, and what you reject matters as much as what you keep.',
     'foot.q': 'A role, a contract,\na technical question?',
     'foot.updated': 'Montréal · updated',
     'case.back': '← Case studies',
