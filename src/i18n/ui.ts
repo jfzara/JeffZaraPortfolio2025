@@ -11,7 +11,7 @@ export const contact = {
 
 export const ui = {
   fr: {
-    'meta.title': 'Jean Fabrice Zara — Développeur full-stack, Montréal',
+    'meta.title': 'Jeff Zara — Développeur full-stack, Montréal',
     'meta.desc':
       "Développeur full-stack à Montréal (React, TypeScript, Node, Spring Boot). Études de cas avec journal de décisions techniques.",
     'skip': 'Aller au contenu',
@@ -65,7 +65,7 @@ export const ui = {
     'notfound': 'Page introuvable.',
   },
   en: {
-    'meta.title': 'Jean Fabrice Zara — Full-stack developer, Montréal',
+    'meta.title': 'Jeff Zara — Full-stack developer, Montréal',
     'meta.desc':
       'Full-stack developer in Montréal (React, TypeScript, Node, Spring Boot). Case studies with a technical decision log.',
     'skip': 'Skip to content',

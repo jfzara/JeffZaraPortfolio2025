@@ -1,4 +1,4 @@
-# Portfolio — Jean Fabrice Zara
+# Portfolio — Jeff Zara
 
 Site statique Astro, bilingue (FR par défaut sur `/`, EN sur `/en/`), thème clair/sombre sans flash, menu mobile accessible, études de cas avec journal de décisions.
 
