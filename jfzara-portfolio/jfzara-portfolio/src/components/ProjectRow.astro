@@ -1,0 +1,52 @@
+---
+import type { Project } from '../data/projects';
+import { useT, paths, type Lang } from '../i18n/ui';
+
+interface Props { project: Project; index: number; lang: Lang }
+const { project: p, index, lang } = Astro.props;
+const t = useT(lang);
+const n = `N°${String(index + 1).padStart(2, '0')}`;
+---
+<article class="row">
+  <span class="mono num">{n}</span>
+  <div>
+    <h3 class="display title">
+      <a href={paths.project(lang, p.slug)} class="stretch">{p.title}</a>
+    </h3>
+    <p class="problem">{p.problemShort[lang]}</p>
+    <p class="mono muted stack">{p.stack.join(' · ')}</p>
+  </div>
+  <div class="decision">
+    <p class="mono accent label">{t('cases.key')}</p>
+    <p>{p.keyDecision[lang]}</p>
+  </div>
+  <div class="shot" aria-hidden={p.image ? undefined : 'true'}>
+    {p.image ? <img src={p.image} alt={p.imageAlt[lang]} loading="lazy" decoding="async" width="720" height="540" /> : `[${p.title}]`}
+  </div>
+</article>
+
+<style>
+  .row {
+    position: relative;
+    display: grid; grid-template-columns: 72px 1.1fr 1fr minmax(0, 360px); gap: 32px;
+    padding: 36px 0; border-bottom: 1px solid var(--ink); align-items: start;
+  }
+  .num { padding-top: 10px; }
+  .title { font-size: clamp(2.5rem, 4.4vw, 3.5rem); font-stretch: 72%; }
+  .title a { text-decoration: none; }
+  /* Toute la ligne est cliquable, avec un seul lien dans l'arbre d'accessibilité. */
+  .stretch::after { content: ''; position: absolute; inset: 0; }
+  .row:hover .title a { color: var(--accent); }
+  .problem { margin-top: 16px; font-size: 1.1875rem; line-height: 1.4; max-width: 460px; }
+  .stack { margin-top: 18px; font-size: 0.75rem; }
+  .decision { border-left: 1px solid var(--faint); padding-left: 24px; font-size: 1.0625rem; line-height: 1.45; }
+  .label { font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; }
+
+  @media (max-width: 980px) {
+    .row { grid-template-columns: 1fr; gap: 16px; padding: 24px 0 28px; }
+    .num { order: -1; padding: 0; }
+    .shot { order: -2; }
+    .decision { border-left: 0; padding-left: 0; color: var(--muted); font-size: 0.95rem; }
+    .decision .label { color: var(--accent); }
+  }
+</style>

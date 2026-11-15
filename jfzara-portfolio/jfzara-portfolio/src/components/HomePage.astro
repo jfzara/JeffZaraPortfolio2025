@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectRow from './ProjectRow.astro';
+import { projects } from '../data/projects';
+import { useT, paths, contact, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+const other: Lang = lang === 'fr' ? 'en' : 'fr';
+const count = String(projects.length).padStart(2, '0');
+---
+<Base lang={lang} altPath={paths.home(other)}>
+  <section class="wrap hero">
+    <div>
+      <p class="mono status"><span class="dot" aria-hidden="true"></span>{t('hero.status')}</p>
+      <h1 class="display name">Jean Fabrice<br />Zara</h1>
+      <p class="lead">
+        {t('hero.lead')} <mark>{t('hero.hl')}</mark>{t('hero.end')}
+      </p>
+    </div>
+    <aside class="brief mono" aria-label={t('brief.title')}>
+      <p class="muted">{t('brief.title')}</p>
+      <dl>
+        <dt class="muted">Stack</dt><dd>React, TypeScript, Next.js, Astro, Node/Express, Spring Boot, PostgreSQL</dd>
+        <dt class="muted">{t('brief.path')}</dt><dd>{t('brief.pathV')}</dd>
+        <dt class="muted">{t('brief.lang')}</dt><dd>{t('brief.langV')}</dd>
+        <dt class="muted">{t('brief.method')}</dt><dd>{t('brief.methodV')}</dd>
+      </dl>
+      <div class="ctas">
+        <a class="btn btn--solid" href="#travaux">{t('cta.read')} <span aria-hidden="true">↓</span></a>
+        <a class="btn btn--ghost" href={`mailto:${contact.email}`}>{t('cta.write')}</a>
+      </div>
+    </aside>
+  </section>
+
+  <section id="travaux" class="wrap work" aria-labelledby="work-title">
+    <div class="head rule-heavy">
+      <h2 id="work-title" class="display">{t('cases.title')}</h2>
+      <span class="mono">{count} · {t('cases.sub')}</span>
+    </div>
+    {projects.map((p, i) => <ProjectRow project={p} index={i} lang={lang} />)}
+  </section>
+
+  <section id="a-propos" class="wrap about" aria-labelledby="about-title">
+    <h2 id="about-title" class="display">{t('about.title')}</h2>
+    <p>{t('about.body')}</p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid; grid-template-columns: 1fr 340px; gap: 64px; align-items: end;
+    padding-top: clamp(40px, 7vw, 72px); padding-bottom: clamp(56px, 8vw, 96px);
+  }
+  .status { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .dot { width: 10px; height: 10px; background: var(--accent); }
+  .name { font-size: clamp(4.25rem, 10vw, 8.25rem); line-height: 0.88; font-stretch: 66%; letter-spacing: -0.02em; }
+  .lead { margin-top: 40px; max-width: 760px; font-size: clamp(1.3rem, 2.2vw, 1.875rem); line-height: 1.25; }
+  mark { background: var(--accent); color: var(--on-accent); padding: 0 0.2em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+  .brief { border-left: 1px solid var(--ink); padding-left: 28px; line-height: 1.7; }
+  .brief > p { margin-bottom: 16px; }
+  .brief dl { display: grid; grid-template-columns: 96px 1fr; row-gap: 8px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+  .head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 16px; padding-bottom: 14px; }
+  .head h2 { font-size: clamp(2.5rem, 4vw, 3rem); }
+  .work { padding-bottom: clamp(56px, 8vw, 96px); }
+
+  .about { display: grid; grid-template-columns: 240px 1fr; gap: 64px; padding-bottom: clamp(56px, 8vw, 96px); }
+  .about h2 { font-size: 2.75rem; }
+  .about p { max-width: 760px; font-size: 1.25rem; line-height: 1.55; }
+
+  @media (max-width: 860px) {
+    .hero, .about { grid-template-columns: 1fr; gap: 32px; }
+    .brief { border-left: 0; padding-left: 0; border-top: 1px solid var(--ink); padding-top: 20px; }
+    .ctas .btn { flex: 1 1 100%; justify-content: space-between; min-height: 52px; }
+  }
+</style>

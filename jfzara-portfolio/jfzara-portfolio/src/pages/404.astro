@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import { useT } from '../i18n/ui';
+const t = useT('fr');
+---
+<Base lang="fr" altPath="/en/" title="404 — JF Zara">
+  <section class="wrap" style="padding-block: 120px">
+    <h1 class="display" style="font-size: clamp(5rem, 14vw, 10rem)">404</h1>
+    <p style="margin-top: 24px; font-size: 1.5rem">{t('notfound')} <a href="/">Accueil</a> · <a href="/en/">Home</a></p>
+  </section>
+</Base>

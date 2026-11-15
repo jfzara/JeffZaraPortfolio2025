@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jeff-zara-portfolio2025.vercel.app/sitemap-index.xml

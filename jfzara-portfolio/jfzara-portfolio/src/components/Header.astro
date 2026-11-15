@@ -1,0 +1,136 @@
+---
+import { useT, paths, contact, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang; altPath: string }
+const { lang, altPath } = Astro.props;
+const t = useT(lang);
+const home = paths.home(lang);
+const links = [
+  { href: `${home}#travaux`, label: t('nav.work') },
+  { href: `${home}#a-propos`, label: t('nav.about') },
+  { href: contact.github, label: 'GitHub ↗', external: true },
+  { href: contact.cv[lang], label: t('nav.cv') },
+];
+---
+<header class="site-header">
+  <div class="wrap bar mono">
+    <a class="brand" href={home}>JF ZARA <span class="muted">/ dev</span></a>
+
+    <nav class="nav-desktop" aria-label="Principal">
+      {links.map((l) => (
+        <a href={l.href} {...(l.external ? { rel: 'noopener', target: '_blank' } : {})}>{l.label}</a>
+      ))}
+    </nav>
+
+    <div class="controls">
+      <a class="ctl" href={altPath} hreflang={lang === 'fr' ? 'en' : 'fr'} aria-label={t('lang.label')}>{t('lang.switch')}</a>
+      <button
+        class="ctl"
+        type="button"
+        data-theme-toggle
+        aria-label={t('theme.label')}
+        aria-pressed="false"
+        data-label-light={t('theme.light')}
+        data-label-dark={t('theme.dark')}
+      >
+        <span data-theme-text>{t('theme.dark')}</span>
+      </button>
+      <button
+        class="ctl menu-btn"
+        type="button"
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        data-menu-toggle
+        data-label-open={t('nav.menu')}
+        data-label-close={t('nav.close')}
+      >
+        <span data-menu-text>{t('nav.menu')}</span>
+      </button>
+    </div>
+  </div>
+
+  <nav id="menu-mobile" class="nav-mobile" aria-label="Mobile" hidden>
+    <div class="wrap">
+      {links.map((l) => (
+        <a class="display" href={l.href} {...(l.external ? { rel: 'noopener', target: '_blank' } : {})}>{l.label}</a>
+      ))}
+    </div>
+  </nav>
+</header>
+
+<script>
+  const root = document.documentElement;
+
+  // Thème
+  const themeBtn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const themeText = document.querySelector<HTMLElement>('[data-theme-text]');
+  const syncTheme = () => {
+    if (!themeBtn || !themeText) return;
+    const dark = root.dataset.theme === 'dark';
+    themeBtn.setAttribute('aria-pressed', String(dark));
+    themeText.textContent = dark ? themeBtn.dataset.labelLight! : themeBtn.dataset.labelDark!;
+  };
+  syncTheme();
+  themeBtn?.addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch {}
+    syncTheme();
+  });
+
+  // Menu mobile
+  const menuBtn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menuText = document.querySelector<HTMLElement>('[data-menu-text]');
+  const menu = document.getElementById('menu-mobile');
+  const setMenu = (open: boolean) => {
+    if (!menuBtn || !menu || !menuText) return;
+    menu.hidden = !open;
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuText.textContent = open ? menuBtn.dataset.labelClose! : menuBtn.dataset.labelOpen!;
+  };
+  menuBtn?.addEventListener('click', () => setMenu(menu?.hidden ?? false));
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setMenu(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu && !menu.hidden) { setMenu(false); menuBtn?.focus(); }
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--bg);
+    border-bottom: 1px solid var(--ink);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 68px; }
+  .brand { text-decoration: none; font-weight: 500; }
+  .nav-desktop { display: flex; gap: 28px; }
+  .nav-desktop a { text-decoration: none; }
+  .nav-desktop a:hover { text-decoration: underline; }
+  .controls { display: flex; gap: 8px; }
+  .ctl {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 44px; min-height: 44px; padding: 0 12px;
+    font: inherit; color: inherit; background: transparent;
+    border: 1px solid currentColor; cursor: pointer; text-decoration: none;
+  }
+  .ctl:hover { color: var(--accent); }
+  .menu-btn { display: none; }
+
+  .nav-mobile { border-top: 3px solid var(--ink); padding-bottom: 16px; }
+  .nav-mobile a {
+    display: block; padding: 14px 0; font-size: 2rem; text-decoration: none;
+    border-bottom: 1px solid var(--faint);
+  }
+  .nav-mobile a:last-child { border-bottom: 0; }
+
+  @media (max-width: 860px) {
+    .nav-desktop { display: none; }
+    .menu-btn { display: inline-flex; }
+    .bar { gap: 12px; }
+  }
+  @media (min-width: 861px) {
+    .nav-mobile { display: none !important; }
+  }
+</style>

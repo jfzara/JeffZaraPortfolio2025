@@ -1,0 +1,29 @@
+---
+import { useT, contact, LAST_UPDATE, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+<footer class="wrap foot">
+  <p class="display q">{t('foot.q')}</p>
+  <div class="mono links">
+    <a href={`mailto:${contact.email}`}>{contact.email}</a><br />
+    <a href={contact.linkedin} rel="noopener" target="_blank">LinkedIn ↗</a> ·
+    <a href={contact.github} rel="noopener" target="_blank">GitHub ↗</a><br />
+    <span class="muted">{t('foot.updated')} {LAST_UPDATE[lang]}</span>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: end;
+    border-top: 3px solid var(--ink); padding-top: 48px; padding-bottom: 64px; margin-top: 32px;
+  }
+  .q { font-size: clamp(2.1rem, 4vw, 2.75rem); line-height: 1; white-space: pre-line; }
+  .links { line-height: 2.1; text-align: right; }
+  @media (max-width: 720px) {
+    .foot { grid-template-columns: 1fr; }
+    .links { text-align: left; }
+  }
+</style>
